@@ -35,7 +35,7 @@
 #include "ui/menu.h"
 #include "ui/version.h"
 
-static const char Menu[49][16] = {
+static const char Menu[50][16] = {
 	"Startup Logo  01",
 	"Voltage       02",
 	"Ringtone      03",
@@ -83,8 +83,9 @@ static const char Menu[49][16] = {
 	"DTMF Mode     45",
 	"DTMF Select   46",
 	"DTMF Display  47",
-	"Initialize    48",
-	"Version       49",
+	"Dark Mode     48",
+	"Initialize    49",
+	"Version       50",
 };
 
 static const ChannelInfo_t EmptyChannel = {
@@ -598,6 +599,11 @@ void MENU_AcceptSetting(void)
 		SETTINGS_SaveDTMF();
 		break;
 
+	case MENU_DARK_MODE:
+		gExtendedSettings.DarkMode = gSettingIndex;
+		SETTINGS_SaveGlobals();
+		break;
+
 	case MENU_INITIALIZE:
 		if (gSettingIndex == 1) {
 			SETTINGS_FactoryReset();
@@ -903,6 +909,11 @@ void MENU_DrawSetting(void)
 		UI_DrawToggle();
 		break;
 
+	case MENU_DARK_MODE:
+		gSettingIndex = gExtendedSettings.DarkMode;
+		UI_DrawToggle();
+		break;
+
 	case MENU_INITIALIZE:
 		UI_DrawToggle();
 		break;
@@ -965,7 +976,7 @@ void MENU_KeyHandler(uint8_t Key)
 		if (gRadioMode != RADIO_MODE_RX) {
 			RADIO_Tune(gSettings.CurrentVfo);
 		}
-		UI_DrawMain(true);
+		UI_DrawMain(false);
 		BEEP_Play(440, 4, 80);
 		break;
 

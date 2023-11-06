@@ -46,6 +46,8 @@ static void DrawStatusBar(void)
 
 void UI_DrawMain(bool bSkipStatus)
 {
+	UI_SetColors(gExtendedSettings.DarkMode);
+
 	if (bSkipStatus) {
 		DISPLAY_Fill(0, 159, 0, 81, COLOR_BLACK);
 		// DISPLAY_DrawRectangle0(0, 41, 160, 1, gSettings.BorderColor);

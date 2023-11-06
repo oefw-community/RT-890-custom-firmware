@@ -21,6 +21,13 @@
 uint16_t gColorForeground;
 uint16_t gColorBackground;
 
+uint16_t COLOR_BLACK;
+uint16_t COLOR_WHITE;
+uint16_t COLOR_RED;
+uint16_t COLOR_GREEN;
+uint16_t COLOR_BLUE;
+uint16_t COLOR_GREY;
+
 void DISPLAY_FillColor(uint16_t Color)
 {
 	uint16_t i;
@@ -53,3 +60,27 @@ void DISPLAY_DrawRectangle1(uint8_t X, uint8_t Y, uint8_t H, uint8_t W, uint16_t
 	DISPLAY_Fill(X, X + W - 1, Y, Y + H - 1, Color);
 }
 
+void UI_SetColors(uint8_t DarkMode)
+{
+	if (DarkMode) {
+		COLOR_BLACK = COLOR_RGB( 0,  0,  0);
+		COLOR_WHITE = COLOR_RGB(31, 63, 31);
+	} else {
+		COLOR_BLACK = COLOR_RGB(31, 63, 31);
+		COLOR_WHITE = COLOR_RGB( 0,  0,  0);
+	} 
+	//COLOR_WHITE = COLOR_RGB( 0,  0,  0);
+	//COLOR_BLACK = COLOR_RGB(31, 63, 31);
+	COLOR_RED   = COLOR_RGB(31,  0,  0);
+	COLOR_GREEN = COLOR_RGB( 0, 63,  0);
+	COLOR_BLUE  = COLOR_RGB( 0,  0, 31);
+	COLOR_GREY  = COLOR_RGB(16, 32, 16);
+
+	gColorBackground = COLOR_BLACK;
+
+	if (DarkMode) {
+		gColorForeground = COLOR_BLACK;
+	} else {
+		gColorForeground = COLOR_WHITE;
+	}
+}
