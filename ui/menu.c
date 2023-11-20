@@ -172,6 +172,7 @@ void UI_DrawActions(uint8_t Index)
 		"Dual Display",
 		"TX Frequency",
 		"Lock        ",
+		"Spectrum    ",
 	};
 
 	UI_DrawSettingOptionEx(Actions[Index], 12, 0);

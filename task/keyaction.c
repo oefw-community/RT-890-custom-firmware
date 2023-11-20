@@ -20,6 +20,7 @@
 #include "app/radio.h"
 #include "app/fm.h"
 #include "app/menu.h"
+#include "app/spectrum.h"
 #include "driver/beep.h"
 #include "driver/bk4819.h"
 #include "driver/key.h"
@@ -354,6 +355,10 @@ void KeypressAction(uint8_t Action) {
 				SETTINGS_SaveGlobals();
 				UI_DrawDialogText(DIALOG_KEY_BEEP, gSettings.KeyBeep);
 				break;
+			
+			case ACTION_SPECTRUM:
+				gInputBoxWriteIndex = 0;
+				APP_Spectrum();
 
 
 		}

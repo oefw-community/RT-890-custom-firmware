@@ -43,6 +43,7 @@ OBJS += app/fm.o
 OBJS += app/lock.o
 OBJS += app/menu.o
 OBJS += app/radio.o
+OBJS += app/spectrum.o
 OBJS += app/t9.o
 OBJS += app/uart.o
 
