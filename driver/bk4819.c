@@ -459,6 +459,7 @@ void BK4819_ToggleAGCMode(bool bAuto)
 		// Set bits 14:12 to 110 (AGC index 4) without affecting the other bits
 		Value = (Value & 0x8FFFU) | 0x6000U;
 	}
+	BK4819_WriteRegister(0x7E, Value);
 }
 
 void BK4819_SetToneFrequency(bool Tone2, uint16_t Tone)
