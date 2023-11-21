@@ -275,9 +275,10 @@ void Spectrum_Loop(void){
 
 		for (uint8_t i = 0; i < CurrentStepCount; i++) {
 
-			BK4819_SetFrequency(FreqToCheck);
-			BK4819_WriteRegister(0x30, 0x0200);
-			BK4819_WriteRegister(0x30, 0xBFF1);
+			BK4819_set_rf_frequency(FreqToCheck, TRUE);
+			//BK4819_SetFrequency(FreqToCheck);
+			//BK4819_WriteRegister(0x30, 0x0200);
+			//BK4819_WriteRegister(0x30, 0xBFF1);
 
 			DELAY_WaitMS(CurrentScanDelay);
 

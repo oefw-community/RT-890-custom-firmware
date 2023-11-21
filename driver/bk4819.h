@@ -20,6 +20,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define BK4819_REG_30_SHIFT_ENABLE_VCO_CALIB    15
+#define BK4819_REG_30_ENABLE_VCO_CALIB 			( 1u << BK4819_REG_30_SHIFT_ENABLE_VCO_CALIB)
+
 enum BK4819_AF_Type_t {
 	BK4819_AF_MUTE = 0U,
 	BK4819_AF_OPEN = 1U,
@@ -69,6 +72,7 @@ void BK4819_EnableTX(bool bUseMic);
 void BK4819_StartFrequencyScan(void);
 void BK4819_StopFrequencyScan(void);
 void BK4819_DisableAutoCssBW(void);
+void BK4819_set_rf_frequency(const uint32_t frequency, const bool trigger_update);
 
 #endif
 
