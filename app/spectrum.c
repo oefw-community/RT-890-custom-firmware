@@ -167,10 +167,14 @@ void ChangeCenterFreq(uint8_t Up){
 	DrawLabels();
 }
 
-void DrawBars(){
+void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 	uint16_t Power;
 	uint8_t MaxBarHeight = 40;
 	uint8_t BarWidth = 128 / CurrentStepCount;
+
+	RssiLow = RssiLow - (RssiLow % 10); // Round down to nearest 10
+	RssiHigh = (RssiHigh - (RssiHigh % 20)) + 20; //Round up to nearest 20
+
 	for (uint8_t i = 0; i < CurrentStepCount; i++) {
 //	Todo: Blacklist
 //		if (blacklist[i]) {
@@ -179,7 +183,8 @@ void DrawBars(){
 //		Valid range 72-330, converted to 0-100, scaled to % based on MaxBarHeight to fit on screen.
 //		Not optimized to keep readable.  Todo: Simplify equation.
 		//Power = (((RssiValue[i]-72)*100)/258)*(MaxBarHeight/100); 
-		Power = (((RssiValue[i]-72)*100)/258)*.4;
+		//Power = (((RssiValue[i]-72)*100)/258)*.4;
+		Power = (((RssiValue[i] - RssiLow) * 100) / (RssiHigh - RssiLow)) * .4; //(MaxBarHeight / 100); 
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, COLOR_FOREGROUND);
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15 + Power, MaxBarHeight - Power, BarWidth, COLOR_BACKGROUND);
 	}
@@ -262,19 +267,15 @@ void CheckKeys(void){
 
 void Spectrum_Loop(void){
 	uint32_t FreqToCheck;
+	uint16_t RssiLow;
+	uint16_t RssiHigh;
 
 	DrawLabels();
 
 	while (1) {
 		FreqToCheck = FreqMin;
-
-//	These are used in radio.c when the frequency is set.  Some combination is needed in the loop.
-//			BK4819_SetSquelchGlitch(FALSE);
-//			BK4819_SetSquelchNoise(FALSE);
-//			BK4819_SetSquelchRSSI(FALSE);
-//			BK4819_EnableRX();
-//			BK4819_SetFilterBandwidth(FALSE);
-//			BK4819_EnableFilter(false);
+		RssiLow = 330;
+		RssiHigh = 72;
 
 		for (uint8_t i = 0; i < CurrentStepCount; i++) {
 
@@ -286,6 +287,12 @@ void Spectrum_Loop(void){
 			DELAY_WaitMS(CurrentScanDelay);
 
 			RssiValue[i] = BK4819_GetRSSI();
+
+			if (RssiValue[i] < RssiLow) {
+				RssiLow = RssiValue[i];
+			} else if (RssiValue[i] > RssiHigh) {
+				RssiHigh = RssiValue[i];
+			}
 
 			//-----------------------Test prints - remove
 			if (bDebug) {
@@ -303,7 +310,7 @@ void Spectrum_Loop(void){
 				return;
 			}
 		}
-		DrawBars();
+		DrawBars(RssiLow, RssiHigh);
 	}
 }
 
