@@ -72,7 +72,9 @@ void BK4819_EnableTX(bool bUseMic);
 void BK4819_StartFrequencyScan(void);
 void BK4819_StopFrequencyScan(void);
 void BK4819_DisableAutoCssBW(void);
+#ifdef ENABLE_SPECTRUM
 void BK4819_set_rf_frequency(const uint32_t frequency, const bool trigger_update);
+#endif
 
 #endif
 

@@ -681,6 +681,7 @@ void BK4819_DisableAutoCssBW(void)
 	BK4819_EnableRX();
 }
 
+#ifdef ENABLE_SPECTRUM
 void BK4819_set_rf_frequency(const uint32_t frequency, const bool trigger_update)
 {
 	BK4819_WriteRegister(0x38, (frequency >> 0) & 0xFFFF);
@@ -693,3 +694,4 @@ void BK4819_set_rf_frequency(const uint32_t frequency, const bool trigger_update
 		BK4819_WriteRegister(0x30, reg);
 	}
 }
+#endif
