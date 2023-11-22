@@ -70,6 +70,7 @@ const char* StepStrings[] = {
 uint8_t bDebug = 0;
 
 void DrawCurrentFreq(void){
+/*
 	uint32_t Divider = 10000000U;
 	uint8_t X = 38;
 	uint8_t Y = 65;
@@ -83,13 +84,35 @@ void DrawCurrentFreq(void){
 			X += 12;
 		}
 	}
+*/
+	gColorForeground = COLOR_BLUE;
+	Int2Ascii(CurrentFreq, 8);
+	for (uint8_t i = 6; i > 2; i--){
+		gShortString[i+1] = gShortString[i];
+	}
+	gShortString[3] = '.';
+	UI_DrawString(50, 80, gShortString, 8);
 }
 
 void DrawLabels(void){
+
+	gColorForeground = COLOR_FOREGROUND;
+
 	Int2Ascii(FreqMin / 10, 7);
+	for (uint8_t i = 6; i > 2; i--){
+		gShortString[i+1] = gShortString[i];
+	}
+	gShortString[3] = '.';
 	UI_DrawSmallString(2, 2, gShortString, 8);
+
 	Int2Ascii(FreqMax / 10, 7);
-	UI_DrawSmallString(116, 2, gShortString, 8);
+	for (uint8_t i = 6; i > 2; i--){
+		gShortString[i+1] = gShortString[i];
+	}
+	gShortString[3] = '.';
+	UI_DrawSmallString(112, 2, gShortString, 8);
+
+	gColorForeground = COLOR_BLUE;
 
 	gShortString[2] = ' ';
 	Int2Ascii(CurrentStepCount, (CurrentStepCount > 100) ? 3 : 2);
@@ -100,8 +123,12 @@ void DrawLabels(void){
 
 	UI_DrawSmallString(2, 64, StepStrings[CurrentFreqStepIndex], 5);
 
-	Int2Ascii(CurrentFreqChangeStep, 5);
-	UI_DrawSmallString(68, 2, gShortString, 5);
+	Int2Ascii(CurrentFreqChangeStep / 10, 5);
+	for (uint8_t i = 4; i > 0; i--){
+		gShortString[i+1] = gShortString[i];
+	}
+	gShortString[1] = '.';
+	UI_DrawSmallString(64, 2, gShortString, 6);
 }
 
 void SetFreqMinMax(void){
@@ -124,6 +151,7 @@ void IncrementStepIndex(void){
 void IncrementFreqStepIndex(void){
 	CurrentFreqStepIndex = (CurrentFreqStepIndex + 1) % 10;
 	CurrentFreqStep = FREQUENCY_GetStep(CurrentFreqStepIndex);
+	SetFreqMinMax();
 	DrawLabels();
 }
 
@@ -157,8 +185,6 @@ void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 //		}
 //		Valid range 72-330, converted to 0-100, scaled to % based on MaxBarHeight to fit on screen.
 //		Not optimized to keep readable.  Todo: Simplify equation.
-		//Power = (((RssiValue[i]-72)*100)/258)*(MaxBarHeight/100); 
-		//Power = (((RssiValue[i]-72)*100)/258)*.4;
 		Power = (((RssiValue[i] - RssiLow) * 100) / (RssiHigh - RssiLow)) * .4; //(MaxBarHeight / 100); 
 		if (Power > MaxBarHeight) {
 			Power = MaxBarHeight;
