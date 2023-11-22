@@ -71,10 +71,10 @@ uint8_t bDebug = 0;
 
 void DrawCurrentFreq(void){
 	uint32_t Divider = 10000000U;
-	uint8_t X = 30;
+	uint8_t X = 38;
 	uint8_t Y = 65;
 
-	for (uint8_t i = 0; i < 8; i++) {
+	for (uint8_t i = 0; i < 7; i++) {
 		UI_DrawBigDigit(X, Y, (CurrentFreq / Divider) % 10U);
 		Divider /= 10;
 		if (i == 2) {
@@ -86,13 +86,14 @@ void DrawCurrentFreq(void){
 }
 
 void DrawLabels(void){
-	Int2Ascii(FreqMin, 8);
+	Int2Ascii(FreqMin / 10, 7);
 	UI_DrawSmallString(2, 2, gShortString, 8);
-	Int2Ascii(FreqMax, 8);
-	UI_DrawSmallString(110, 2, gShortString, 8);
+	Int2Ascii(FreqMax / 10, 7);
+	UI_DrawSmallString(116, 2, gShortString, 8);
 
-	Int2Ascii(CurrentStepCount, 3);
-	UI_DrawSmallString(2, 74, gShortString, 3);
+	gShortString[2] = ' ';
+	Int2Ascii(CurrentStepCount, (CurrentStepCount > 100) ? 3 : 2);
+	UI_DrawSmallString(2, 76, gShortString, 3);
 
 	Int2Ascii(CurrentScanDelay, 2);
 	UI_DrawSmallString(142, 74, gShortString, 2);
@@ -100,7 +101,7 @@ void DrawLabels(void){
 	UI_DrawSmallString(2, 64, StepStrings[CurrentFreqStepIndex], 5);
 
 	Int2Ascii(CurrentFreqChangeStep, 5);
-	UI_DrawSmallString(60, 2, gShortString, 5);
+	UI_DrawSmallString(68, 2, gShortString, 5);
 }
 
 void SetFreqMinMax(void){
@@ -254,7 +255,7 @@ void Spectrum_Loop(void){
 		RssiLow = 330;
 		RssiHigh = 72;
 		CurrentFreqIndex = 0;
-		CurrentFreq = FreqToCheck;
+		CurrentFreq = FreqMin;
 
 		for (uint8_t i = 0; i < CurrentStepCount; i++) {
 
@@ -276,17 +277,6 @@ void Spectrum_Loop(void){
 			if (RssiValue[i] > RssiValue[CurrentFreqIndex]) {
 				CurrentFreqIndex = i;
 				CurrentFreq = FreqToCheck;
-#ifdef UART_DEBUG
-				Int2Ascii(i, 8);
-				UART_printf("Updating index to: ");
-				UART_printf(gShortString);
-				UART_printf("   ");
-
-				Int2Ascii(CurrentFreqIndex, 8);
-				UART_printf("New Index: ");
-				UART_printf(gShortString);
-				UART_printf("   ");
-#endif
 			}
 
 			//-----------------------Test prints - remove
@@ -316,8 +306,8 @@ void Spectrum_Loop(void){
 			UART_printf(gShortString);
 			UART_printf("   ");
 		#endif
-		DrawBars(RssiLow, RssiHigh);
 		DrawCurrentFreq();
+		DrawBars(RssiLow, RssiHigh);
 	}
 }
 
