@@ -33,6 +33,7 @@
 #endif
 
 //static uint32_t StartFreq;
+uint16_t RegisterBackup[1];
 uint32_t CurrentFreq;
 uint32_t FreqMin;
 uint32_t FreqMax;
@@ -186,6 +187,8 @@ void DrawBars(){
 
 void StopSpectrum(void)
 {
+	BK4819_WriteRegister(0x7E, RegisterBackup[0]);
+
 	SCREEN_TurnOn();
 
 	if (gSettings.WorkMode) {
@@ -306,6 +309,8 @@ void Spectrum_Loop(void){
 
 void APP_Spectrum(void){
 	bExit = FALSE;
+
+	RegisterBackup[0] = BK4819_ReadRegister(0x7E);
 
 	CurrentFreq = gVfoState[gSettings.CurrentVfo].RX.Frequency;
 	CurrentModulation = gVfoState[gSettings.CurrentVfo].gModulationType;
