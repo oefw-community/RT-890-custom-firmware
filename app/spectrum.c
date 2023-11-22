@@ -32,9 +32,10 @@
 	#include "external/printf/printf.h"
 #endif
 
-//static uint32_t StartFreq;
 uint16_t RegisterBackup[1];
 uint32_t CurrentFreq;
+uint8_t CurrentFreqIndex;
+uint32_t FreqCenter;
 uint32_t FreqMin;
 uint32_t FreqMax;
 uint8_t CurrentModulation;
@@ -68,8 +69,7 @@ const char* StepStrings[] = {
 
 uint8_t bDebug = 0;
 
-
-void DrawLabels(void){
+void DrawCurrentFreq(void){
 	uint32_t Divider = 10000000U;
 	uint8_t X = 30;
 	uint8_t Y = 65;
@@ -83,7 +83,9 @@ void DrawLabels(void){
 			X += 12;
 		}
 	}
+}
 
+void DrawLabels(void){
 	Int2Ascii(FreqMin, 8);
 	UI_DrawSmallString(2, 2, gShortString, 8);
 	Int2Ascii(FreqMax, 8);
@@ -103,25 +105,8 @@ void DrawLabels(void){
 
 void SetFreqMinMax(void){
 	CurrentFreqChangeStep = CurrentFreqStep*(CurrentStepCount >> 1);
-	FreqMin = CurrentFreq - CurrentFreqChangeStep;
-	FreqMax = CurrentFreq + CurrentFreqChangeStep;
-
-#ifdef UART_DEBUG
-	Int2Ascii(CurrentFreqChangeStep, 8);
-	UART_printf("Delta: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-
-	Int2Ascii(FreqMin, 8);
-	UART_printf("Min: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-
-	Int2Ascii(FreqMax, 8);
-	UART_printf("Max: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-#endif
+	FreqMin = FreqCenter - CurrentFreqChangeStep;
+	FreqMax = FreqCenter + CurrentFreqChangeStep;
 }
 
 void SetStepCount(void){
@@ -139,17 +124,6 @@ void IncrementFreqStepIndex(void){
 	CurrentFreqStepIndex = (CurrentFreqStepIndex + 1) % 10;
 	CurrentFreqStep = FREQUENCY_GetStep(CurrentFreqStepIndex);
 	DrawLabels();
-#ifdef UART_DEBUG
-	Int2Ascii(CurrentFreqStepIndex, 2);
-	UART_printf("Step Index: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-
-	Int2Ascii(CurrentFreqStep, 8);
-	UART_printf("Step: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-#endif
 }
 
 void IncrementScanDelay(void){
@@ -159,9 +133,9 @@ void IncrementScanDelay(void){
 
 void ChangeCenterFreq(uint8_t Up){
 	if (Up) {
-		CurrentFreq += CurrentFreqChangeStep;
+		FreqCenter += CurrentFreqChangeStep;
 	} else {
-		CurrentFreq -= CurrentFreqChangeStep;
+		FreqCenter -= CurrentFreqChangeStep;
 	}
 	SetFreqMinMax();
 	DrawLabels();
@@ -185,7 +159,10 @@ void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 		//Power = (((RssiValue[i]-72)*100)/258)*(MaxBarHeight/100); 
 		//Power = (((RssiValue[i]-72)*100)/258)*.4;
 		Power = (((RssiValue[i] - RssiLow) * 100) / (RssiHigh - RssiLow)) * .4; //(MaxBarHeight / 100); 
-		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, COLOR_FOREGROUND);
+		if (Power > MaxBarHeight) {
+			Power = MaxBarHeight;
+		}
+		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, (i == CurrentFreqIndex) ? COLOR_BLUE : COLOR_FOREGROUND);
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15 + Power, MaxBarHeight - Power, BarWidth, COLOR_BACKGROUND);
 	}
 } 
@@ -276,6 +253,8 @@ void Spectrum_Loop(void){
 		FreqToCheck = FreqMin;
 		RssiLow = 330;
 		RssiHigh = 72;
+		CurrentFreqIndex = 0;
+		CurrentFreq = FreqToCheck;
 
 		for (uint8_t i = 0; i < CurrentStepCount; i++) {
 
@@ -294,6 +273,22 @@ void Spectrum_Loop(void){
 				RssiHigh = RssiValue[i];
 			}
 
+			if (RssiValue[i] > RssiValue[CurrentFreqIndex]) {
+				CurrentFreqIndex = i;
+				CurrentFreq = FreqToCheck;
+#ifdef UART_DEBUG
+				Int2Ascii(i, 8);
+				UART_printf("Updating index to: ");
+				UART_printf(gShortString);
+				UART_printf("   ");
+
+				Int2Ascii(CurrentFreqIndex, 8);
+				UART_printf("New Index: ");
+				UART_printf(gShortString);
+				UART_printf("   ");
+#endif
+			}
+
 			//-----------------------Test prints - remove
 			if (bDebug) {
 				Int2Ascii(FreqToCheck, 8);
@@ -310,7 +305,19 @@ void Spectrum_Loop(void){
 				return;
 			}
 		}
+		#ifdef UART_DEBUG
+			Int2Ascii(CurrentFreqIndex, 8);
+			UART_printf("Current Freq Index: ");
+			UART_printf(gShortString);
+			UART_printf("   ");
+
+			Int2Ascii(CurrentFreq, 8);
+			UART_printf("Current Freq: ");
+			UART_printf(gShortString);
+			UART_printf("   ");
+		#endif
 		DrawBars(RssiLow, RssiHigh);
+		DrawCurrentFreq();
 	}
 }
 
@@ -319,12 +326,12 @@ void APP_Spectrum(void){
 
 	RegisterBackup[0] = BK4819_ReadRegister(0x7E);
 
-	CurrentFreq = gVfoState[gSettings.CurrentVfo].RX.Frequency;
+	FreqCenter = gVfoState[gSettings.CurrentVfo].RX.Frequency;
 	CurrentModulation = gVfoState[gSettings.CurrentVfo].gModulationType;
 	CurrentFreqStepIndex = gSettings.FrequencyStep;
 	CurrentFreqStep = FREQUENCY_GetStep(CurrentFreqStepIndex);
-	CurrentStepCountIndex = STEPS_16;
-	CurrentScanDelay = 15;
+	CurrentStepCountIndex = STEPS_64;
+	CurrentScanDelay = 10;
 
 	SetStepCount();
 	SetFreqMinMax(); 
@@ -332,18 +339,6 @@ void APP_Spectrum(void){
 	for (int i = 0; i < 8; i++) {
 		gShortString[i] = ' ';
 	}
-
-#ifdef UART_DEBUG
-	Int2Ascii(CurrentFreqStepIndex, 2);
-	UART_printf("Step Index: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-
-	Int2Ascii(CurrentFreqStep, 8);
-	UART_printf("Step: ");
-	UART_printf(gShortString);
-	UART_printf("   ");
-#endif
 	
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
 	Spectrum_Loop();
