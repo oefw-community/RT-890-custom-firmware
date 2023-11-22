@@ -167,23 +167,25 @@ void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 			Power = MaxBarHeight;
 		}
 		COLOR_BAR = COLOR_BACKGROUND;
-		if (Power <= 2) {COLOR_BAR   = COLOR_RGB(0,  0,  63);}
+		if (Power <= 1) {COLOR_BAR   = COLOR_RGB(0,  0,  63);}
+		if (Power > 1) {COLOR_BAR   = COLOR_RGB(0,  8,  63);}
 		if (Power > 2) {COLOR_BAR   = COLOR_RGB(0,  16,  63);}
 		if (Power > 4) {COLOR_BAR   = COLOR_RGB(0,  32,  63);}
 		if (Power > 6) {COLOR_BAR   = COLOR_RGB(0,  47,  63);}
 		if (Power > 8) {COLOR_BAR   = COLOR_RGB(0,  63,  63);}
-		if (Power > 10) {COLOR_BAR   = COLOR_RGB(0,  63,  63);}
-		if (Power > 12) {COLOR_BAR   = COLOR_RGB(0,  63,  47);}
-		if (Power > 14) {COLOR_BAR   = COLOR_RGB(0,  63,  32);}
-		if (Power > 16) {COLOR_BAR   = COLOR_RGB(0,  63,  16);}
+		if (Power > 10) {COLOR_BAR   = COLOR_RGB(0,  63,  47);}
+		if (Power > 12) {COLOR_BAR   = COLOR_RGB(0,  63,  32);}
+		if (Power > 14) {COLOR_BAR   = COLOR_RGB(0,  63,  16);}
+		if (Power > 16) {COLOR_BAR   = COLOR_RGB(0,  63,  8);}
 		if (Power > 18) {COLOR_BAR   = COLOR_RGB(0,  63,  0);}
-		if (Power > 20) {COLOR_BAR   = COLOR_RGB(16,  63,  0);}
-		if (Power > 22) {COLOR_BAR   = COLOR_RGB(32,  63,  0);}
-		if (Power > 24) {COLOR_BAR   = COLOR_RGB(47,  63,  0);}
-		if (Power > 26) {COLOR_BAR   = COLOR_RGB(63,  47,  0);}
-		if (Power > 28) {COLOR_BAR   = COLOR_RGB(63,  32,  0);}
-		if (Power > 30) {COLOR_BAR   = COLOR_RGB(63,  16,  0);}
-		if (Power > 33) {COLOR_BAR   = COLOR_RGB(63,  0,  0);}
+		if (Power > 20) {COLOR_BAR   = COLOR_RGB(8,  63,  0);}
+		if (Power > 22) {COLOR_BAR   = COLOR_RGB(16,  63,  0);}
+		if (Power > 24) {COLOR_BAR   = COLOR_RGB(32,  63,  0);}
+		if (Power > 26) {COLOR_BAR   = COLOR_RGB(47,  63,  0);}
+		if (Power > 28) {COLOR_BAR   = COLOR_RGB(63,  47,  0);}
+		if (Power > 30) {COLOR_BAR   = COLOR_RGB(63,  32,  0);}
+		if (Power > 32) {COLOR_BAR   = COLOR_RGB(63,  16,  0);}
+		if (Power > 34) {COLOR_BAR   = COLOR_RGB(63,  8,  0);}
 		if (Power > 36) {COLOR_BAR   = COLOR_RGB(63,  0,  0);}
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, (i == CurrentFreqIndex) ? COLOR_BLUE : COLOR_FOREGROUND);
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15 + Power, MaxBarHeight - Power, BarWidth, COLOR_BAR);
