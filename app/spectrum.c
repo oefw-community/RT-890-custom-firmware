@@ -47,6 +47,9 @@ uint8_t CurrentStepCount;
 uint16_t CurrentScanDelay;
 uint16_t RssiValue[128] = {0};
 uint16_t COLOR_BAR;
+uint8_t COLOR_R;
+uint8_t COLOR_G;
+uint8_t COLOR_B;
 bool bExit;
 KEY_t Key;
 KEY_t LastKey = KEY_NONE;
@@ -192,46 +195,50 @@ void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 		}
 		
 		COLOR_BAR = COLOR_BACKGROUND;
-		if (Power <= 1) {COLOR_BAR   = COLOR_RGB(0,  0,  0);}
-		if (Power == 2) {COLOR_BAR   = COLOR_RGB(0,  0,  63);}
-		if (Power == 3) {COLOR_BAR   = COLOR_RGB(0,  5,  63);}
-		if (Power == 4) {COLOR_BAR   = COLOR_RGB(0,  10,  63);}
-		if (Power == 5) {COLOR_BAR   = COLOR_RGB(0,  15,  63);}
-		if (Power == 6) {COLOR_BAR   = COLOR_RGB(0,  20,  63);}
-		if (Power == 7) {COLOR_BAR   = COLOR_RGB(0,  25,  63);}
-		if (Power == 8) {COLOR_BAR   = COLOR_RGB(0,  30,  63);}
-		if (Power == 9) {COLOR_BAR   = COLOR_RGB(0,  35,  60);}
-		if (Power == 10) {COLOR_BAR   = COLOR_RGB(0,  40,  55);}
-		if (Power == 11) {COLOR_BAR   = COLOR_RGB(0,  45,  50);}
-		if (Power == 12) {COLOR_BAR   = COLOR_RGB(0,  50,  45);}
-		if (Power == 13) {COLOR_BAR   = COLOR_RGB(0,  55,  40);}
-		if (Power == 14) {COLOR_BAR   = COLOR_RGB(0,  60,  35);}
-		if (Power == 15) {COLOR_BAR   = COLOR_RGB(0,  63,  30);}
-		if (Power == 16) {COLOR_BAR   = COLOR_RGB(0,  63,  25);}
-		if (Power == 17) {COLOR_BAR   = COLOR_RGB(0,  63,  20);}
-		if (Power == 18) {COLOR_BAR   = COLOR_RGB(0,  63,  15);}
-		if (Power == 19) {COLOR_BAR   = COLOR_RGB(0,  63,  10);}
-		if (Power == 20) {COLOR_BAR   = COLOR_RGB(0,  63,  5);}
-		if (Power == 21) {COLOR_BAR   = COLOR_RGB(0,  63,  0);}
-		if (Power == 22) {COLOR_BAR   = COLOR_RGB(0,  63,  0);}
-		if (Power == 23) {COLOR_BAR   = COLOR_RGB(5,  63,  0);}
-		if (Power == 24) {COLOR_BAR   = COLOR_RGB(10,  63,  0);}
-		if (Power == 25) {COLOR_BAR   = COLOR_RGB(15,  63,  0);}
-		if (Power == 26) {COLOR_BAR   = COLOR_RGB(20,  63,  0);}
-		if (Power == 27) {COLOR_BAR   = COLOR_RGB(25,  63,  0);}
-		if (Power == 28) {COLOR_BAR   = COLOR_RGB(30,  63,  0);}
-		if (Power == 29) {COLOR_BAR   = COLOR_RGB(35,  55,  0);}
-		if (Power == 30) {COLOR_BAR   = COLOR_RGB(40,  50,  0);}
-		if (Power == 31) {COLOR_BAR   = COLOR_RGB(45,  45,  0);}
-		if (Power == 32) {COLOR_BAR   = COLOR_RGB(50,  40,  0);}
-		if (Power == 33) {COLOR_BAR   = COLOR_RGB(55,  35,  0);}
-		if (Power == 34) {COLOR_BAR   = COLOR_RGB(60,  30,  0);}
-		if (Power == 35) {COLOR_BAR   = COLOR_RGB(63,  25,  0);}
-		if (Power == 36) {COLOR_BAR   = COLOR_RGB(63,  20,  0);}
-		if (Power == 37) {COLOR_BAR   = COLOR_RGB(63,  15,  0);}
-		if (Power == 38) {COLOR_BAR   = COLOR_RGB(63,  10,  0);}
-		if (Power == 39) {COLOR_BAR   = COLOR_RGB(63,  5,  0);}
-		if (Power == 40) {COLOR_BAR   = COLOR_RGB(63,  0,  0);}
+		if(Power == 0) {COLOR_BAR = COLOR_RGB(0,  0,  0);}
+		COLOR_R = 0;
+		COLOR_B = 0;
+		if(Power > 0 && Power <= 4) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = 63;
+		}
+		if(Power > 4 && Power <= 8) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}
+		if(Power > 8 && Power <= 12) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}
+		if(Power > 12 && Power <= 16) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}
+		if(Power > 16 && Power <= 20) {
+			COLOR_G = 63;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}		
+		if(Power > 20 && Power <= 24) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = 63;
+		}			
+		if(Power > 24 && Power <= 28) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = (41 - Power) * 4 - 1; 
+		}			
+		if(Power > 28 && Power <= 32) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = (41 - Power) * 4 - 1;
+		}	
+		if(Power > 32 && Power <= 36) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = (41 - Power) * 4 - 1;
+		}
+		if(Power > 36 && Power <= 40) {
+			COLOR_R = 63;
+			COLOR_G = (41 - Power) * 4 - 1;
+		}
+		COLOR_BAR = COLOR_RGB(COLOR_R,  COLOR_G,  COLOR_B);
 		
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, COLOR_BAR);
 		//DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, (i == CurrentFreqIndex) ? COLOR_BLUE : COLOR_FOREGROUND);
