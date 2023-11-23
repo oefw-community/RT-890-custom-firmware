@@ -46,6 +46,10 @@ uint8_t CurrentStepCountIndex;
 uint8_t CurrentStepCount;
 uint16_t CurrentScanDelay;
 uint16_t RssiValue[128] = {0};
+uint16_t COLOR_BAR;
+uint8_t COLOR_R;
+uint8_t COLOR_G;
+uint8_t COLOR_B;
 bool bExit;
 KEY_t Key;
 KEY_t LastKey = KEY_NONE;
@@ -156,7 +160,7 @@ void IncrementFreqStepIndex(void){
 }
 
 void IncrementScanDelay(void){
-	CurrentScanDelay = (CurrentScanDelay + 5) % 45;
+	CurrentScanDelay = (CurrentScanDelay + 2) % 45;
 	DrawLabels();
 }
 
@@ -189,7 +193,55 @@ void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 		if (Power > MaxBarHeight) {
 			Power = MaxBarHeight;
 		}
-		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, (i == CurrentFreqIndex) ? COLOR_BLUE : COLOR_FOREGROUND);
+		
+		COLOR_BAR = COLOR_BACKGROUND;
+		if(Power == 0) {COLOR_BAR = COLOR_RGB(0,  0,  0);}
+		COLOR_R = 0;
+		COLOR_B = 0;
+		if(Power > 0 && Power <= 4) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = 63;
+		}
+		if(Power > 4 && Power <= 8) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}
+		if(Power > 8 && Power <= 12) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}
+		if(Power > 12 && Power <= 16) {
+			COLOR_G = (Power * 4) - 1;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}
+		if(Power > 16 && Power <= 20) {
+			COLOR_G = 63;
+			COLOR_B = (21 - Power) * 4 - 1;
+		}		
+		if(Power > 20 && Power <= 24) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = 63;
+		}			
+		if(Power > 24 && Power <= 28) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = (41 - Power) * 4 - 1; 
+		}			
+		if(Power > 28 && Power <= 32) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = (41 - Power) * 4 - 1;
+		}	
+		if(Power > 32 && Power <= 36) {
+			COLOR_R = (Power - 20) * 4 - 1;
+			COLOR_G = (41 - Power) * 4 - 1;
+		}
+		if(Power > 36 && Power <= 40) {
+			COLOR_R = 63;
+			COLOR_G = (41 - Power) * 4 - 1;
+		}
+		COLOR_BAR = COLOR_RGB(COLOR_R,  COLOR_G,  COLOR_B);
+		
+		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, COLOR_BAR);
+		//DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, (i == CurrentFreqIndex) ? COLOR_BLUE : COLOR_FOREGROUND);
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15 + Power, MaxBarHeight - Power, BarWidth, COLOR_BACKGROUND);
 	}
 } 
