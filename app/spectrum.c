@@ -131,7 +131,7 @@ void IncrementFreqStepIndex(void){
 }
 
 void IncrementScanDelay(void){
-	CurrentScanDelay = (CurrentScanDelay + 5) % 45;
+	CurrentScanDelay = (CurrentScanDelay + 2) % 45;
 	DrawLabels();
 }
 
