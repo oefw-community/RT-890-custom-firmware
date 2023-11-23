@@ -234,6 +234,7 @@ void DrawBars(uint16_t RssiLow, uint16_t RssiHigh){
 		if (Power == 40) {COLOR_BAR   = COLOR_RGB(63,  0,  0);}
 		
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, COLOR_BAR);
+		//DISPLAY_DrawRectangle1(16+(i * BarWidth), 15, Power, BarWidth, (i == CurrentFreqIndex) ? COLOR_BLUE : COLOR_FOREGROUND);
 		DISPLAY_DrawRectangle1(16+(i * BarWidth), 15 + Power, MaxBarHeight - Power, BarWidth, COLOR_BACKGROUND);
 	}
 } 
