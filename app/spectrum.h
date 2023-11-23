@@ -25,32 +25,6 @@ enum {
   STEPS_COUNT,
 };
 
-enum STEP_Setting_t {
-  STEP_0_01kHz,
-  STEP_0_1kHz,
-  STEP_0_5kHz,
-  STEP_1_0kHz,
-  STEP_2_5kHz,
-  STEP_5_0kHz,
-  STEP_6_25kHz,
-  STEP_8_33kHz,
-  STEP_10_0kHz,
-  STEP_12_5kHz,
-  STEP_25_0kHz,
-  STEP_100_0kHz,
-};
-
-typedef enum STEP_Setting_t STEP_Setting_t;
-typedef STEP_Setting_t ScanStep;
-
-/*
-typedef struct SpectrumSettings {
-  StepsCount stepCount;
-  ScanStep scanStepIndex;
-  ModulationType modulationType;
-} SpectrumSettings;
-*/
-
 void APP_Spectrum(void);
 
 #endif
