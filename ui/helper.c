@@ -125,27 +125,6 @@ static const uint32_t IconRadio[] = {
 	0x7FFC00, 0x800300, 0xAA7B00, 0xAA7A00, 0xAA7A00, 0xAA7A00, 0xAA7A00, 0x8003FF, 0x7FFC00,
 };
 
-static const uint8_t BitmapFM[] = {
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x04, 0x08, 0x08, 0x10, 0x1F, 0x20,
-	0x20, 0x20, 0x40, 0x40, 0x40, 0x40, 0x40, 0x7F, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x40, 0x20, 0x20,
-	0x20, 0x1F, 0x10, 0x08, 0x08, 0x04, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x01, 0x06, 0x0E, 0x22, 0x42, 0x82, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06, 0xFF, 0x06,
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0xFF, 0xFF, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-	0x06, 0xFF, 0x06, 0x02, 0x02, 0x02, 0x02, 0x02, 0x82, 0x42, 0x22, 0x1E, 0x06, 0x01, 0x00, 0x00,
-	0x00, 0x3F, 0xC1, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xFF, 0x01,
-	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xFF, 0xFF, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-	0x01, 0xFF, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xC1, 0x3F, 0x00,
-	0x00, 0xF8, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xF8, 0x00,
-	0x00, 0x00, 0x00, 0xE0, 0x70, 0x4C, 0x46, 0x41, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0xFF, 0x40,
-	0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0xFF, 0xFF, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
-	0x40, 0xFF, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x41, 0x42, 0x4C, 0x70, 0xE0, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x40, 0x60, 0x20, 0x10, 0x10, 0xF8, 0x08,
-	0x04, 0x04, 0x04, 0x02, 0x02, 0x02, 0x02, 0xFE, 0xFE, 0x02, 0x02, 0x02, 0x02, 0x04, 0x04, 0x04,
-	0x08, 0xF8, 0x10, 0x10, 0x20, 0x20, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
-
 static const uint8_t BitmapSKY[] = {
 	0x00, 0x01, 0x07, 0x0F, 0x1F, 0x3F, 0x3F, 0x3F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
 	0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
@@ -259,7 +238,7 @@ void UI_DrawDigits(const char *pDigits, uint8_t Vfo)
 	uint8_t i;
 
 	X = 136;
-	Y = 73 + (Vfo * 215);
+	Y = 70 + (Vfo * 215);
 	gColorForeground = COLOR_FOREGROUND;
 	for (i = 0; i < 3; i++) {
 		if (pDigits[i] == '-') {
@@ -305,27 +284,23 @@ void UI_DrawStatusIcon(uint8_t X, UI_Icon_t Icon, bool bDraw, uint16_t Color)
 		}
 	}
 }
-
+// Roger beep -bell
 void UI_DrawRoger(void)
 {
 	gColorForeground = COLOR_FOREGROUND;
 
 	switch (gSettings.RogerBeep) {
 	case 0:
-		UI_DrawStatusIcon(20, ICON_BELL, false, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 85, "  ", 2);
+		UI_DrawSmallString(86, 85, "  ", 2);
 		break;
 	case 1:
-		UI_DrawStatusIcon(20, ICON_BELL, true, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 86, " 1", 2);
+		UI_DrawSmallString(86, 86, "R1", 2);
 		break;
 	case 2:
-		UI_DrawStatusIcon(20, ICON_BELL, true, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 86, " 2", 2);
+		UI_DrawSmallString(86, 86, "R2", 2);
 		break;
 	case 3:
-		UI_DrawStatusIcon(20, ICON_BELL, true, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 86, "ID", 2);
+		UI_DrawSmallString(86, 86, "ID", 2);
 		break;
 	}
 }
@@ -334,60 +309,70 @@ void UI_DrawVoltage(uint8_t Vfo)
 {
 	if (gSettings.DualDisplay == 0) {
 		const uint8_t Y = 72 - (Vfo * 41);
-		gColorForeground = COLOR_BLUE;
-		/* Replacing voltage display with register display */
 		uint16_t regValue = BK4819_ReadRegister(0x7E);
-		// Extract bits 15, 14, 13 and 12
 		regValue = (regValue & 0xF000) >> 12;
-		// If bit 15 is set, display AUTO, otherwise display FIX
-		if ((regValue & 0x8) == 0x8) {
+		
+		gColorForeground = COLOR_FOREGROUND;
+        if ((regValue & 0x8) == 0x8) {
 			UI_DrawSmallString(16, Y, "FIX ", 4);
 		} else {
-			UI_DrawSmallString(16, Y, "AUTO", 4);
+			UI_DrawSmallString(16, Y, "EAM ", 4);
 		}
-		// Display bits 14:12 as an integer
+		
 		unsigned char curRegValue = (regValue & 0x7);
 		Int2Ascii(regValue & 0x7, 1);
 		UI_DrawSmallString(40, Y, gShortString, 1);
-		// Now, read register (0x10 + curRegValue) and output the following as separate values:
-		// 2:0 - PGA Gain
-		// 4:3 - Mixer Gain
-		// 7:5 - LNA Gain
-		// 9:8 - LNA Gain Short
 		regValue = BK4819_ReadRegister(0x10 + curRegValue);
-		// Extract bits 2:0
-		Int2Ascii(regValue & 0x7, 1);
-		UI_DrawSmallString(16, Y-8, "PGA ", 4);
-		UI_DrawSmallString(40, Y-8, gShortString, 1);
-		// Extract bits 4:3
-		Int2Ascii((regValue & 0x18) >> 3, 1);
-		UI_DrawSmallString(64, Y-8, "MIX ", 4);
-		UI_DrawSmallString(88, Y-8, gShortString, 1);
-		// Extract bits 7:5
-		Int2Ascii((regValue & 0xE0) >> 5, 1);
-		UI_DrawSmallString(112, Y-8, "LNA ", 4);
-		UI_DrawSmallString(136, Y-8, gShortString, 1);
 		// Extract bits 9:8
+		gColorForeground = COLOR_FOREGROUND;
 		Int2Ascii((regValue & 0x300) >> 8, 1);
-		UI_DrawSmallString(16, Y-16, "LNAS", 4);
-		UI_DrawSmallString(48, Y-16, gShortString, 1);
+		UI_DrawSmallString(16, Y-8, "LNAS", 4);
+		UI_DrawSmallString(40, Y-8, gShortString, 1);
+		// Extract bits 7:5
+		gColorForeground = COLOR_FOREGROUND;
+		Int2Ascii((regValue & 0xE0) >> 5, 1);
+		UI_DrawSmallString(64, Y-8, "LNA ", 4);
+		UI_DrawSmallString(88, Y-8, gShortString, 1);
+		// Extract bits 4:3
+		gColorForeground = COLOR_FOREGROUND;
+		Int2Ascii((regValue & 0x18) >> 3, 1);
+		UI_DrawSmallString(16, Y-16, "MIX ", 4);
+		UI_DrawSmallString(40, Y-16, gShortString, 1);
+		// Extract bits 2:0
+		gColorForeground = COLOR_FOREGROUND;
+		Int2Ascii(regValue & 0x7, 1);
+		UI_DrawSmallString(112, Y-8, "PGA ", 4);
+		UI_DrawSmallString(136, Y-8, gShortString, 1);
 		// Next, logic to handle REG_43<14:12> (RF filter bandwidth)
 		regValue = BK4819_ReadRegister(0x43);
 		// Extract bits 14:12
+		gColorForeground = COLOR_FOREGROUND;
 		Int2Ascii(regValue & 0x7000 >> 12, 1);
 		UI_DrawSmallString(64, Y, "BW", 2);
 		UI_DrawSmallString(88, Y, gShortString, 1);
 		// Extract bits 11:9
+		gColorForeground = COLOR_FOREGROUND;
 		Int2Ascii(regValue & 0xE00 >> 9, 1);
-		UI_DrawSmallString(112, Y, "Weak", 4);
+		UI_DrawSmallString(112, Y, "WK", 2);
 		UI_DrawSmallString(136, Y, gShortString, 1);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(112, Y-16, "0", 1);
+		gColorForeground = COLOR_FOREGROUND;
 		Int2Ascii(gBatteryVoltage, 2);
 		gShortString[2] = gShortString[1];
 		gShortString[1] = '.';
 		gShortString[3] = 'V';
-		UI_DrawSmallString(64, Y-24, gShortString, 4);
-
+		UI_DrawSmallString(118, Y-16, gShortString, 4);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(16, Y-24, "-----", 5);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(64, Y-24, "M7OCM", 5);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(112, Y-24, "-----", 5);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(64, Y-16, "V1.34", 5);
 	}
+	
 }
 
 void UI_DrawVfoFrame(uint8_t Y)
@@ -402,7 +387,7 @@ void UI_DrawVfoFrame(uint8_t Y)
 //	DISPLAY_DrawRectangle1( 95, Y,   5, 1, COLOR_FOREGROUND);
 
 // 80% size - allow room to right for dBM reading
-	DISPLAY_DrawRectangle0( 20, Y, 80, 1, COLOR_FOREGROUND);
+	DISPLAY_DrawRectangle0( 20, Y,  80, 1, COLOR_FOREGROUND);
 	DISPLAY_DrawRectangle1( 20, Y,   6, 1, COLOR_FOREGROUND);
 	DISPLAY_DrawRectangle1(100, Y,   6, 1, COLOR_FOREGROUND);
 	DISPLAY_DrawRectangle1( 40, Y,   5, 1, COLOR_FOREGROUND);
@@ -412,8 +397,8 @@ void UI_DrawVfoFrame(uint8_t Y)
 
 void UI_DrawName(uint8_t Vfo, const char *pName)
 {
-	gColorForeground = COLOR_GREY;
-	UI_DrawString(34, 83 - (Vfo * 41), pName, 10);
+	gColorForeground = COLOR_FOREGROUND;
+	UI_DrawSmallString(34, 70 - (Vfo * 41), pName, 10);
 }
 
 void UI_DrawExtra(uint8_t Mode, uint8_t gModulationType, uint8_t Vfo)
@@ -422,6 +407,7 @@ void UI_DrawExtra(uint8_t Mode, uint8_t gModulationType, uint8_t Vfo)
 
 	switch (Mode) {
 	case 0:
+<<<<<<< Updated upstream
 		gColorForeground = COLOR_BLUE;
 		UI_DrawSmallString(2, Y, gModulationType == 0 ? " FM" : gModulationType == 1 ? " AM" : gModulationType == 2 ? "LSB" : "USB", 3);
         break;
@@ -434,6 +420,19 @@ void UI_DrawExtra(uint8_t Mode, uint8_t gModulationType, uint8_t Vfo)
 	case 2: // RX mode
 		gColorForeground = COLOR_BLUE;
 		UI_DrawSmallString(2, Y, " RX", 3);
+=======
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(105, Y, gModulationType == 0 ? "FM" : gModulationType == 1 ? "AM" : gModulationType == 2 ? "L-" : "-U", 2);
+        break;
+	case 1: // TX mode
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(105, Y, "TX", 2);
+		break;
+
+	case 2: // RX mode
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(105, Y, "RX", 2);
+>>>>>>> Stashed changes
 		break;
 	}
 }
@@ -481,16 +480,16 @@ void UI_DrawBigDigit(uint8_t X, uint8_t Y, uint8_t Digit)
 
 void UI_DrawCss(uint8_t CodeType, uint16_t Code, uint8_t Encrypt, bool bMute, uint8_t Vfo)
 {
-	const uint8_t Y = 58 - (Vfo * 41);
+	const uint8_t Y = 61 - (Vfo * 41);
 
 	gColorForeground = COLOR_FOREGROUND;
 
 	if (bMute) {
-		UI_DrawSmallString(124, Y, "MUTE ", 5);
+		UI_DrawSmallString(124, Y, "MCODE", 5);
 		return;
 	}
 	if (Encrypt) {
-		UI_DrawSmallString(124, Y, "ENC  ", 5);
+		UI_DrawSmallString(124, Y, "ENCPT", 5);
 		return;
 	}
 	switch (CodeType) {
@@ -507,7 +506,7 @@ void UI_DrawCss(uint8_t CodeType, uint16_t Code, uint8_t Encrypt, bool bMute, ui
 		UI_DrawSmallString(130, Y, gShortString, 3);
 		break;
 	case 3:
-		UI_DrawSmallString(124, Y, "OFF  ", 5);
+		UI_DrawSmallString(124, Y, "-----", 5);
 		break;
 	}
 }
@@ -517,11 +516,11 @@ void UI_DrawTxPower(bool bIsLow, uint8_t Vfo)
 	uint8_t Y = 43 - (Vfo * 41);
 
 	if (bIsLow) {
-		gColorForeground = COLOR_RED;
-		UI_DrawSmallString(132, Y, "L", 1);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(4, Y, "LO", 2);
 	} else {
-		gColorForeground = COLOR_GREEN;
-		UI_DrawSmallString(132, Y, "H", 1);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawSmallString(4, Y, "HI", 2);
 	}
 }
 
@@ -532,7 +531,7 @@ void UI_DrawRxDBM(uint16_t RXdBM, bool isNeg, uint16_t len, uint8_t Vfo, bool Cl
 	gColorForeground = COLOR_FOREGROUND;
 
 	if (Clear) {
-		UI_DrawSmallString(105, Y, "    ", 4);
+		UI_DrawSmallString(124, Y, "    ", 4);
 	} else {
 		for (int i = len; i < 3; i++) {
 			gShortString[i] = ' ';
@@ -540,23 +539,23 @@ void UI_DrawRxDBM(uint16_t RXdBM, bool isNeg, uint16_t len, uint8_t Vfo, bool Cl
 		Int2Ascii(RXdBM, len);
 
 		if (isNeg) {
-			UI_DrawSmallString(105, Y, "-", 1);
+			UI_DrawSmallString(124, Y, "-", 1);
 		} else {
-			UI_DrawSmallString(105, Y, " ", 1);
+			UI_DrawSmallString(124, Y, " ", 1);
 		}
-		UI_DrawSmallString(111, Y, gShortString, 3);
+		UI_DrawSmallString(130, Y, gShortString, 3);
 	}
 }
 
 void UI_DrawChannel(uint16_t Channel, uint8_t Vfo)
 {
-	uint8_t Y = 73 - (Vfo * 41);
+	uint8_t Y = 70 - (Vfo * 41);
 
 	gColorForeground = COLOR_FOREGROUND;
 	if (Channel > 998) {
 		UI_DrawSmallString(124, Y, "VFO  ", 5);
 	} else {
-		UI_DrawSmallString(124, Y, "CH", 2);
+		UI_DrawSmallString(124, Y, "M-", 2);
 		Int2Ascii(Channel + 1, 3);
 		UI_DrawSmallString(136, Y, gShortString, 3);
 	}
@@ -591,10 +590,10 @@ void UI_DrawRX(uint8_t Vfo)
 		uint16_t Pixel;
 
 		if (gRadioMode == RADIO_MODE_TX) {
-			gColorForeground = COLOR_RED;
+			gColorForeground = COLOR_FOREGROUND;
 			Pixel = IconAntenna[0][i];
 		} else if (gRadioMode == RADIO_MODE_RX) {
-			gColorForeground = COLOR_BLUE;
+			gColorForeground = COLOR_FOREGROUND;
 			Pixel = IconAntenna[1][i];
 		} else {
 			gColorForeground = gColorBackground;
@@ -615,34 +614,34 @@ void UI_DrawRX(uint8_t Vfo)
 
 void UI_DrawDTMF(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(10, 54, "DTMF Input :", 12);
 	UI_DrawString(10, 38, gDTMF_Input.String, 14);
 }
-
-void UI_DrawFMFrequency(uint16_t Frequency)
+	
+void UI_DrawFMFrequency(uint16_t Frequency)// Start FM Radio
 {
 	Int2Ascii(gSettings.FmFrequency, 4);
 	gShortString[4] = gShortString[3];
 	gShortString[3] = '.';
-	gColorForeground = COLOR_BLUE;
-	UI_DrawString(84, 58, gShortString, 5);
-	UI_DrawString(124, 58, "M", 1);
+	gColorForeground = COLOR_FOREGROUND;
+	UI_DrawSmallString(103, 86, gShortString, 5);
 }
 
-void UI_DrawFM(void)
+void UI_DrawDecimal(const char *pInput)
 {
-	gColorForeground = COLOR_GREY;
-	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
-	UI_DrawFrame(12, 150, 6, 74, 2, gColorForeground);
-	UI_DrawFrame(72, 144, 36, 64, 2, gColorForeground);
-	DISPLAY_Fill( 72,  88, 16, 22, gColorForeground);
-	DISPLAY_Fill(100, 116, 16, 22, gColorForeground);
-	DISPLAY_Fill(128, 144, 16, 22, gColorForeground);
-	UI_DrawBitmap(16,  16,  6, 48, BitmapFM);
-}
+	char String[5];
+	uint8_t i;
 
+	gColorForeground = COLOR_FOREGROUND;
+	for (i = 0; i < 4; i++) {
+		String[i] = (pInput[i] == 10) ? '-' : ('0' + pInput[i]);
+	}
+	String[4] = String[3];
+	String[3] = '.';
+	UI_DrawSmallString(103, 86, String, 5);// End FM Radio
+}
+	
 void UI_DrawBitmap(uint8_t X, uint8_t Y, uint8_t H, uint8_t W, const uint8_t *pBitmap)
 {
 	uint8_t x, y, i;
@@ -675,7 +674,7 @@ void UI_DrawFrame(uint8_t X0, uint8_t X1, uint8_t Y0, uint8_t Y1, uint8_t Thickn
 void UI_DrawDialog(void)
 {
 	DISPLAY_Fill(4, 156, 19, 61, COLOR_BACKGROUND);
-	UI_DrawFrame(4, 156, 19, 61, 2, gSettings.BorderColor);
+	UI_DrawFrame(4, 156, 19, 61, 2, gColorForeground);
 }
 
 void UI_DrawBar(uint8_t Level, uint8_t Vfo)
@@ -688,12 +687,12 @@ void UI_DrawBar(uint8_t Level, uint8_t Vfo)
 
 //	if (Level < 25) {
 	if (Level < 20) {
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_FOREGROUND;
 //	} else if (Level < 50) {
 	} else if (Level < 40) {
-		gColorForeground = COLOR_RGB(31, 41, 0);
+		gColorForeground = COLOR_FOREGROUND;
 	} else {
-		gColorForeground = COLOR_GREEN;
+		gColorForeground = COLOR_FOREGROUND;
 	}
 
 	for (i = 0; i < Level; i++) {
@@ -742,9 +741,10 @@ void UI_DrawMainBitmap(bool bOverride, uint8_t Vfo)
 	uint8_t i, j;
 
 	if (gSettings.bFLock) {
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_FOREGROUND;
 	} else {
-		gColorForeground = COLOR_BLUE;
+		// Main icon
+		gColorForeground = COLOR_FOREGROUND;
 	}
 
 	for (i = 0; i < 25; i++) {
@@ -768,9 +768,9 @@ void UI_DrawMainBitmap(bool bOverride, uint8_t Vfo)
 
 void UI_DrawSky(void)
 {
-	gColorForeground = COLOR_RGB(31, 63, 31);
+	gColorForeground = COLOR_FOREGROUND;
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
+	DISPLAY_DrawRectangle0(0, 82, 160, 1, gColorForeground);
 	UI_DrawBitmap(90, 16, 7, 70, BitmapSKY);
 }
 
@@ -783,7 +783,7 @@ void UI_DrawFrequencyEx(const char *String, uint8_t Vfo, bool bReverse)
 	if (!bReverse) {
 		gColorForeground = COLOR_FOREGROUND;
 	} else {
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_FOREGROUND;
 	}
 
 	DISPLAY_Fill(56, 57, Y, Y + 1, gColorForeground);
@@ -799,27 +799,13 @@ void UI_DrawFrequencyEx(const char *String, uint8_t Vfo, bool bReverse)
 
 void UI_DrawBootVoltage(uint8_t X, uint8_t Y)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(gBatteryVoltage, 2);
 	gShortString[2] = gShortString[1];
 	gShortString[1] = '.';
 	gShortString[3] = 'V';
 	UI_DrawString(X, Y, "Voltage:", 8);
 	UI_DrawString(X + 72, Y, gShortString, 4);
-}
-
-void UI_DrawDecimal(const char *pInput)
-{
-	char String[5];
-	uint8_t i;
-
-	gColorForeground = COLOR_BLUE;
-	for (i = 0; i < 4; i++) {
-		String[i] = (pInput[i] == 10) ? '-' : ('0' + pInput[i]);
-	}
-	String[4] = String[3];
-	String[3] = '.';
-	UI_DrawString(84, 58, String, 5);
 }
 
 void UI_DrawMenuPosition(const char *pString)
@@ -838,8 +824,8 @@ void UI_DrawMenuPosition(const char *pString)
 
 void UI_DrawStringSwitchType(void)
 {
-	DISPLAY_DrawRectangle0(1, 20, 159, 1, COLOR_RGB(31, 53, 0));
-	gColorForeground = COLOR_RED;
+	DISPLAY_DrawRectangle0(1, 20, 159, 1, COLOR_FOREGROUND);
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(4, 18, "Switch type by [*]", 18);
 	gColorForeground = COLOR_FOREGROUND;
 }
@@ -847,8 +833,8 @@ void UI_DrawStringSwitchType(void)
 void UI_DrawRadar(void)
 {
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
-	gColorForeground = COLOR_BLUE;
+	DISPLAY_DrawRectangle0(0, 82, 160, 1, gColorForeground);
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawBitmap(4, 12, 8, 64, BitmapRadar);
 }
 
@@ -883,7 +869,7 @@ void UI_DrawChannelNumber(const char *pString)
 
 void UI_DrawBand(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	if (gSettings.bUseVHF) {
 		UI_DrawString(80, 72, "VHF      ", 9);
 	} else {
@@ -895,7 +881,7 @@ void UI_DrawScanFrequency(uint32_t Frequency)
 {
 	uint8_t i;
 
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(Frequency, 8);
 	for (i = 8; i > 3; i--) {
 		gShortString[i] = gShortString[i - 1];
@@ -906,13 +892,13 @@ void UI_DrawScanFrequency(uint32_t Frequency)
 
 void UI_DrawCtdcScan(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(80, 72, "CTDC Scan", 9);
 }
 
 void UI_DrawCtcssCode(uint16_t Code)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(Code, 4);
 	gShortString[4] = gShortString[3];
 	gShortString[3] = '.';
@@ -921,7 +907,7 @@ void UI_DrawCtcssCode(uint16_t Code)
 
 void UI_DrawDcsCodeN(uint16_t Code)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(CSS_ConvertCode(Code), 3);
 	gShortString[3] = gShortString[2];
 	gShortString[2] = gShortString[1];
@@ -936,17 +922,17 @@ void UI_DrawDTMFString(void)
 	if (gDTMF_Settings.Display) {
 		if (!gDataDisplay) {
 			UI_DrawDialog();
-			gColorForeground = COLOR_RED;
+			gColorForeground = COLOR_FOREGROUND;
 			UI_DrawString(10, 54, "DTMF:", 5);
 		}
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_FOREGROUND;
 		UI_DrawString(10, 38, gDTMF_String, 14);
 	}
 }
 
 void UI_DrawMuteInfo(bool bIs24Bit, uint32_t Golay)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(Golay, 8);
 	if (bIs24Bit) {
 		UI_DrawString(80, 40, "24bits", 6);
@@ -958,7 +944,7 @@ void UI_DrawMuteInfo(bool bIs24Bit, uint32_t Golay)
 
 void UI_DrawNone(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(80, 40, "None", 4);
 }
 
