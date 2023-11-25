@@ -1,5 +1,7 @@
 # Radtel RT-890 Custom Firmware
 
+![20231124_161822](https://github.com/M7OCM/RT-890-custom-firmware/assets/128899149/bf59e9ae-c4a9-477b-b2fb-53a4afc00e26)
+
 This project is an effort to improve the firmware of the Radtel RT-890 in terms of features and radio performance.
 
 It is based on [DualTachyon's OEFW](https://github.com/DualTachyon/radtel-rt-890-oefw) which is reversed from the original Radtel 1.34 firmware.  
