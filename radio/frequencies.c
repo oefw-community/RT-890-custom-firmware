@@ -23,7 +23,7 @@ bool gUseUhfFilter;
 uint8_t gCurrentFrequencyBand = 0xFF;
 
 uint8_t gTxPowerLevelHigh = 40;
-uint8_t gTxPowerLevelLow = 20;
+uint8_t gTxPowerLevelLow = 5;
 uint8_t gSquelchNoiseWide = 40;
 uint8_t gSquelchNoiseNarrow = 40;
 uint8_t gSquelchRSSIWide = 80;
@@ -102,7 +102,7 @@ void FREQUENCY_SelectBand(uint32_t Frequency)
 		gSquelchNoiseWide += 10;
 		gSquelchRSSIWide -= 10;
 	}
-	gTxPowerLevelLow = gFrequencyBandInfo.TxPowerLevelLow[Level];
+	gTxPowerLevelLow = gFrequencyBandInfo.TxPowerLevelLow[Level] / 4;
 	gTxPowerLevelHigh = gFrequencyBandInfo.TxPowerLevelHigh[Level];
 	gSquelchNoiseNarrow = gFrequencyBandInfo.SquelchNoiseNarrow[Level];
 	gSquelchRSSINarrow = gFrequencyBandInfo.SquelchRSSINarrow[Level];
