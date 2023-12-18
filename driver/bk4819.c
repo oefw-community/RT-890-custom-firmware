@@ -21,6 +21,7 @@
 #include "driver/delay.h"
 #include "driver/pins.h"
 #include "driver/speaker.h"
+#include "helper/helper.h"
 #include "misc.h"
 #include "radio/settings.h"
 
@@ -461,6 +462,7 @@ void BK4819_SetFilterBandwidth(bool bIsNarrow)
 {
 	// Check if modulation is FM
 	if (gMainVfo->gModulationType == 0) { // if FM
+#ifndef ENABLE_REGISTER_EDIT
 		if (bIsNarrow) {
 			//BK4819_WriteRegister(0x43, 0x4048); //stock
 			BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
@@ -470,6 +472,14 @@ void BK4819_SetFilterBandwidth(bool bIsNarrow)
 			BK4819_WriteRegister(0x43, 0x3428); //kamil/fagci
 			//BK4819_WriteRegister(0x43, 0x45A8); //egzumer
 		}
+#else
+		uint16_t Value = BK4819_ReadRegister(0x43); 
+		if (bIsNarrow) {
+			BK4819_WriteRegister(0x43, (Value & ~0x30) | 0);
+		} else {
+			BK4819_WriteRegister(0x43, (Value & ~0x30) | 32);
+		}
+#endif
 	}
 }
 
@@ -542,7 +552,7 @@ void BK4819_EnableVox(bool bEnable)
 
 void BK4819_RestoreGainSettings()
 {
-	/*  This section left here as reference, it will be useful when someone writes a register editor
+	/* Keep for now, may be useful for register editing
 	const uint8_t orig_lna_short = 2;
             const uint8_t orig_lna = 5;
             const uint8_t orig_mixer = 2;
@@ -552,21 +562,28 @@ void BK4819_RestoreGainSettings()
 			}
 	*/
 	
+	//Default values
+	BK4819_WriteRegister(0x10, 0x0038);  
+	BK4819_WriteRegister(0x11, 0x025a);  
+	BK4819_WriteRegister(0x12, 0x037b); 
 	BK4819_WriteRegister(0x13, 0x03de);
+	BK4819_WriteRegister(0x14, 0x0000); 
 }
 
-void BK4819_ToggleAGCMode(bool bAuto)
+void BK4819_ToggleAGCMode()
 {
 	// REG_7E[15] - AGC Mode
 	// 1 - Fixed, 0 - Auto
-	uint16_t Value;
-	Value = BK4819_ReadRegister(0x7E);
-	if (bAuto) {
-		Value &= ~0x8000U;
+
+	uint16_t Value = BK4819_ReadRegister(0x7E);
+	uint16_t AGCIndex = (Value & 0x7000) >> 12; // Extract bits 14, 13 and 12
+
+	if (!(Value & 0x8000U) || AGCIndex == 4){ //Bit 15 = 0 (AGC on) or 14:12 = 110 (index 4/min)
+		Value ^= 0x8000U; //Toggle AGC
 	} else {
-		Value |= 0x8000U;
-		// Set bits 14:12 to 110 (AGC index 4) without affecting the other bits
-		Value = (Value & 0x8FFFU) | 0x6000U;
+		Value |= 0x8000U; //Turn AGC off
+		AGCIndex = (AGCIndex + 7) % 8; //Decrement ACG Index
+		Value =  (Value & 0x8FFFU) | (AGCIndex << 12); // Set bits 14:12 (AGC Index)
 	}
 	BK4819_WriteRegister(0x7E, Value);
 }

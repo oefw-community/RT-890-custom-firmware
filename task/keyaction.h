@@ -46,6 +46,8 @@ enum {
 	ACTION_LOCK,
 	ACTION_SPECTRUM,
 	ACTION_DARK_MODE,
+	ACTION_AGC_MODE,
+	ACTION_REG_EDIT,
 	ACTIONS_COUNT,	// used to count the number of actions, keep this last
 };
 

@@ -87,11 +87,25 @@ Down => Normal: Decrease frequency range by frequency +/- (number in middle of b
 Menu => Jump to VFO mode with current frequency and settings (to allow TX)
 Exit => Exit spectrum
 ```
-
 Spectrum display:
 <p float="left">
 <img src="/Images/SpectrumDisplay.png" height=300 />
 </p>
+
+### Register Editor Usage
+Register Editor must be enabled with a Makefile flag.  It is off by default to save space.  Start register by mapping a key (side key or keypad) to the Reg Editor action using the main menu.  Register Editor will launch, showing the current register values in blue.  The register currently being edited will display in large white font.
+
+Register Editor keys:
+```
+Up   => Move editor to next register
+Down => Move to previous register
+1    => Change AGC level
+2    => Decrease value of current register's setting
+3    => Increase value of current register's setting
+Exit => Exit Register Editor
+```
+
+Note: There is also an key action (mappable to any key) that will cycle through the AGC levels.  To use this assign the AGC Mode action to a key.  It will cycle between Auto AGC and Fixed AGC levels 1-7.  This action is available even if the Register Editor Makefile flag is disabled.
 
 ## Update Instructions
 ### SPI memory backup

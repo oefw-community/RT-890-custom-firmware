@@ -24,6 +24,9 @@
 	#include "app/fm.h"
 #endif
 #include "app/menu.h"
+#ifdef ENABLE_REGISTER_EDIT
+	#include "app/regedit.h"
+#endif
 #ifdef ENABLE_SPECTRUM
 	#include "app/spectrum.h"
 #endif
@@ -380,10 +383,22 @@ void KeypressAction(uint8_t Action) {
                 UI_DrawMain(FALSE);
                 break;
 			
+			case ACTION_AGC_MODE:
+				BK4819_ToggleAGCMode();
+				UI_DrawVoltage(!gCurrentVfo);
+				break;
+	
 #ifdef ENABLE_SPECTRUM
 			case ACTION_SPECTRUM:
 				gInputBoxWriteIndex = 0;
 				APP_Spectrum();
+				break;
+#endif
+
+#ifdef ENABLE_REGISTER_EDIT
+			case ACTION_REG_EDIT:
+				APP_RegEdit();
+				break;
 #endif
 
 		}

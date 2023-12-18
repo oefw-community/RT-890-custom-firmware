@@ -10,6 +10,8 @@ ENABLE_SPECTRUM			?= 1
 ENABLE_SPECTRUM_PRESETS		?= 1
 # FM radio = 2.6 kB
 ENABLE_FM_RADIO			?= 1
+# Register Editor = .5 kB
+ENABLE_REGISTER_EDIT	?= 0
 # Space saving options
 ENABLE_LTO			?= 0
 ENABLE_OPTIMIZED		?= 1
@@ -55,6 +57,9 @@ endif
 OBJS += app/lock.o
 OBJS += app/menu.o
 OBJS += app/radio.o
+ifeq ($(ENABLE_REGISTER_EDIT), 1)
+	OBJS += app/regedit.o
+endif
 ifeq ($(ENABLE_SPECTRUM), 1)
 	OBJS += app/spectrum.o
 endif
@@ -207,6 +212,9 @@ ifeq ($(ENABLE_SPECTRUM), 1)
 endif
 ifeq ($(ENABLE_SPECTRUM_PRESETS), 1)
 	CFLAGS += -DENABLE_SPECTRUM_PRESETS
+endif
+ifeq ($(ENABLE_REGISTER_EDIT), 1)
+	CFLAGS += -DENABLE_REGISTER_EDIT
 endif
 ifeq ($(ENABLE_FM_RADIO), 1)
 	CFLAGS += -DENABLE_FM_RADIO

@@ -136,6 +136,7 @@ void Task_CheckRSSI(void)
 			if (gTailToneCounter <= 10 && gNoToneCounter <= 1000) {
 				gNoToneCounter = 0;
 				CheckRSSI();
+				UI_DrawVoltage(!gCurrentVfo);
 			} else if (!gReceptionMode) {
 				RADIO_EndRX();
 			} else {

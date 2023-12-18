@@ -46,7 +46,6 @@ void Task_CheckBattery(void)
 #ifdef ENABLE_FM_RADIO
 			&& gFM_Mode == FM_MODE_OFF
 #endif
-			&& gScreenMode == SCREEN_MAIN
 			&& !gDTMF_InputMode
 			&& !gFlashlightMode) {
 		UI_DrawVoltage(!gSettings.CurrentVfo);

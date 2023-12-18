@@ -181,7 +181,13 @@ void UI_DrawActions(uint8_t Index)
 #else
 		"[DISABLED]  ",
 #endif
-		"Dark Mode   "
+		"Dark Mode   ",
+		"AGC Mode    ",
+#ifdef ENABLE_REGISTER_EDIT
+		"Reg Editor  "
+#else
+		"[DISABLED]  "
+#endif
 	};
 
 	UI_DrawSettingOptionEx(Actions[Index], 12, 0);

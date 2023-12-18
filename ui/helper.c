@@ -319,7 +319,7 @@ void UI_DrawRoger(void)
 
 void UI_DrawVoltage(uint8_t Vfo)
 {
-	if (gSettings.DualDisplay == 0) {
+	if (gSettings.DualDisplay == 0 && gScreenMode == SCREEN_MAIN) {
 		const uint8_t Y = 72 - (Vfo * 41);
 		gColorForeground = COLOR_BLUE;
 		/* Replacing voltage display with register display */
@@ -361,11 +361,11 @@ void UI_DrawVoltage(uint8_t Vfo)
 		// Next, logic to handle REG_43<14:12> (RF filter bandwidth)
 		regValue = BK4819_ReadRegister(0x43);
 		// Extract bits 14:12
-		Int2Ascii(regValue & 0x7000 >> 12, 1);
+		Int2Ascii((regValue & 0x7000) >> 12, 1);
 		UI_DrawSmallString(64, Y, "BW", 2);
 		UI_DrawSmallString(88, Y, gShortString, 1);
 		// Extract bits 11:9
-		Int2Ascii(regValue & 0xE00 >> 9, 1);
+		Int2Ascii((regValue & 0xE00) >> 9, 1);
 		UI_DrawSmallString(112, Y, "Weak", 4);
 		UI_DrawSmallString(136, Y, gShortString, 1);
 		Int2Ascii(gBatteryVoltage, 2);

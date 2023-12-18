@@ -50,7 +50,7 @@ void BK4819_SetFrequency(uint32_t Frequency);
 void BK4819_SetSquelchGlitch(bool bIsNarrow);
 void BK4819_SetSquelchNoise(bool bIsNarrow);
 void BK4819_SetSquelchRSSI(bool bIsNarrow);
-void BK4819_ToggleAGCMode(bool bAuto);
+void BK4819_ToggleAGCMode(void);
 void BK4819_RestoreGainSettings();
 void BK4819_SetFilterBandwidth(bool bIsNarrow);
 void BK4819_EnableFilter(bool bEnable);
