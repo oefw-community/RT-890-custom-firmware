@@ -111,6 +111,8 @@ static void CheckRSSI(void)
 		UI_DrawBar(Power, gCurrentVfo);
 		ConvertRssiToDbm(RSSI);
 		UI_DrawRxDBM(gCurrentVfo, false);
+		ConvertRssiToSmeter(RSSI);
+		UI_DrawRxSmeter(!gCurrentVfo, false);
 		gCurrentRssi[gCurrentVfo] = Power;
 	}
 }

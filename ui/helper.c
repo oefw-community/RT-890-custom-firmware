@@ -373,7 +373,7 @@ void UI_DrawVoltage(uint8_t Vfo)
 		gShortString[1] = '.';
 		gShortString[3] = 'V';
 		UI_DrawSmallString(64, Y-24, gShortString, 4);
-
+		UI_DrawSmallString(64, Y-16, "S-METER", 7);
 	}
 }
 
@@ -517,7 +517,7 @@ void ConvertRssiToDbm(uint16_t Rssi) {
 		uint16_t uRXdBM;
 		uint8_t bNeg;
 		uint16_t len;
-		
+
 		RXdBM = (Rssi >> 1) - 160; 
 
 		if (RXdBM < 0) {
@@ -527,7 +527,7 @@ void ConvertRssiToDbm(uint16_t Rssi) {
 			uRXdBM = RXdBM;
 			bNeg = false;
 		}
-		
+
 		for (int i = 0; i < 8; i++) {
 			gShortString[i] = ' ';
 		}
@@ -550,6 +550,59 @@ void ConvertRssiToDbm(uint16_t Rssi) {
 		}	
 }
 
+void ConvertRssiToSmeter(uint16_t Rssi)
+{
+	/* S-Meter to dbm
+	S9 + 40 dB 	-53 dBm
+	S9 + 30 dB 	-63 dBm
+	S9 + 20 dB 	-73 dBm
+	S9 + 10 dB 	-83 dBm
+	S9 			-93 dBm
+	S8 			-99 dBm
+	S7 			-105 dBm
+	S6 			-111 dBm
+	S5 			-117 dBm
+	S4 			-123 dBm
+	S3 			-129 dBm
+	S2 			-135 dBm
+	S1 			-141 dBm
+	S0 			-147 dBm
+	*/
+
+	int16_t RXdBM;
+	int16_t Svalue;
+	const int16_t RXdBMover9 = -93;
+	uint8_t len;
+
+	RXdBM = (Rssi >> 1) - 160;
+
+	for (int i = 0; i < 8; i++) {
+			gShortString[i] = ' ';
+		}
+
+	if (RXdBM <= RXdBMover9) {
+		Svalue = (-(-147 - RXdBM))/6; //6dBm spacing
+		if (Svalue < 0) Svalue = 0;
+		len = 1;
+	} else {
+		Svalue = -(RXdBMover9 - RXdBM);
+		if (Svalue > 99) Svalue = 99; //TODO: Delete or adapt this value on maximum value retrieved from BEKEN register
+		len = 2;
+	}
+
+		Int2Ascii(Svalue, len);
+
+		for (uint8_t i = len; i > 0; i--){
+			gShortString[i+len] = gShortString[i-1];
+		}
+
+		gShortString[0] = 'S';
+		if (len == 2){
+			gShortString[0] = '9';
+			gShortString[1] = '.';
+		}
+}
+
 void UI_DrawRxDBM(uint8_t Vfo, bool Clear)
 {
 	uint8_t Y = 43 - (Vfo * 41);
@@ -561,6 +614,19 @@ void UI_DrawRxDBM(uint8_t Vfo, bool Clear)
 	} else {
 		UI_DrawSmallString(105, Y, gShortString, 4);
 	}
+}
+
+void UI_DrawRxSmeter (uint8_t Vfo, bool Clear)
+{
+	uint8_t Y;
+	if (gSettings.DualDisplay == 0) {
+		Y = 72 - (Vfo * 41);
+		gColorForeground = COLOR_BLUE;
+		UI_DrawSmallString(112, Y-16, gShortString, 5);
+	}
+
+	if (gSettings.DualDisplay == 0 && Clear)
+		UI_DrawSmallString(112, Y-16, "     ", 5);
 }
 
 void UI_DrawChannel(uint16_t Channel, uint8_t Vfo)
@@ -751,6 +817,7 @@ void UI_DrawSomething(void)
 		UI_DrawBar(0, gCurrentVfo);
 		ConvertRssiToDbm(0);
 		UI_DrawRxDBM(gCurrentVfo, true);
+		UI_DrawRxSmeter(!gCurrentVfo, true);
 	}
 	UI_DrawMainBitmap(true, gSettings.CurrentVfo);
 }
