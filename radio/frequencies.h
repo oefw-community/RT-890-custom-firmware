@@ -44,10 +44,6 @@ typedef struct __attribute__((packed)) {
 	uint16_t RX_DAC_GainNarrow;
 	uint8_t TxPowerLevelHigh[16];
 	uint8_t TxPowerLevelLow[16];
-	uint8_t SquelchNoiseWide[16];
-	uint8_t SquelchRSSIWide[16];
-	uint8_t SquelchNoiseNarrow[16];
-	uint8_t SquelchRSSINarrow[16];
 } FrequencyBandInfo_t;
 
 extern FrequencyBandInfo_t gFrequencyBandInfo;

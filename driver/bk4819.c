@@ -30,48 +30,6 @@ enum {
 	GPIO_FILTER_UNKWOWN = 1U << 7,
 };
 
-static const uint8_t gSquelchGlitchLevel[11] = {
-	0x20,
-	0x20,
-	0x1E,
-	0x1C,
-	0x1A,
-	0x18,
-	0x16,
-	0x14,
-	0x12,
-	0x10,
-	0x0E,
-};
-
-static const uint8_t gSquelchNoiseLevel[11] = {
-	0x0A,
-	0x0A,
-	0x09,
-	0x08,
-	0x07,
-	0x06,
-	0x05,
-	0x04,
-	0x03,
-	0x02,
-	0x01,
-};
-
-static const uint8_t gSquelchRssiLevel[11] = {
-	0x00,
-	0x00,
-	0x02,
-	0x04,
-	0x06,
-	0x0A,
-	0x10,
-	0x16,
-	0x1C,
-	0x22,
-	0x26,
-};
-
 static void Delay(volatile uint8_t Counter)
 {
 	while (Counter-- > 0) {
@@ -317,25 +275,60 @@ void BK4819_SetFrequency(uint32_t Frequency)
 
 void BK4819_SetSquelchGlitch(bool bIsNarrow)
 {
-	if (bIsNarrow) {
-		BK4819_WriteRegister(0x4D, gSquelchGlitchLevel[gSettings.Squelch] + 0x9FFF);
-		BK4819_WriteRegister(0x4E, gSquelchGlitchLevel[gSettings.Squelch] + 0x4DFE);
+	uint16_t Value;
+
+	static const uint8_t SquelchGlitchOpenLevel[10] = {
+		0x5A,
+		0x14,
+		0x11,
+		0x0E,
+		0x0B,
+		0x08,
+		0x03,
+		0x02,
+		0x02,
+		0x02,
+	};
+
+	if (gSettings.Squelch == 0){
+		Value = 255;
 	} else {
-		BK4819_WriteRegister(0x4D, gSquelchGlitchLevel[gSettings.Squelch] + 0xA000);
-		BK4819_WriteRegister(0x4E, gSquelchGlitchLevel[gSettings.Squelch] + 0x4DFF);
+		Value = (SquelchGlitchOpenLevel[gSettings.Squelch] * 4) / 3;
 	}
+
+	BK4819_WriteRegister(0x4E, Value);
+
+	if (gSettings.Squelch == 0){
+		Value = 255;
+	} else {
+		Value = (Value * 10) / 9;
+	}
+
+	BK4819_WriteRegister(0x4D, Value);
 }
 
 void BK4819_SetSquelchNoise(bool bIsNarrow)
 {
-	uint8_t Level;
 	uint16_t Value;
 
-	Level = gSquelchNoiseLevel[gSettings.Squelch];
-	if (bIsNarrow) {
-		Value = ((gSquelchNoiseNarrow + 12 + Level) << 8) | (gSquelchNoiseNarrow + 6 + Level);
+	static const uint8_t SquelchNoiseOpenLevel[10] = {
+		0x5A,
+		0x2D,
+		0x29,
+		0x26,
+		0x23,
+		0x20,
+		0x1D,
+		0x1A,
+		0x17,
+		0x14,
+	};
+
+	if (gSettings.Squelch == 0){
+		Value = (127 << 8) | 127;
 	} else {
-		Value = ((gSquelchNoiseWide   + 12 + Level) << 8) | (gSquelchNoiseWide   - 6 + Level);
+		Value = (SquelchNoiseOpenLevel[gSettings.Squelch] * 4) / 3;
+		Value = (((Value * 10) / 9) << 8) | Value;
 	}
 
 	BK4819_WriteRegister(0x4F, Value);
@@ -343,14 +336,27 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 
 void BK4819_SetSquelchRSSI(bool bIsNarrow)
 {
-	uint8_t Level;
 	uint16_t Value;
 
-	Level = gSquelchRssiLevel[gSettings.Squelch];
-	if (bIsNarrow) {
-		Value = ((gSquelchRSSINarrow - 8 + Level) << 8) | (gSquelchRSSINarrow - 14 + Level);
+	static const uint8_t SquelchRssiOpenLevel[10] = {
+		0x0A,
+		0x4B,
+		0x4E,
+		0x53,
+		0x56,
+		0x59,
+		0x5C,
+		0x5F,
+		0x62,
+		0x64,
+	//	0x66,
+	};
+
+	if (gSettings.Squelch == 0){
+		Value = 0;
 	} else {
-		Value = ((gSquelchRSSIWide   - 8 + Level) << 8) | (gSquelchRSSIWide   - 14 + Level);
+		Value = (SquelchRssiOpenLevel[gSettings.Squelch] * 3) / 4;
+		Value = (Value << 8) | (Value * 9) / 10;
 	}
 
 	BK4819_WriteRegister(0x78, Value);
