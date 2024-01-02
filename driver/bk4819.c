@@ -30,48 +30,6 @@ enum {
 	GPIO_FILTER_UNKWOWN = 1U << 7,
 };
 
-static const uint8_t gSquelchGlitchLevel[11] = {
-	0x20,
-	0x20,
-	0x1E,
-	0x1C,
-	0x1A,
-	0x18,
-	0x16,
-	0x14,
-	0x12,
-	0x10,
-	0x0E,
-};
-
-static const uint8_t gSquelchNoiseLevel[11] = {
-	0x0A,
-	0x0A,
-	0x09,
-	0x08,
-	0x07,
-	0x06,
-	0x05,
-	0x04,
-	0x03,
-	0x02,
-	0x01,
-};
-
-static const uint8_t gSquelchRssiLevel[11] = {
-	0x00,
-	0x00,
-	0x02,
-	0x04,
-	0x06,
-	0x0A,
-	0x10,
-	0x16,
-	0x1C,
-	0x22,
-	0x26,
-};
-
 static void Delay(volatile uint8_t Counter)
 {
 	while (Counter-- > 0) {
@@ -317,6 +275,54 @@ void BK4819_SetFrequency(uint32_t Frequency)
 
 void BK4819_SetSquelchGlitch(bool bIsNarrow)
 {
+
+#ifdef ENABLE_ALT_SQUELCH
+	uint16_t Value;
+
+	static const uint8_t SquelchGlitchOpenLevel[10] = {
+		0x5A,
+		0x10,
+		0x9,
+		0x8,
+		0x7,
+		0x6,
+		0x5,
+		0x4,
+		0x3,
+		0x2,
+	};
+
+	if (gSettings.Squelch == 0){
+		Value = 255;
+	} else {
+		Value = SquelchGlitchOpenLevel[gSettings.Squelch];
+	}
+
+	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF) | Value);
+
+	if (gSettings.Squelch == 0){
+		Value = 255;
+	} else {
+		Value = (Value * 10) / 9;
+	}
+
+	BK4819_WriteRegister(0x4D, (BK4819_ReadRegister(0x4D) & 0xFF) | Value);
+#else
+
+	static const uint8_t gSquelchGlitchLevel[11] = {
+		0x20,
+		0x20,
+		0x1E,
+		0x1C,
+		0x1A,
+		0x18,
+		0x16,
+		0x14,
+		0x12,
+		0x10,
+		0x0E,
+	};
+	
 	if (bIsNarrow) {
 		BK4819_WriteRegister(0x4D, gSquelchGlitchLevel[gSettings.Squelch] + 0x9FFF);
 		BK4819_WriteRegister(0x4E, gSquelchGlitchLevel[gSettings.Squelch] + 0x4DFE);
@@ -324,10 +330,58 @@ void BK4819_SetSquelchGlitch(bool bIsNarrow)
 		BK4819_WriteRegister(0x4D, gSquelchGlitchLevel[gSettings.Squelch] + 0xA000);
 		BK4819_WriteRegister(0x4E, gSquelchGlitchLevel[gSettings.Squelch] + 0x4DFF);
 	}
+#endif
+
 }
 
 void BK4819_SetSquelchNoise(bool bIsNarrow)
 {
+#ifdef ENABLE_ALT_SQUELCH
+
+	uint16_t Value;
+
+	static const uint8_t SquelchNoiseOpenLevel[10] = {
+		0xB4,
+		0x3E,
+		0x38,
+		0x32,
+		0x2C,
+		0x26,
+		0x20,
+		0x1A,
+		0x14,
+		0x0E,
+	};
+
+	if (gSettings.Squelch == 0){
+		Value = (127 << 8) | 127;
+	} else {
+		Value = SquelchNoiseOpenLevel[gSettings.Squelch];
+		if (bIsNarrow) {
+			Value = ((((Value - 5) * 10) / 9) << 8) | Value;
+		} else {
+			Value = (((Value * 10) / 9) << 8) | Value;
+		 }
+	}
+
+	BK4819_WriteRegister(0x4F, (BK4819_ReadRegister(0x4F) & 0x7F7F) | Value);
+
+#else
+
+	static const uint8_t gSquelchNoiseLevel[11] = {
+		0x0A,
+		0x0A,
+		0x09,
+		0x08,
+		0x07,
+		0x06,
+		0x05,
+		0x04,
+		0x03,
+		0x02,
+		0x01,
+	};
+
 	uint8_t Level;
 	uint16_t Value;
 
@@ -339,10 +393,54 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 	}
 
 	BK4819_WriteRegister(0x4F, Value);
+
+#endif
+
 }
 
 void BK4819_SetSquelchRSSI(bool bIsNarrow)
 {
+#ifdef ENABLE_ALT_SQUELCH
+
+	uint16_t Value;
+
+	static const uint8_t SquelchRssiOpenLevel[10] = {
+		0x0A,
+		0x76,
+		0x7E,
+		0x86,
+		0x8E,
+		0x96,
+		0x9E,
+		0xA6,
+		0xAE,
+		0xB6,
+	};
+
+	if (gSettings.Squelch == 0){
+		Value = 0;
+	} else {
+		Value = SquelchRssiOpenLevel[gSettings.Squelch];
+		Value = (Value << 8) | (Value * 9) / 10;
+	}
+
+	BK4819_WriteRegister(0x78, Value);
+#else
+
+	static const uint8_t gSquelchRssiLevel[11] = {
+		0x00,
+		0x00,
+		0x02,
+		0x04,
+		0x06,
+		0x0A,
+		0x10,
+		0x16,
+		0x1C,
+		0x22,
+		0x26,
+	};
+
 	uint8_t Level;
 	uint16_t Value;
 
@@ -354,6 +452,9 @@ void BK4819_SetSquelchRSSI(bool bIsNarrow)
 	}
 
 	BK4819_WriteRegister(0x78, Value);
+
+#endif
+
 }
 
 void BK4819_SetFilterBandwidth(bool bIsNarrow)
@@ -361,9 +462,13 @@ void BK4819_SetFilterBandwidth(bool bIsNarrow)
 	// Check if modulation is FM
 	if (gMainVfo->gModulationType == 0) { // if FM
 		if (bIsNarrow) {
-			BK4819_WriteRegister(0x43, 0x4048);
+			//BK4819_WriteRegister(0x43, 0x4048); //stock
+			BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x4408); //egzumer
 		} else {
-			BK4819_WriteRegister(0x43, 0x3028);
+			//BK4819_WriteRegister(0x43, 0x3028); //stock
+			BK4819_WriteRegister(0x43, 0x3428); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x45A8); //egzumer
 		}
 	}
 }

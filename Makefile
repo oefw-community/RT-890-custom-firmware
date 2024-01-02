@@ -3,6 +3,7 @@ TARGET = firmware
 UART_DEBUG			?= 0
 MOTO_STARTUP_TONE		?= 1
 ENABLE_AM_FIX			?= 1
+ENABLE_ALT_SQUELCH		?= 1
 ENABLE_NOAA			?= 1
 ENABLE_SPECTRUM			?= 1
 # Spectrum presets - 1.4 kB
@@ -191,6 +192,9 @@ ifeq ($(MOTO_STARTUP_TONE),1)
 endif
 ifeq ($(ENABLE_AM_FIX),1)
 	CFLAGS += -DENABLE_AM_FIX
+endif
+ifeq ($(ENABLE_ALT_SQUELCH),1)
+	CFLAGS += -DENABLE_ALT_SQUELCH
 endif
 ifeq ($(ENABLE_LTO),1)
 	CFLAGS += -flto=auto
