@@ -328,7 +328,11 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 		Value = (127 << 8) | 127;
 	} else {
 		Value = SquelchNoiseOpenLevel[gSettings.Squelch];
-		Value = (((Value * 10) / 9) << 8) | Value;
+		if (bIsNarrow) {
+			Value = ((((Value - 10) * 10) / 9) << 8) | Value;
+		} else {
+			Value = (((Value * 10) / 9) << 8) | Value;
+		}
 	}
 
 	BK4819_WriteRegister(0x4F, (BK4819_ReadRegister(0x4F) & 0x7F7F) | Value);
@@ -366,9 +370,13 @@ void BK4819_SetFilterBandwidth(bool bIsNarrow)
 	// Check if modulation is FM
 	if (gMainVfo->gModulationType == 0) { // if FM
 		if (bIsNarrow) {
-			BK4819_WriteRegister(0x43, 0x4048);
+			//BK4819_WriteRegister(0x43, 0x4048); //stock
+			BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x4408); //egzumer
 		} else {
-			BK4819_WriteRegister(0x43, 0x3028);
+			//BK4819_WriteRegister(0x43, 0x3028); //stock
+			BK4819_WriteRegister(0x43, 0x3428); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x45A8); //egzumer
 		}
 	}
 }
