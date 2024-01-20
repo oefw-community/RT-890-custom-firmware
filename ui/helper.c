@@ -518,7 +518,9 @@ void ConvertRssiToDbm(uint16_t Rssi) {
 		uint8_t bNeg;
 		uint16_t len;
 
-		RXdBM = (Rssi >> 1) - 160; 
+		//RXdBM = (Rssi >> 1) - 160;
+		//RXdBM = (Rssi >> 1) - 160 - 17; //17dBm in excess mesured with RF generator
+		RXdBM = (Rssi >> 1) - 177;
 
 		if (RXdBM < 0) {
 			uRXdBM = -RXdBM;
@@ -574,7 +576,9 @@ void ConvertRssiToSmeter(uint16_t Rssi)
 	const int16_t RXdBMover9 = -93;
 	uint8_t len;
 
-	RXdBM = (Rssi >> 1) - 160;
+	//RXdBM = (Rssi >> 1) - 160;
+	//RXdBM = (Rssi >> 1) - 160 - 17; //17dBm in excess mesured with RF generator
+	RXdBM = (Rssi >> 1) - 177;
 
 	for (int i = 0; i < 8; i++) {
 			gShortString[i] = ' ';
@@ -586,7 +590,7 @@ void ConvertRssiToSmeter(uint16_t Rssi)
 		len = 1;
 	} else {
 		Svalue = -(RXdBMover9 - RXdBM);
-		if (Svalue > 99) Svalue = 99; //TODO: Delete or adapt this value on maximum value retrieved from BEKEN register
+		if (Svalue > 99) Svalue = 99;
 		len = 2;
 	}
 
