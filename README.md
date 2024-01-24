@@ -2,7 +2,7 @@
 
 This project is an effort to improve the firmware of the Radtel RT-890 in terms of features and radio performance.
 
-It is based on [DualTachyon's OEFW](https://github.com/DualTachyon/radtel-rt-890-oefw) which is reversed from the original Radtel 1.34 firmware.  
+It is based on [DualTachyon's OEFW](https://github.com/OEFW-community/radtel-rt-890-oefw) which is reversed from the original Radtel 1.34 firmware.  
 Thanks to him for making this possible!
 
 ## Disclaimer
@@ -95,10 +95,10 @@ Spectrum display:
 
 ## Update Instructions
 ### SPI memory backup
-Use [RT-890-Flasher](https://github.com/DualTachyon/radtel-rt-890-flasher)
+Use [RT-890-Flasher](https://github.com/OEFW-community/radtel-rt-890-flasher)
 
 ### SPI memory restore
-Use [RT-890-SPI-restore-CLI](https://github.com/DualTachyon/radtel-rt-890-spi-restore-cli)
+Use [RT-890-SPI-restore-CLI](https://github.com/OEFW-community/RT-890-SPI-Restore-CLI)
 
 ### Customizations
 ```
@@ -176,7 +176,7 @@ make
 
 # Flashing
 
-* Use the firmware.bin file with either [RT-890-Flasher](https://github.com/DualTachyon/radtel-rt-890-flasher) or [RT-890-Flasher-CLI](https://github.com/DualTachyon/radtel-rt-890-flasher-cli)
+* Use the firmware.bin file with either [RT-890-Flasher](https://github.com/OEFW-community/radtel-rt-890-flasher) or [RT-890-Flasher-CLI](https://github.com/OEFW-community/radtel-rt-890-flasher-cli)
 
 # License
 
