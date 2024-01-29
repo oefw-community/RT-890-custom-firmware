@@ -207,6 +207,7 @@ void BK4819_Init(void)
 	BK4819_SetAFResponseCoefficients(true,  false, gCalibration.TX_300Hz_Coefficient);
 	BK4819_EnableRX();
 	BK4819_SetAF(BK4819_AF_MUTE);
+	BK4819_RestoreGainSettings();
 }
 
 void BK4819_SetAFResponseCoefficients(bool bTx, bool bLowPass, uint8_t Index)
@@ -465,11 +466,13 @@ void BK4819_SetFilterBandwidth(bool bIsNarrow)
 #ifndef ENABLE_REGISTER_EDIT
 		if (bIsNarrow) {
 			//BK4819_WriteRegister(0x43, 0x4048); //stock
-			BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
+			BK4819_WriteRegister(0x43, 0x1408);
 			//BK4819_WriteRegister(0x43, 0x4408); //egzumer
 		} else {
 			//BK4819_WriteRegister(0x43, 0x3028); //stock
-			BK4819_WriteRegister(0x43, 0x3428); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
+			BK4819_WriteRegister(0x43, 0x1408);
 			//BK4819_WriteRegister(0x43, 0x45A8); //egzumer
 		}
 #else
