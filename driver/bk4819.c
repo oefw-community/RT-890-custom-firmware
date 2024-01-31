@@ -770,10 +770,7 @@ void BK4819_EnableRfTxDeviation(void)
 
 void BK4819_SetMicSensitivityTuning(void)
 {
-	uint8_t Tuning;
-
-	Tuning = gMainVfo->bIsNarrow ? gFrequencyBandInfo.MicSensitivityTuningNarrow : gFrequencyBandInfo.MicSensitivityTuningWide;
-	BK4819_WriteRegister(0x7D, 0xE940 | Tuning);
+	BK4819_WriteRegister(0x7D, 0xE940 | (gExtendedSettings.MicGainLevel & 0x1F));
 }
 
 void BK4819_EnableTX(bool bUseMic)

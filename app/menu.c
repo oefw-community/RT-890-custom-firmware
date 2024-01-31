@@ -20,6 +20,7 @@
 #include "app/t9.h"
 #include "driver/audio.h"
 #include "driver/beep.h"
+#include "driver/bk4819.h"
 #include "driver/key.h"
 #include "driver/speaker.h"
 #include "helper/dtmf.h"
@@ -67,6 +68,7 @@ static const char Menu[][14] = {
 	"RX CTCSS/DCS  ",
 	"TX CTCSS/DCS  ",
 	"TX Power      ",
+	"Mic Gain      ",
 	"Modulation    ",
 	"Band Width    ",
 	"List To Scan  ",
@@ -506,6 +508,12 @@ void MENU_AcceptSetting(void)
 		CHANNELS_SaveVfo();
 		break;
 
+	case MENU_MIC_GAIN:
+		gExtendedSettings.MicGainLevel = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		SETTINGS_SaveGlobals();
+		BK4819_SetMicSensitivityTuning();
+		break;
+
 	case MENU_MODULATION:
 		gVfoState[gSettings.CurrentVfo].gModulationType = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
 		CHANNELS_SaveVfo();
@@ -894,6 +902,13 @@ void MENU_DrawSetting(void)
 		UI_DrawSettingTxPower();
 		break;
 
+	case MENU_MIC_GAIN:
+		gSettingCurrentValue = gExtendedSettings.MicGainLevel;
+		gSettingMaxValues = 32;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingMicGain(gSettingCurrentValue);
+		break;
+
 	case MENU_MODULATION:
 		gSettingCurrentValue = gVfoState[gSettings.CurrentVfo].gModulationType;
 		gSettingMaxValues = 4;
@@ -1271,6 +1286,10 @@ void MENU_ScrollSetting(uint8_t Key)
 
 	case MENU_TX_POWER:
 		UI_DrawSettingTxPower();
+		break;
+
+	case MENU_MIC_GAIN:
+		UI_DrawSettingMicGain(gSettingCurrentValue);
 		break;
 
 	case MENU_MODULATION:

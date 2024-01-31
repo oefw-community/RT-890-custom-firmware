@@ -184,10 +184,11 @@ void UI_DrawActions(uint8_t Index)
 		"Dark Mode   ",
 		"AGC Mode    ",
 #ifdef ENABLE_REGISTER_EDIT
-		"Reg Editor  "
+		"Reg Editor  ",
 #else
-		"[DISABLED]  "
+		"[DISABLED]  ",
 #endif
+		"Mic Gain    "
 	};
 
 	UI_DrawSettingOptionEx(Actions[Index], 12, 0);
@@ -490,4 +491,13 @@ void UI_DrawSettingScanlist(uint8_t Index)
 
 	UI_DrawSettingOptionEx(Mode[Index], 1, 0);
 	UI_DrawSettingOptionEx(Mode[(Index + 1) % 9], 1, 1);
+}
+
+void UI_DrawSettingMicGain(uint8_t Index)
+{
+	gColorForeground = COLOR_FOREGROUND;
+	Int2Ascii(Index, 2);
+	UI_DrawString(24, 48, gShortString, 2);
+	Int2Ascii((Index + 1) % 32, 2);
+	UI_DrawString(24, 24, gShortString, 2);
 }

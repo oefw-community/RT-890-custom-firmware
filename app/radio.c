@@ -139,7 +139,6 @@ static bool TuneTX(bool bUseMic)
 		}
 		gRadioMode = RADIO_MODE_TX;
 		BK4819_EnableRfTxDeviation();
-		BK4819_SetMicSensitivityTuning();
 		BK4819_EnableTX(bUseMic);
 		BK4819_EnableScramble(gMainVfo->Scramble);
 		if (gMainVfo->Scramble == 0) {

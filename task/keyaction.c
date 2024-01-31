@@ -283,6 +283,12 @@ void KeypressAction(uint8_t Action) {
 				MENU_DrawSetting();
 				break;
 
+			case ACTION_MIC_GAIN:
+				gMenuIndex = MENU_MIC_GAIN;
+				DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
+				MENU_DrawSetting();
+				break;
+
 			case ACTION_DUAL_STANDBY:
 				RADIO_CancelMode();
 				gSettings.DualStandby ^= 1;
