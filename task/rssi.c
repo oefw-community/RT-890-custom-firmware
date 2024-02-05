@@ -96,7 +96,12 @@ static void CheckRSSI(void)
 		uint16_t RSSI;
 		uint16_t Power;
 
+#ifdef ENABLE_SLOWER_RSSI_TIMER
+		gVoxRssiUpdateTimer = 500;
+#else
 		gVoxRssiUpdateTimer = 100;
+#endif
+
 		RSSI = BK4819_GetRSSI();
 
 		//Valid range is 72 - 330

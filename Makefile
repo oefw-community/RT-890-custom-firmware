@@ -15,6 +15,7 @@ ENABLE_REGISTER_EDIT	?= 0
 # Space saving options
 ENABLE_LTO			?= 0
 ENABLE_OPTIMIZED		?= 1
+ENABLE_SLOWER_RSSI_TIMER ?= 1
 
 OBJS =
 # Startup files
@@ -218,6 +219,9 @@ ifeq ($(ENABLE_REGISTER_EDIT), 1)
 endif
 ifeq ($(ENABLE_FM_RADIO), 1)
 	CFLAGS += -DENABLE_FM_RADIO
+endif
+ifeq ($(ENABLE_SLOWER_RSSI_TIMER), 1)
+	CFLAGS += -DENABLE_SLOWER_RSSI_TIMER
 endif
 
 all: $(TARGET)
