@@ -100,8 +100,12 @@ Register Editor keys:
 Up   => Move editor to next register
 Down => Move to previous register
 1    => Change AGC level
-2    => Decrease value of current register's setting
-3    => Increase value of current register's setting
+2    => Decrease value of current register's setting by 1
+3    => Increase value of current register's setting by 1
+5    => Decrease value of current register's setting by 10
+6    => Increase value of current register's setting by 10
+8    => Decrease value of current register's setting by 100
+9    => Increase value of current register's setting by 100
 Exit => Exit Register Editor
 ```
 

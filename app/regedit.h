@@ -18,7 +18,7 @@
 #define APP_SPECTRUM_H
 
 typedef struct Registers {
-  const char Name[5];
+  const char Name[10];
   uint8_t RegAddr;
   uint8_t Offset;
   uint16_t Mask;
