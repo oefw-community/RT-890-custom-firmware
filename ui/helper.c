@@ -319,7 +319,11 @@ void UI_DrawRoger(void)
 
 void UI_DrawVoltage(uint8_t Vfo)
 {
-	if (gSettings.DualDisplay == 0 && gScreenMode == SCREEN_MAIN) {
+	if ((gSettings.DualDisplay == 0 && gScreenMode == SCREEN_MAIN)
+#ifdef ENABLE_REGISTER_EDIT
+		|| (gScreenMode == SCREEN_REGEDIT)
+#endif
+	) {
 		const uint8_t Y = 72 - (Vfo * 41);
 		gColorForeground = COLOR_BLUE;
 		/* Replacing voltage display with register display */

@@ -28,6 +28,9 @@ enum SCREEN_Mode_t {
 	SCREEN_MAIN = 0,
 	SCREEN_MENU,
 	SCREEN_SETTING,
+#ifdef ENABLE_REGISTER_EDIT
+	SCREEN_REGEDIT,
+#endif
 };
 
 typedef enum SCREEN_Mode_t SCREEN_Mode_t;

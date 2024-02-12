@@ -315,6 +315,8 @@ static void HandlerShort(KEY_t Key)
 	case SCREEN_SETTING:
 		MENU_SettingKeyHandler(Key);
 		break;
+	default:
+		break;
 	}
 }
 

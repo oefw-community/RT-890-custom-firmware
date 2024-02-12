@@ -23,6 +23,7 @@
 #include "ui/helper.h"
 #include "ui/main.h"
 #include "driver/delay.h"
+#include "misc.h"
 
 #ifdef UART_DEBUG
 	#include "driver/uart.h"
@@ -123,11 +124,13 @@ void APP_RegEdit(void) {
 	DISPLAY_Fill(0, 159, 1, 96, COLOR_BACKGROUND);
 
 	bExit = false;
+	gScreenMode = SCREEN_REGEDIT;
 
 	while (1) {
 		RegEditCheckKeys();
 
 		if (bExit) {
+			gScreenMode = SCREEN_MAIN;
 			UI_DrawMain(false);
 			return;
 		}
