@@ -11,7 +11,7 @@ ENABLE_SPECTRUM_PRESETS		?= 1
 # FM radio = 2.6 kB
 ENABLE_FM_RADIO			?= 1
 # Register Editor = .5 kB
-ENABLE_REGISTER_EDIT	?= 0
+ENABLE_REGISTER_EDIT		?= 0
 # Space saving options
 ENABLE_LTO			?= 0
 ENABLE_OPTIMIZED		?= 1

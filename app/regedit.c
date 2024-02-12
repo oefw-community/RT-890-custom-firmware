@@ -30,14 +30,14 @@
 #endif
 
 static const Registers RegisterTable[] = {
-    {"LNAS      ", 0x10, 8, 0b11, 1},
-    {"LNA       ", 0x10, 5, 0b111, 1},
-    {"PGA       ", 0x10, 0, 0b111, 1},
-    {"MIX       ", 0x10, 3, 0b11, 1},
-    {"BW        ", 0x43, 12, 0b111, 1},
-    {"WEAK      ", 0x43, 9, 0b111, 1},
-    {"TX DEV ON ", 0x40, 12, 0b1, 1},
-    {"TX DEV LVL", 0x40, 0, 0b111111111111, 4}
+		{"LNAS      ", 0x10, 8,  0b11,           1},
+		{"LNA       ", 0x10, 5,  0b111,          1},
+		{"PGA       ", 0x10, 0,  0b111,          1},
+		{"MIX       ", 0x10, 3,  0b11,           1},
+		{"BW        ", 0x43, 12, 0b111,          1},
+		{"WEAK      ", 0x43, 9,  0b111,          1},
+		{"TX DEV ON ", 0x40, 12, 0b1,            1},
+		{"TX DEV LVL", 0x40, 0,  0b111111111111, 4}
 };
 
 static const uint8_t RegCount = sizeof(RegisterTable) / sizeof(RegisterTable[0]);
@@ -46,24 +46,24 @@ static uint8_t bExit;
 static uint8_t RegIndex = 1;
 static uint16_t RegValue;
 static uint16_t SettingValue;
-static uint8_t CurrentReg; 
+static uint8_t CurrentReg;
 
 void ChangeRegValue(uint8_t bUp, uint8_t HowMany) {
 
-    uint16_t FullMask;
+	uint16_t FullMask;
 
-    if (bUp) {
-        SettingValue = (SettingValue + HowMany) % (RegisterTable[RegIndex].Mask + 1);
-    } else {
-        SettingValue = (SettingValue + (RegisterTable[RegIndex].Mask + 1) - HowMany) % (RegisterTable[RegIndex].Mask + 1);
-    }
+	if (bUp) {
+		SettingValue = (SettingValue + HowMany) % (RegisterTable[RegIndex].Mask + 1);
+	} else {
+		SettingValue = (SettingValue + (RegisterTable[RegIndex].Mask + 1) - HowMany) % (RegisterTable[RegIndex].Mask + 1);
+	}
 
-    FullMask = RegisterTable[RegIndex].Mask << RegisterTable[RegIndex].Offset;
+	FullMask = RegisterTable[RegIndex].Mask << RegisterTable[RegIndex].Offset;
 
-    SettingValue <<= RegisterTable[RegIndex].Offset;
-    RegValue = (RegValue & ~FullMask) | SettingValue;
+	SettingValue <<= RegisterTable[RegIndex].Offset;
+	RegValue = (RegValue & ~FullMask) | SettingValue;
 
-    BK4819_WriteRegister(CurrentReg, RegValue);
+	BK4819_WriteRegister(CurrentReg, RegValue);
 
 }
 
@@ -86,25 +86,25 @@ void RegEditCheckKeys(void) {
 			case KEY_DOWN:
 				RegIndex = (RegIndex + RegCount - 1) % RegCount;
 				break;
-            case KEY_1:
-                BK4819_ToggleAGCMode();
-                break;
-            case KEY_2:
+			case KEY_1:
+				BK4819_ToggleAGCMode();
+				break;
+			case KEY_2:
 				ChangeRegValue(false, 1);
 				break;
-            case KEY_3:
+			case KEY_3:
 				ChangeRegValue(true, 1);
 				break;
-            case KEY_5:
+			case KEY_5:
 				ChangeRegValue(false, 10);
 				break;
-            case KEY_6:
+			case KEY_6:
 				ChangeRegValue(true, 10);
 				break;
-            case KEY_8:
+			case KEY_8:
 				ChangeRegValue(false, 100);
 				break;
-            case KEY_9:
+			case KEY_9:
 				ChangeRegValue(true, 100);
 				break;
 			default:
@@ -116,43 +116,43 @@ void RegEditCheckKeys(void) {
 
 void APP_RegEdit(void) {
 
-    uint16_t ActiveGainReg;
+	uint16_t ActiveGainReg;
 
 	RADIO_EndAudio();  // Just in case audio is open
 
 	DISPLAY_Fill(0, 159, 1, 96, COLOR_BACKGROUND);
 
-    bExit = false;
+	bExit = false;
 
-    while (1) {
-        RegEditCheckKeys();
+	while (1) {
+		RegEditCheckKeys();
 
-        if (bExit){
-            UI_DrawMain(false);
-            return;
-        }
+		if (bExit) {
+			UI_DrawMain(false);
+			return;
+		}
 
-        UI_DrawVoltage(0);
+		UI_DrawVoltage(0);
 
-        ActiveGainReg = BK4819_ReadRegister(0x7e);
-        ActiveGainReg >>= 12;
-        ActiveGainReg &= 0b111;
+		ActiveGainReg = BK4819_ReadRegister(0x7e);
+		ActiveGainReg >>= 12;
+		ActiveGainReg &= 0b111;
 
-        CurrentReg = (RegIndex < 4) ? RegisterTable[RegIndex].RegAddr + ActiveGainReg : RegisterTable[RegIndex].RegAddr;
+		CurrentReg = (RegIndex < 4) ? RegisterTable[RegIndex].RegAddr + ActiveGainReg : RegisterTable[RegIndex].RegAddr;
 
-        RegValue = BK4819_ReadRegister(CurrentReg);
+		RegValue = BK4819_ReadRegister(CurrentReg);
 
-        SettingValue = RegValue >> RegisterTable[RegIndex].Offset;
-        SettingValue &= RegisterTable[RegIndex].Mask;
+		SettingValue = RegValue >> RegisterTable[RegIndex].Offset;
+		SettingValue &= RegisterTable[RegIndex].Mask;
 
-        gColorForeground = COLOR_FOREGROUND;
-        UI_DrawString(20, 30, RegisterTable[RegIndex].Name, 10);
-        gShortString[1] = ' ';
-        gShortString[2] = ' ';
-        gShortString[3] = ' ';
-        Int2Ascii(SettingValue, RegisterTable[RegIndex].DiplayDigits);
-        UI_DrawString(105, 30, gShortString, 4);
+		gColorForeground = COLOR_FOREGROUND;
+		UI_DrawString(20, 30, RegisterTable[RegIndex].Name, 10);
+		gShortString[1] = ' ';
+		gShortString[2] = ' ';
+		gShortString[3] = ' ';
+		Int2Ascii(SettingValue, RegisterTable[RegIndex].DiplayDigits);
+		UI_DrawString(105, 30, gShortString, 4);
 
-        DELAY_WaitMS(100);
+		DELAY_WaitMS(100);
 	}
 }
