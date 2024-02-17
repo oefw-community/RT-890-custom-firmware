@@ -31,6 +31,10 @@ void DrawStatusBar(void)
 	DISPLAY_Fill(0, 159, 0, 96, COLOR_BACKGROUND);
 	// DISPLAY_DrawRectangle0(0, 41, 160, 1, gSettings.BorderColor);
 
+	#ifdef ENABLE_STATUS_BAR_LINE
+		DISPLAY_DrawRectangle0(0, 83, 160, 1, gSettings.BorderColor);
+	#endif
+
 	if (gSettings.DtmfState == DTMF_STATE_STUNNED) {
 		UI_DrawStatusIcon(4, ICON_LOCK, true, COLOR_RED);
 	} else {
@@ -101,7 +105,7 @@ void UI_DrawBattery(bool bDisplayVoltage)
 	}
 	if (i < 6) {
 		Color = COLOR_RED;
-	} else if (i < 11) {
+	} else if (i < 7) {
 		Color = COLOR_RGB(31, 41, 0);
 	} else {
 		Color = COLOR_GREEN;

@@ -727,7 +727,9 @@ void UI_DrawFM(void)
 {
 	gColorForeground = COLOR_GREY;
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
+	#ifndef ENABLE_STATUS_BAR_LINE
+		DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
+	#endif
 	UI_DrawFrame(12, 150, 6, 74, 2, gColorForeground);
 	UI_DrawFrame(72, 144, 36, 64, 2, gColorForeground);
 	DISPLAY_Fill( 72,  88, 16, 22, gColorForeground);
@@ -946,7 +948,9 @@ void UI_DrawStringSwitchType(void)
 void UI_DrawRadar(void)
 {
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
+	#ifndef ENABLE_STATUS_BAR_LINE
+		DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
+	#endif
 	gColorForeground = COLOR_BLUE;
 	UI_DrawBitmap(4, 12, 8, 64, BitmapRadar);
 }

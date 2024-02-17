@@ -127,6 +127,7 @@ UART_DEBUG                     => UART debug output
 MOTO_STARTUP_TONE              => Moto XPS startup beeps
 ENABLE_AM_FIX                  => Experimental port of the great UV-K5 AM fix from OneOfEleven
 ENABLE_ALT_SQUELCH             => Port of optimized UV-K5 squelch system from various firmwares
+ENABLE_STATUS_BAR_LINE         => Display status bar separator line
 ENABLE_NOAA                    => NOAA weather channels (always re-set the sidekeys actions from menu after modifying the available actions)
 ENABLE_SPECTRUM                => Spectrum frequency view (assign to a shortcut key to access)
 ENABLE_SPECTRUM_PRESETS        => Band presets for Spectrum mode (ENABLE_SPECTRUM required to be enabled)
