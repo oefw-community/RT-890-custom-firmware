@@ -48,7 +48,7 @@ void Task_CheckPTT(void)
 	SCHEDULER_ClearTask(TASK_CHECK_PTT);
 	if (!gpio_input_data_bit_read(GPIOB, BOARD_GPIOB_KEY_PTT)) {
 		if (gSettings.DtmfState == DTMF_STATE_NORMAL && !gPttPressed) {
-			if (gPttCounter++ < 100) {
+			if (gPttCounter++ < (gRadioMode == RADIO_MODE_RX ? 10 : 100)) {
 				return;
 			}
 			if (gFlashlightMode) {

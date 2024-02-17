@@ -58,7 +58,7 @@ void Task_CheckIncoming(void)
 			if (gRxLinkCounter++ > 5) {
 				gRxLinkCounter = 0;
 				gSaveModeTimer = 300;
-				if (gMainVfo->BCL == BUSY_LOCK_CARRIER && !gFrequencyDetectMode) {
+				if (gMainVfo->BCL == BUSY_LOCK_CARRIER && !gFrequencyDetectMode && !gMonitorMode) {
 					PTT_SetLock(PTT_LOCK_INCOMING);
 				}
 				gRadioMode = RADIO_MODE_INCOMING;

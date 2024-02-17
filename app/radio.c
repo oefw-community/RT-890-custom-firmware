@@ -300,7 +300,7 @@ void RADIO_StartRX(void)
 			UI_DrawMainBitmap(false, gSettings.CurrentVfo);
 			UI_DrawRX(gCurrentVfo);
 		}
-		if (gMainVfo->BCL == BUSY_LOCK_CSS) {
+		if (gMainVfo->BCL == BUSY_LOCK_CSS && !gMonitorMode) {
 			PTT_SetLock(PTT_LOCK_BUSY);
 		}
 		if (gSettings.TxPriority && gSettings.CurrentVfo != gCurrentVfo) {
