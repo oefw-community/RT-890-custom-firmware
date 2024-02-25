@@ -360,6 +360,7 @@ static void DETECTOR_Loop(void)
 
 void RADIO_FrequencyDetect(void)
 {
+	gScreenMode = SCREEN_FREQ_DETECT;
 	SPEAKER_State = 0;
 	gpio_bits_reset(GPIOA, BOARD_GPIOA_SPEAKER);
 	gAudioOffsetIndex = gAudioOffsetLast;
@@ -372,5 +373,6 @@ void RADIO_FrequencyDetect(void)
 	VFO_ClearMute();
 	BK4819_EnableFilter(true);
 	DETECTOR_Loop();
+	gScreenMode = SCREEN_MAIN;
 }
 
