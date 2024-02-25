@@ -15,7 +15,7 @@ ENABLE_REGISTER_EDIT		?= 0
 # Space saving options
 ENABLE_LTO			?= 0
 ENABLE_OPTIMIZED		?= 1
-ENABLE_SLOWER_RSSI_TIMER ?= 1
+ENABLE_SLOWER_RSSI_TIMER 	?= 1
 
 OBJS =
 # Startup files
