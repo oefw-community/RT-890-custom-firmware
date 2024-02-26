@@ -61,7 +61,10 @@ Scanning:
 - When scanning is in progress, use the `Freq scanner` key to change the scan list, this action will move to the next non-empty scanlist, or switch to scan all mode if all subsequent lists are empty.  
 - To change the direction of current scan, use the `up`/`down` keys.  
 - To force the scan to resume when the scanner stops on a signal, use the `up`/`down` keys.  
-- Press any key other than `Freq scanner` to stop scanning.  
+- Press any key other than `Freq scanner` or `Up`/`Down` to stop scanning.  
+  - `Exit` key will restore the frequency or channel that was active before scanning started.
+  - `Menu` key will restore the last frequency or channel on wich the scanner stopped.
+  - Any other key will stop the scanner where it is.
 
 ### Spectrum Usage
 Start spectrum by mapping a key (side key or keypad) to the Spectrum action using the main menu.  Spectrum will launch, centered on the frequency from the active VFO/Memory Channel.

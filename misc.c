@@ -48,6 +48,8 @@ uint16_t gNoToneCounter;
 bool gFrequencyReverse;
 bool gManualScanDirection;
 bool gForceScan;
+uint32_t gScanStartFreqOrChannel;
+uint32_t gScanLastRxFreqOrChannel;
 uint8_t gSlot;
 char gString[32];
 char gBigString[40];

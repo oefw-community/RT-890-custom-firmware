@@ -270,6 +270,10 @@ void RADIO_Tune(uint8_t Vfo)
 
 void RADIO_StartRX(void)
 {
+	if (gScannerMode) {
+		gScanLastRxFreqOrChannel = gSettings.WorkMode ? gSettings.VfoChNo[gSettings.CurrentVfo]
+													  : gVfoInfo[gSettings.CurrentVfo].Frequency;
+	}
 #ifdef ENABLE_FM_RADIO
 	FM_Disable(FM_MODE_STANDBY);
 #endif

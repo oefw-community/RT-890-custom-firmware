@@ -218,6 +218,8 @@ void KeypressAction(uint8_t Action) {
 				break;
 
 			case ACTION_SCAN:
+				gScanStartFreqOrChannel = gSettings.WorkMode ? gSettings.VfoChNo[gSettings.CurrentVfo] : gVfoInfo[gSettings.CurrentVfo].Frequency;
+				gScanLastRxFreqOrChannel = gScanStartFreqOrChannel;
 				RADIO_CancelMode();
 				gManualScanDirection = gSettings.ScanDirection;
 				gScannerMode ^= 1;

@@ -94,7 +94,7 @@ static void MAIN_KeyHandler(KEY_t Key)
 
 	VOX_Timer = 0;
 	Task_UpdateScreen();
-	if (gScannerMode && Key != KEY_UP && Key != KEY_DOWN) {
+	if (gScannerMode && Key != KEY_UP && Key != KEY_DOWN && Key != KEY_MENU && Key != KEY_EXIT) {
 		SETTINGS_SaveState();
 		return;
 	}
@@ -122,6 +122,20 @@ static void MAIN_KeyHandler(KEY_t Key)
 		break;
 
 	case KEY_MENU:
+		if (gScannerMode) {
+			// stop scanner and restore last RX channel or frequency
+			if (gSettings.WorkMode) {
+				CHANNELS_LoadChannel(gScanLastRxFreqOrChannel, gSettings.CurrentVfo);
+				gSettings.VfoChNo[gSettings.CurrentVfo] = gScanLastRxFreqOrChannel;
+			} else {
+				gVfoInfo[gSettings.CurrentVfo].Frequency = gScanLastRxFreqOrChannel;
+				gVfoState[gSettings.CurrentVfo].RX.Frequency = gScanLastRxFreqOrChannel;
+			}
+			RADIO_Tune(gSettings.CurrentVfo);
+			UI_DrawVfo(gSettings.CurrentVfo);
+			SETTINGS_SaveState();
+			return;
+		}
 		if (gInputBoxWriteIndex == 0) {
 #ifdef ENABLE_FM_RADIO
 			if (gFM_Mode > FM_MODE_STANDBY) {
@@ -194,6 +208,20 @@ static void MAIN_KeyHandler(KEY_t Key)
 		break;
 
 	case KEY_EXIT:
+		if (gScannerMode) {
+			// stop scanner and restore initial channel or frequency
+			if (gSettings.WorkMode) {
+				CHANNELS_LoadChannel(gScanStartFreqOrChannel, gSettings.CurrentVfo);
+				gSettings.VfoChNo[gSettings.CurrentVfo] = gScanStartFreqOrChannel;
+			} else {
+				gVfoInfo[gSettings.CurrentVfo].Frequency = gScanStartFreqOrChannel;
+				gVfoState[gSettings.CurrentVfo].RX.Frequency = gScanStartFreqOrChannel;
+			}
+			RADIO_Tune(gSettings.CurrentVfo);
+			UI_DrawVfo(gSettings.CurrentVfo);
+			SETTINGS_SaveState();
+			return;
+		}
 		if (gInputBoxWriteIndex) {
 #ifdef ENABLE_FM_RADIO
 			if (gFM_Mode == FM_MODE_PLAY) {
@@ -394,11 +422,11 @@ static void HandlerLong(KEY_t Key)
 			case KEY_9:
 				KeypressAction(gExtendedSettings.KeyShortcut[Key]);
 				break;
-			
+
 			case KEY_STAR:
 				KeypressAction(gExtendedSettings.KeyShortcut[10]);
 				break;
-			
+
 			case KEY_HASH:
 				KeypressAction(gExtendedSettings.KeyShortcut[11]);
 				break;
@@ -406,7 +434,7 @@ static void HandlerLong(KEY_t Key)
 			case KEY_MENU:
 				KeypressAction(gExtendedSettings.KeyShortcut[12]);
 				break;
-			
+
 			case KEY_EXIT:
 				KeypressAction(gExtendedSettings.KeyShortcut[13]);
 				break;

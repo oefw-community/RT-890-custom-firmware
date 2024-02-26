@@ -102,6 +102,8 @@ extern uint16_t gNoToneCounter;
 extern bool gFrequencyReverse;
 extern bool gManualScanDirection;
 extern bool gForceScan;
+extern uint32_t gScanStartFreqOrChannel;	// Frequency or channel to restore after scan
+extern uint32_t gScanLastRxFreqOrChannel;	// Last RX frequency or channel during scan
 extern uint8_t gSlot;
 extern char gString[32];
 extern char gBigString[40];
