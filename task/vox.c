@@ -70,7 +70,9 @@ void VOX_Update(void)
 		if (Vox > 5000) {
 			Vox = 5000;
 		}
+#ifdef ENABLE_TX_BAR		
 		UI_DrawBar(Vox / 50, gSettings.CurrentVfo);
+#endif
 	}
 }
 

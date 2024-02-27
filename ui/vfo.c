@@ -42,18 +42,24 @@ void UI_DrawVfo(uint8_t Vfo)
 		UI_DrawScanLists(Vfo);
 	} else {
 #endif
+#if defined ENABLE_RX_BAR || defined ENABLE_TX_BAR
 		UI_DrawVfoFrame(Vfo);
+#endif
 #ifdef ENABLE_SCANLIST_DISPLAY
 	}
 #endif
 
 	if (Vfo == gCurrentVfo) {
 		if (gRadioMode == RADIO_MODE_RX) {
+#ifdef ENABLE_RX_BAR
 			UI_DrawRX(Vfo);
+#endif
 			UI_DrawExtra(2, gVfoState[Vfo].gModulationType, Vfo);
 			gColorForeground = COLOR_BLUE;
 		} else if (gRadioMode == RADIO_MODE_TX) {
+#ifdef ENABLE_RX_BAR
 			UI_DrawRX(Vfo);
+#endif
 			UI_DrawExtra(1, gVfoState[Vfo].gModulationType, Vfo);
 			gColorForeground = COLOR_RED;
 		} else {

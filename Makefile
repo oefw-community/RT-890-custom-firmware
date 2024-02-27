@@ -5,19 +5,23 @@ MOTO_STARTUP_TONE		?= 1
 ENABLE_AM_FIX			?= 1
 ENABLE_ALT_SQUELCH		?= 1
 ENABLE_NOAA			?= 1
+ENABLE_RX_BAR			?= 1
+ENABLE_TX_BAR			?= 1
+ENABLE_SLOWER_RSSI_TIMER	?= 1
 ENABLE_SPECTRUM			?= 1
+
 # Spectrum presets - 1.4 kB
 ENABLE_SPECTRUM_PRESETS		?= 1
 # FM radio = 2.6 kB
 ENABLE_FM_RADIO			?= 1
 # Register Editor = .5 kB
 ENABLE_REGISTER_EDIT		?= 0
+# Scanlist membership display - 252 B
+ENABLE_SCANLIST_DISPLAY		?= 1
 # Space saving options
 ENABLE_LTO			?= 0
 ENABLE_OPTIMIZED		?= 1
-ENABLE_SLOWER_RSSI_TIMER	?= 1
-# Scanlist membership display - 252 B
-ENABLE_SCANLIST_DISPLAY		?= 1
+
 
 OBJS =
 # Startup files
@@ -224,6 +228,12 @@ ifeq ($(ENABLE_FM_RADIO), 1)
 endif
 ifeq ($(ENABLE_SLOWER_RSSI_TIMER), 1)
 	CFLAGS += -DENABLE_SLOWER_RSSI_TIMER
+endif
+ifeq ($(ENABLE_RX_BAR), 1)
+	CFLAGS += -DENABLE_RX_BAR
+endif
+ifeq ($(ENABLE_TX_BAR), 1)
+	CFLAGS += -DENABLE_TX_BAR
 endif
 ifeq ($(ENABLE_SCANLIST_DISPLAY), 1)
 	CFLAGS += -DENABLE_SCANLIST_DISPLAY

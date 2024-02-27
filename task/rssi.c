@@ -112,12 +112,17 @@ static void CheckRSSI(void)
 		} else {
 			Power = ((RSSI-72)*100)/258;
 		}
-		
+#ifdef ENABLE_RX_BAR	
 		UI_DrawBar(Power, gCurrentVfo);
+#endif		
 		ConvertRssiToDbm(RSSI);
+#ifdef ENABLE_RX_BAR		
 		UI_DrawRxDBM(gCurrentVfo, false);
+#endif
 		ConvertRssiToSmeter(RSSI);
+#ifdef ENABLE_RX_BAR		
 		UI_DrawRxSmeter(!gCurrentVfo, false);
+#endif
 		gCurrentRssi[gCurrentVfo] = Power;
 	}
 }
