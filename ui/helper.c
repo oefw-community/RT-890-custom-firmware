@@ -384,6 +384,9 @@ void UI_DrawVoltage(uint8_t Vfo)
 void UI_DrawVfoFrame(uint8_t Y)
 {
 	Y = 43 - (Y * 41);
+#ifdef ENABLE_SCANLIST_DISPLAY
+	DISPLAY_Fill(20, 120, Y, Y + 6, COLOR_BACKGROUND);
+#endif
 // Full size
 //	DISPLAY_DrawRectangle0( 20, Y, 100, 1, COLOR_FOREGROUND);
 //	DISPLAY_DrawRectangle1( 20, Y,   6, 1, COLOR_FOREGROUND);
@@ -813,6 +816,9 @@ void UI_DrawSomething(void)
 		UI_DrawVoltage(!gSettings.CurrentVfo);
 		UI_DrawVfo(gSettings.CurrentVfo);
 	} else {
+#ifdef ENABLE_SCANLIST_DISPLAY
+		DISPLAY_Fill(20, 127, 43 - Y, 49 - Y, COLOR_BACKGROUND);
+#endif
 		UI_DrawVfo(gCurrentVfo);
 		if (gSettings.CurrentVfo == gCurrentVfo && gInputBoxWriteIndex) {
 			if (gSettings.WorkMode) {
@@ -822,9 +828,11 @@ void UI_DrawSomething(void)
 			}
 		}
 		UI_DrawRX(gCurrentVfo);
+#ifndef ENABLE_SCANLIST_DISPLAY
 		UI_DrawBar(0, gCurrentVfo);
 		ConvertRssiToDbm(0);
 		UI_DrawRxDBM(gCurrentVfo, true);
+#endif
 		UI_DrawRxSmeter(!gCurrentVfo, true);
 	}
 	UI_DrawMainBitmap(true, gSettings.CurrentVfo);
@@ -1074,3 +1082,14 @@ void UI_DrawScan(void)
 		}
 	}
 }
+
+#ifdef ENABLE_SCANLIST_DISPLAY
+void UI_DrawScanLists(uint8_t Vfo)
+{
+	gColorForeground = COLOR_GREY;
+	for (uint8_t i = 0; i < 8; i++) {
+		gShortString[0] = (((gVfoState[Vfo].IsInscanList >> i) & 1 ) ? (49 + i) : '-');
+		UI_DrawSmallString(26 + (i * 12), Vfo ? 2 : 43, gShortString, 1);
+	}
+}
+#endif

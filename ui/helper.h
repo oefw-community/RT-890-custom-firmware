@@ -80,6 +80,9 @@ void UI_DrawDTMFString(void);
 void UI_DrawMuteInfo(bool bIs24Bit, uint32_t Golay);
 void UI_DrawNone(void);
 void UI_DrawScan(void);
+#ifdef ENABLE_SCANLIST_DISPLAY
+void UI_DrawScanLists(uint8_t Vfo);
+#endif
 
 #endif
 

@@ -32,6 +32,9 @@
 	#include "ui/noaa.h"
 #endif
 #include "ui/vfo.h"
+#ifdef ENABLE_SCANLIST_DISPLAY
+#include "ui/gfx.h"
+#endif
 
 static const ChannelInfo_t VfoTemplate[2] = {
 	{
@@ -639,6 +642,12 @@ void CHANNELS_LoadVfoMode(void)
 
 void CHANNELS_LoadWorkMode(void)
 {
+#ifdef ENABLE_SCANLIST_DISPLAY
+	DISPLAY_Fill(20, 127, 43 - (gSettings.CurrentVfo * 41), 49 - (gSettings.CurrentVfo * 41), COLOR_BACKGROUND);
+	if (gSettings.DualDisplay) {
+		DISPLAY_Fill(20, 127, 43 - ((1 - gSettings.CurrentVfo) * 41), 49 - ((1 - gSettings.CurrentVfo) * 41), COLOR_BACKGROUND);
+	}
+#endif
 	if (CHANNELS_LoadChannel(gSettings.VfoChNo[0], 0)) {
 		gSettings.VfoChNo[0] = CHANNELS_GetChannelUp(gSettings.VfoChNo[0], 0);
 		SETTINGS_SaveGlobals();

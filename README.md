@@ -131,6 +131,7 @@ ENABLE_FM_RADIO          => FM broadcast radio mode
 ENABLE_LTO               => Link Time Optimization
 ENABLE_OPTIMIZED         => Compiler options to reduce binary size
 ENABLE_SLOWER_RSSI_TIMER => Slower update rate of RSSI to reduce screen updates that cause reports of clicking around 444-446MHz
+ENABLE_SCANLIST_DISPLAY  => Display scanlists membership instead of empty RSSI grid in channel mode when radio not RX/TX
 ```
 
 ### Build & Flash

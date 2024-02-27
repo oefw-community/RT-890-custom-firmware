@@ -35,10 +35,17 @@ static void DrawBandwidth(bool bIsNarrow, uint8_t Vfo)
 
 void UI_DrawVfo(uint8_t Vfo)
 {
-	// TODO display enabled scan list, maybe using grid or dots
 	UI_DrawName(Vfo, gVfoState[Vfo].Name);
 	gColorForeground = COLOR_FOREGROUND;
-	UI_DrawVfoFrame(Vfo);
+#ifdef ENABLE_SCANLIST_DISPLAY
+	if (gSettings.WorkMode && gRadioMode == RADIO_MODE_QUIET) {
+		UI_DrawScanLists(Vfo);
+	} else {
+#endif
+		UI_DrawVfoFrame(Vfo);
+#ifdef ENABLE_SCANLIST_DISPLAY
+	}
+#endif
 
 	if (Vfo == gCurrentVfo) {
 		if (gRadioMode == RADIO_MODE_RX) {
