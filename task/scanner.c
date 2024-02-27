@@ -14,6 +14,9 @@
  *     limitations under the License.
  */
 
+#ifdef ENABLE_FM_RADIO
+#include "app/fm.h"
+#endif
 #include "app/radio.h"
 #include "bsp/gpio.h"
 #include "driver/key.h"
@@ -47,7 +50,14 @@ void Task_Scanner(void) {
 			CHANNELS_NextChannelVfo(gManualScanDirection ? KEY_DOWN : KEY_UP);
 			RADIO_Tune(gSettings.CurrentVfo);
 		}
-		SCANNER_Countdown = 15;
+		// we have to slow down the scan speed in FM broadcast mode
+		// because we do not redraw VFO so the chip does not have time
+		// to catch incoming signal
+		SCANNER_Countdown =
+#ifdef ENABLE_FM_RADIO
+				gFM_Mode > FM_MODE_OFF ? 50 :
+#endif
+				15;
 		if (gExtendedSettings.ScanBlink) {
 			gpio_bits_flip(GPIOA, BOARD_GPIOA_LED_GREEN);
 		}

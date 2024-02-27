@@ -368,7 +368,13 @@ bool CHANNELS_NextChannelMr(uint8_t Key, bool OnlyFromScanlist) {
 			return false;	// empty list
 	} while (OnlyFromScanlist && !((gVfoState[gSettings.CurrentVfo].IsInscanList >> gExtendedSettings.CurrentScanList) & 1));
 	RADIO_Tune(gSettings.CurrentVfo);
+#ifdef ENABLE_FM_RADIO
+	if (gFM_Mode < FM_MODE_PLAY) {
+#endif
 	UI_DrawVfo(gSettings.CurrentVfo);
+#ifdef ENABLE_FM_RADIO
+	}
+#endif
 	return true;
 }
 
@@ -449,8 +455,13 @@ void CHANNELS_NextChannelVfo(uint8_t Key)
 		}
 		gVfoInfo[gSettings.CurrentVfo].Frequency = pInfo->TX.Frequency;
 	}
-
-	UI_DrawVfo(gSettings.CurrentVfo);
+#ifdef ENABLE_FM_RADIO
+	if (gFM_Mode < FM_MODE_PLAY) {
+#endif
+		UI_DrawVfo(gSettings.CurrentVfo);
+#ifdef ENABLE_FM_RADIO
+	}
+#endif
 }
 
 #ifdef ENABLE_NOAA
