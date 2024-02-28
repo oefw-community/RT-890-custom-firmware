@@ -816,8 +816,11 @@ void UI_DrawSomething(void)
 		UI_DrawVoltage(!gSettings.CurrentVfo);
 		UI_DrawVfo(gSettings.CurrentVfo);
 	} else {
+
 #ifdef ENABLE_SCANLIST_DISPLAY
+#if defined(ENABLE_RX_BAR) || defined(ENABLE_TX_BAR)
 		DISPLAY_Fill(20, 127, 43 - Y, 49 - Y, COLOR_BACKGROUND);
+#endif
 #endif
 		UI_DrawVfo(gCurrentVfo);
 		if (gSettings.CurrentVfo == gCurrentVfo && gInputBoxWriteIndex) {

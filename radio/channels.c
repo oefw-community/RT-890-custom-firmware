@@ -33,7 +33,9 @@
 #endif
 #include "ui/vfo.h"
 #ifdef ENABLE_SCANLIST_DISPLAY
+#if defined(ENABLE_RX_BAR) || defined(ENABLE_TX_BAR)
 #include "ui/gfx.h"
+#endif
 #endif
 
 static const ChannelInfo_t VfoTemplate[2] = {
@@ -654,10 +656,13 @@ void CHANNELS_LoadVfoMode(void)
 void CHANNELS_LoadWorkMode(void)
 {
 #ifdef ENABLE_SCANLIST_DISPLAY
+#if defined(ENABLE_RX_BAR) || defined(ENABLE_TX_BAR)
+
 	DISPLAY_Fill(20, 127, 43 - (gSettings.CurrentVfo * 41), 49 - (gSettings.CurrentVfo * 41), COLOR_BACKGROUND);
 	if (gSettings.DualDisplay) {
 		DISPLAY_Fill(20, 127, 43 - ((1 - gSettings.CurrentVfo) * 41), 49 - ((1 - gSettings.CurrentVfo) * 41), COLOR_BACKGROUND);
 	}
+#endif
 #endif
 	if (CHANNELS_LoadChannel(gSettings.VfoChNo[0], 0)) {
 		gSettings.VfoChNo[0] = CHANNELS_GetChannelUp(gSettings.VfoChNo[0], 0);
