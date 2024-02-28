@@ -123,20 +123,21 @@ Use [RT-890-SPI-restore-CLI](https://github.com/OEFW-community/RT-890-SPI-Restor
 
 ### Customizations
 ```
-UART_DEBUG               => UART debug output
-MOTO_STARTUP_TONE        => Moto XPS startup beeps
-ENABLE_AM_FIX            => Experimental port of the great UV-K5 AM fix from OneOfEleven
-ENABLE_ALT_SQUELCH       => Port of optimized UV-K5 squelch system from various firmwares
-ENABLE_NOAA              => NOAA weather channels (always re-set the sidekeys actions from menu after modifying the available actions)
-ENABLE_SPECTRUM          => Spectrum frequency view (assign to a shortcut key to access)
-ENABLE_SPECTRUM_PRESETS  => Band presets for Spectrum mode (ENABLE_SPECTRUM required to be enabled)
-ENABLE_FM_RADIO          => FM broadcast radio mode
-ENABLE_LTO               => Link Time Optimization
-ENABLE_OPTIMIZED         => Compiler options to reduce binary size
-ENABLE_SLOWER_RSSI_TIMER => Slower update rate of RSSI to reduce screen updates that cause reports of clicking around 444-446MHz
-ENABLE_RX_BAR            => Display RSSI level bar when RX
-ENABLE_TX_BAR            => Display vox level bar when TX
-ENABLE_SCANLIST_DISPLAY  => Display scanlists membership instead of empty RSSI grid in channel mode when radio not RX/TX
+UART_DEBUG                     => UART debug output
+MOTO_STARTUP_TONE              => Moto XPS startup beeps
+ENABLE_AM_FIX                  => Experimental port of the great UV-K5 AM fix from OneOfEleven
+ENABLE_ALT_SQUELCH             => Port of optimized UV-K5 squelch system from various firmwares
+ENABLE_NOAA                    => NOAA weather channels (always re-set the sidekeys actions from menu after modifying the available actions)
+ENABLE_SPECTRUM                => Spectrum frequency view (assign to a shortcut key to access)
+ENABLE_SPECTRUM_PRESETS        => Band presets for Spectrum mode (ENABLE_SPECTRUM required to be enabled)
+ENABLE_FM_RADIO                => FM broadcast radio mode
+ENABLE_LTO                     => Link Time Optimization
+ENABLE_OPTIMIZED               => Compiler options to reduce binary size
+ENABLE_SLOWER_RSSI_TIMER       => Slower update rate of RSSI to reduce screen updates that cause reports of clicking around 444-446MHz
+ENABLE_RX_BAR                  => Display RSSI level bar when RX
+ENABLE_TX_BAR                  => Display vox level bar when TX
+ENABLE_SCANLIST_DISPLAY        => Display scanlists membership instead of empty RSSI grid in channel mode when radio not RX/TX
+ENABLE_KEEP_MONITOR_MODE_UP_DN => Keep monitor mode when pressing up/down keys to change frequency
 ```
 
 ### Build & Flash

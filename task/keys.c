@@ -169,7 +169,9 @@ static void MAIN_KeyHandler(KEY_t Key)
 #endif
 				if (!gReceptionMode) {
 					if (!gScannerMode) {
+#ifndef ENABLE_KEEP_MONITOR_MODE_UP_DN
 						RADIO_CancelMode();
+#endif
 						if (gSettings.WorkMode) {
 							CHANNELS_NextChannelMr(Key, false);
 							SETTINGS_SaveGlobals();

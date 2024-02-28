@@ -38,7 +38,11 @@ void UI_DrawVfo(uint8_t Vfo)
 	UI_DrawName(Vfo, gVfoState[Vfo].Name);
 	gColorForeground = COLOR_FOREGROUND;
 #ifdef ENABLE_SCANLIST_DISPLAY
-	if (gSettings.WorkMode && gRadioMode == RADIO_MODE_QUIET) {
+	if (gSettings.WorkMode && gRadioMode == RADIO_MODE_QUIET
+#ifdef ENABLE_KEEP_MONITOR_MODE_UP_DN
+		&& !gMonitorMode
+#endif
+	) {
 		UI_DrawScanLists(Vfo);
 	} else {
 #endif

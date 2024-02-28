@@ -30,6 +30,9 @@
 #ifdef ENABLE_SPECTRUM
 	#include "app/spectrum.h"
 #endif
+#ifdef UART_DEBUG
+	#include "driver/uart.h"
+#endif
 #include "driver/beep.h"
 #include "driver/bk4819.h"
 #include "driver/key.h"
@@ -114,7 +117,12 @@ void KeypressAction(uint8_t Action) {
 		return;
 	}
 
+
+#ifdef ENABLE_KEEP_MONITOR_MODE_UP_DN
+	if (gMonitorMode && Action == ACTION_MONITOR) {
+#else
 	if (gMonitorMode) {
+#endif		
 		gMonitorMode = false;
 		RADIO_EndRX();
 		return;
