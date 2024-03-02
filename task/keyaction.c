@@ -417,6 +417,12 @@ void KeypressAction(uint8_t Action) {
 				break;
 #endif
 
+			case ACTION_MODULATION:
+				gMenuIndex = MENU_MODULATION;
+				DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
+				MENU_DrawSetting();
+				break;
+
 		}
 	}
 }

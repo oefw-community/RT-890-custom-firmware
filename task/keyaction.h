@@ -49,6 +49,7 @@ enum {
 	ACTION_AGC_MODE,
 	ACTION_REG_EDIT,
 	ACTION_MIC_GAIN,
+	ACTION_MODULATION,
 	ACTIONS_COUNT,	// used to count the number of actions, keep this last
 };
 

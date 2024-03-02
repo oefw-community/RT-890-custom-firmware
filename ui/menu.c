@@ -188,7 +188,8 @@ void UI_DrawActions(uint8_t Index)
 #else
 		"[DISABLED]  ",
 #endif
-		"Mic Gain    "
+		"Mic Gain    ",
+		"Modulation  ",
 	};
 
 	UI_DrawSettingOptionEx(Actions[Index], 12, 0);
