@@ -54,7 +54,7 @@ void UI_DrawDtmfMode(uint8_t Index)
 		"Off             ",
 		"TX Start        ",
 		"TX End          ",
-		"TX Start And End",
+		"TX Start - End  ",
 	};
 
 	UI_DrawSettingOption(Mode[Index], 0);
