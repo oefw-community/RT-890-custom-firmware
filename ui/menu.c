@@ -332,62 +332,43 @@ void UI_DrawFrequencyStep(uint8_t Index)
 
 void UI_DrawTimer(uint8_t Index)
 {
-	char String[4];
 	uint16_t Timer;
-
-	String[0] = ' ';
-	String[1] = ' ';
-	String[2] = ' ';
-	String[3] = ' ';
 
 	switch (Index) {
 	case 0:
-		UI_DrawSettingOptionEx(" Off", 4, 0);
-		UI_DrawSettingOptionEx("   5", 4, 1);
+		UI_DrawSettingOptionEx("Off ", 4, 0);
+		UI_DrawSettingOptionEx("5   ", 4, 1);
 		break;
 
 	case 1:
-		UI_DrawSettingOptionEx("   5", 4, 0);
-		UI_DrawSettingOptionEx("  10", 4, 1);
+		UI_DrawSettingOptionEx("5   ", 4, 0);
+		UI_DrawSettingOptionEx("10  ", 4, 1);
 		break;
 
 	case 2:
-		UI_DrawSettingOptionEx("  10", 4, 0);
-		UI_DrawSettingOptionEx("  15", 4, 1);
+		UI_DrawSettingOptionEx("10  ", 4, 0);
+		UI_DrawSettingOptionEx("15  ", 4, 1);
 		break;
 
 	case 42:
-		UI_DrawSettingOptionEx(" 600", 4, 0);
-		UI_DrawSettingOptionEx(" Off", 4, 1);
+		UI_DrawSettingOptionEx("600 ", 4, 0);
+		UI_DrawSettingOptionEx("Off ", 4, 1);
 		break;
 
 	default:
+
 		Timer = (Index - 2) * 15;
-		if (Timer < 100) {
-			Int2Ascii(Timer, 2);
-			String[2] = gShortString[0];
-			String[3] = gShortString[1];
-			UI_DrawSettingOptionEx(String, 4, 0);
-		} else {
-			Int2Ascii(Timer, 3);
-			String[1] = gShortString[0];
-			String[2] = gShortString[1];
-			String[3] = gShortString[2];
-			UI_DrawSettingOptionEx(String, 4, 0);
-		}
+		gShortString[2] = ' ';
+		gShortString[3] = ' ';
+		Int2Ascii(Timer, (Timer > 100) ? 3 : 2);
+		UI_DrawSettingOptionEx(gShortString, 4, 0);
+
 		Timer = (Index - 1) * 15;
-		if (Timer < 100) {
-			Int2Ascii(Timer, 2);
-			String[2] = gShortString[0];
-			String[3] = gShortString[1];
-			UI_DrawSettingOptionEx(String, 4, 1);
-		} else {
-			Int2Ascii(Timer, 3);
-			String[1] = gShortString[0];
-			String[2] = gShortString[1];
-			String[3] = gShortString[2];
-			UI_DrawSettingOptionEx(String, 4, 1);
-		}
+		gShortString[2] = ' ';
+		gShortString[3] = ' ';
+		Int2Ascii(Timer, (Timer > 100) ? 3 : 2);
+		UI_DrawSettingOptionEx(gShortString, 4, 1);
+
 		break;
 	}
 }
