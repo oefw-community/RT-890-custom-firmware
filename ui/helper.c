@@ -778,12 +778,10 @@ void UI_DrawBar(uint8_t Level, uint8_t Vfo)
 	uint8_t i;
 
 	// Adjust for 80% bar
-	Level = Level * .8;
+	Level = (Level * 80) / 100;
 
-//	if (Level < 25) {
 	if (Level < 20) {
 		gColorForeground = COLOR_RED;
-//	} else if (Level < 50) {
 	} else if (Level < 40) {
 		gColorForeground = COLOR_RGB(31, 41, 0);
 	} else {
@@ -791,14 +789,11 @@ void UI_DrawBar(uint8_t Level, uint8_t Vfo)
 	}
 
 	for (i = 0; i < Level; i++) {
-//		if (i != 0 && i != 25 && i != 50 && i != 75) {
 		if (i != 0 && i != 20 && i != 40 && i != 60) {
 			DISPLAY_DrawRectangle1(20 + i, Y, 4, 1, gColorForeground);
 		}
 	}
 
-//	for (; Level < 100; Level++) {
-//		if (Level != 0 && Level != 25 && Level != 50 && Level != 75) {
 	for (; Level < 80; Level++) {
 		if (Level != 0 && Level != 20 && Level != 40 && Level != 60) {
 			DISPLAY_DrawRectangle1(20 + Level, Y, 4, 1, gColorBackground);
