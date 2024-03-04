@@ -38,20 +38,21 @@
 #include "ui/menu.h"
 #include "ui/version.h"
 
-static const char Menu[][14] = {
-	"Startup Logo  ",
+static const char Main_Menu[][14] = {
+	"Radio Menu    ",
+	"Channel Menu  ",
+	"Keys Menu     ",
+	"Display Menu  ",
+};
+
+static const char Radio_Menu[][14] = {
 	"Voltage       ",
 	"Ringtone      ",
-	"Prompt Text   ",
 	"Voice Prompt  ",
 	"Key Beep      ",
 	"Roger Beep    ",
-	"Dual Display  ",
 	"TX Priority   ",
 	"Save Mode     ",
-	"Freq Step     ",
-	"SQ Level      ",
-	"LED Timer     ",
 	"Lock Timer    ",
 	"TOT           ",
 	"VOX Level     ",
@@ -64,14 +65,27 @@ static const char Menu[][14] = {
 	"Repeater Mode ",
 	"Scan Resume   ",
 	"Scan Blink    ",
+	"Mic Gain      ",
+	"List To Scan  ",
+	"Busy Lock     ",
+	"DTMF Delay    ",
+	"DTMF Interval ",
+	"DTMF Mode     ",
+	"DTMF Select   ",
+	"DTMF Display  ",
+	"Initialize    ",
+	"Version       ",
+};
+
+static const char Channel_Menu[][14] = {
 	"CTCSS/DCS     ",
 	"RX CTCSS/DCS  ",
 	"TX CTCSS/DCS  ",
 	"TX Power      ",
-	"Mic Gain      ",
+	"Freq Step     ",
+	"SQ Level      ",
 	"Modulation    ",
 	"Band Width    ",
-	"List To Scan  ",
 	"Ch In List 1  ",
 	"Ch In List 2  ",
 	"Ch In List 3  ",
@@ -80,13 +94,15 @@ static const char Menu[][14] = {
 	"Ch In List 6  ",
 	"Ch In List 7  ",
 	"Ch In List 8  ",
-	"Busy Lock     ",
 	"Scrambler     ",
 	"DCS Encrypt   ",
 	"Mute Code     ",
+	"Delete CH     ",
 	"CH Name       ",
 	"Save CH       ",
-	"Delete CH     ",
+};
+
+static const char Keys_Menu[][14] = {
 	"Side 1 Long   ",
 	"Side 1 Short  ",
 	"Side 2 Long   ",
@@ -106,14 +122,30 @@ static const char Menu[][14] = {
 	"Key Menu Long ",
 	"Key Exit Long ",
 	"Reset Keys    ",
-	"DTMF Delay    ",
-	"DTMF Interval ",
-	"DTMF Mode     ",
-	"DTMF Select   ",
-	"DTMF Display  ",
+};
+
+static const char Display_Menu[][14] = {
+	"Dual Display  ",
 	"Dark Mode     ",
-	"Initialize    ",
-	"Version       ",
+	"LED Timer     ",
+	"Startup Logo  ",
+	"Prompt Text   ",
+};
+
+static const char *Menus[] = {
+	Main_Menu, 
+	Radio_Menu, 
+	Channel_Menu, 
+	Keys_Menu, 
+	Display_Menu
+};
+
+static const int8_t MenuLengths[] = {
+	sizeof Main_Menu / sizeof(Main_Menu) / sizeof(Main_Menu[0]),
+	sizeof Main_Menu / sizeof(Radio_Menu) / sizeof(Radio_Menu[0]),
+	sizeof Main_Menu / sizeof(Channel_Menu) / sizeof(Channel_Menu[0]),
+	sizeof Main_Menu / sizeof(Keys_Menu) / sizeof(Keys_Menu[0]),
+	sizeof Main_Menu / sizeof(Display_Menu) / sizeof(Display_Menu[0])
 };
 
 static const ChannelInfo_t EmptyChannel = {
@@ -149,20 +181,38 @@ static uint8_t EditSize;
 
 uint16_t gSettingGolay;
 
-uint8_t gMenuIndex;
+uint8_t gMenuLevel;
+uint16_t gMenuIndex;
+uint16_t gMenuStartIndex;
 uint8_t gSettingIndex;
-uint8_t gSettingsCount = sizeof(Menu) / sizeof(Menu[0]);
+uint8_t gSettingsCount;
+
+
+static void ChangeMenuLevel(uint8_t Level)
+{
+	gMenuLevel = Level;
+	gSettingsCount = MenuLengths[Level];
+	gMenuStartIndex = gMenuLevel * 100;
+}
 
 static void DrawMenu(uint8_t Index)
 {
-	UI_DrawString(24, 72, Menu[(Index + gSettingsCount - 1) % gSettingsCount], 14);
-	Int2Ascii(((Index + gSettingsCount - 1) % gSettingsCount) + 1, 2);
+	uint16_t IndexVal;
+	uint16_t BaseVal;
+
+	BaseVal = gSettingsCount - gMenuStartIndex + 1;
+	IndexVal = ((Index - 1 - gMenuStartIndex) % BaseVal + BaseVal) % BaseVal + gMenuStartIndex;
+	UI_DrawString(24, 72, Menus[gMenuLevel][IndexVal], 14);
+	Int2Ascii(IndexVal + 1, 2);
 	UI_DrawString(140, 72, gShortString, 2);
-	UI_DrawString(24, 48, Menu[Index], 14);
+
+	UI_DrawString(24, 48, Menus[gMenuLevel][Index], 14);
 	Int2Ascii(Index + 1, 2);
 	UI_DrawString(140, 48, gShortString, 2);
-	UI_DrawString(24, 24, Menu[(Index + 1) % gSettingsCount], 14);
-	Int2Ascii(((Index + 1) % gSettingsCount) + 1, 2);
+
+	IndexVal = (Index + 1 - gMenuStartIndex) % (gSettingsCount - gMenuStartIndex + 1) + gMenuStartIndex;
+	UI_DrawString(24, 24, Menus[gMenuLevel][IndexVal], 14);
+	Int2Ascii(IndexVal + 1, 2);
 	UI_DrawString(140, 24, gShortString, 2);
 }
 
@@ -184,7 +234,8 @@ static void EnableTextEditor(void)
 static void DrawSettingName(uint8_t Index)
 {
 	gColorForeground = COLOR_BLUE;
-	UI_DrawString(24, 72, Menu[Index], 14);
+	GetMenuOption(Index);
+	UI_DrawString(24, 72, gShortString, 14);
 	Int2Ascii((Index + 1), 2);
 	UI_DrawString(140, 72, gShortString, 2);
 	gColorForeground = COLOR_FOREGROUND;
@@ -1139,11 +1190,14 @@ void MENU_KeyHandler(uint8_t Key)
 
 void MENU_Next(uint8_t Key)
 {
+	uint16_t BaseVal;
+
 	UI_DrawSettingArrow(0);
 	if (Key == KEY_UP) {
-		gMenuIndex = (gMenuIndex + gSettingsCount - 1) % gSettingsCount;
+		BaseVal = gSettingsCount - gMenuStartIndex + 1;
+		gMenuIndex = ((gMenuIndex - 1 - gMenuStartIndex) % BaseVal + BaseVal) % BaseVal + gMenuStartIndex;
 	} else {
-		gMenuIndex = (gMenuIndex + 1) % gSettingsCount;
+		gMenuIndex = (gMenuIndex + 1 - gMenuStartIndex) % (gSettingsCount - gMenuStartIndex + 1) + gMenuStartIndex;
 	}
 	DrawMenu(gMenuIndex);
 }

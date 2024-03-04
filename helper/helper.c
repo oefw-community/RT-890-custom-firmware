@@ -20,7 +20,7 @@
 #include "radio/scheduler.h"
 #include "radio/settings.h"
 
-char gShortString[10];
+char gShortString[14];
 
 void Int2Ascii(uint32_t Number, uint8_t Size)
 {
