@@ -287,7 +287,7 @@ void RADIO_StartRX(void)
 		if (gScannerMode && gExtendedSettings.ScanResume == 2) {	// Time Operated
 			SCANNER_Countdown = 5000;
 		}
-		if (gScreenMode == SCREEN_MAIN && !gDTMF_InputMode) {
+		if (gScreenMode == SCREEN_MAIN && !gDTMF_InputMode && !gFlashlightMode) {
 			if (gSettings.DualDisplay == 0 && gSettings.CurrentVfo != gCurrentVfo) {
 				const uint8_t Y = gCurrentVfo * 41;
 
@@ -332,7 +332,7 @@ void RADIO_EndRX(void)
 	}
 	TuneCurrentVfo();
 	if (!gFrequencyDetectMode) {
-		if (gScreenMode == SCREEN_MAIN && !gDTMF_InputMode) {
+		if (gScreenMode == SCREEN_MAIN && !gDTMF_InputMode && !gFlashlightMode) {
 			if (!gFskDataReceived && !gDataDisplay) {
 				UI_DrawSomething();
 			} else {

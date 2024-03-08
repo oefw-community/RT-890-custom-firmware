@@ -92,7 +92,8 @@ static uint8_t GetToneStatus(uint8_t CodeType, bool bMuteEnabled)
 
 static void CheckRSSI(void)
 {
-	if (gVoxRssiUpdateTimer == 0 && !gDataDisplay && !gDTMF_InputMode && !gFrequencyDetectMode && !gReceptionMode && !gFskDataReceived && gScreenMode == SCREEN_MAIN) {
+	if (gVoxRssiUpdateTimer == 0 && !gDataDisplay && !gDTMF_InputMode && !gFrequencyDetectMode && !gReceptionMode
+			&& !gFskDataReceived && gScreenMode == SCREEN_MAIN && !gFlashlightMode) {
 		uint16_t RSSI;
 		uint16_t Power;
 
