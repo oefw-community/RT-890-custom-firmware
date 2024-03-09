@@ -281,28 +281,15 @@ void BK4819_SetSquelchGlitch(bool bIsNarrow)
 #ifdef ENABLE_ALT_SQUELCH
 	uint16_t Value;
 
-	static const uint8_t SquelchGlitchOpenLevel[10] = {
-		0x5A,
-		0x10,
-		0x9,
-		0x8,
-		0x7,
-		0x6,
-		0x5,
-		0x4,
-		0x3,
-		0x2,
-	};
-
 	if (gSettings.Squelch == 0){
 		Value = 255;
 	} else {
-		Value = SquelchGlitchOpenLevel[gSettings.Squelch];
+		Value = gExtendedSettings.SqGlitchBase - (gSettings.Squelch);
 	}
 
 	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF) | Value);
 
-	if (gSettings.Squelch == 0){
+	if (gSettings.Squelch == 0 || gExtendedSettings.SqGlitchBase > 230){
 		Value = 255;
 	} else {
 		Value = (Value * 10) / 9;
@@ -342,24 +329,13 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 
 	uint16_t Value;
 
-	static const uint8_t SquelchNoiseOpenLevel[10] = {
-		0xB4,
-		0x3E,
-		0x38,
-		0x32,
-		0x2C,
-		0x26,
-		0x20,
-		0x1A,
-		0x14,
-		0x0E,
-	};
-
 	if (gSettings.Squelch == 0){
 		Value = (127 << 8) | 127;
 	} else {
-		Value = SquelchNoiseOpenLevel[gSettings.Squelch];
-		if (bIsNarrow) {
+		Value = gExtendedSettings.SqNoiseBase - (gSettings.Squelch * 6);
+		if (gExtendedSettings.SqNoiseBase > 230) {
+			Value = (255 << 8) | Value;
+		} else if (bIsNarrow) {
 			Value = ((((Value - 5) * 10) / 9) << 8) | Value;
 		} else {
 			Value = (((Value * 10) / 9) << 8) | Value;
@@ -406,23 +382,10 @@ void BK4819_SetSquelchRSSI(bool bIsNarrow)
 
 	uint16_t Value;
 
-	static const uint8_t SquelchRssiOpenLevel[10] = {
-		0x0A,
-		0x66,
-		0x6E,
-		0x76,
-		0x7E,
-		0x86,
-		0x8E,
-		0x96,
-		0x9E,
-		0xA6,
-	};
-
 	if (gSettings.Squelch == 0){
 		Value = 0;
 	} else {
-		Value = SquelchRssiOpenLevel[gSettings.Squelch];
+		Value = gExtendedSettings.SqRSSIBase + (gSettings.Squelch * 8);
 		Value = (Value << 8) | (Value * 9) / 10;
 	}
 

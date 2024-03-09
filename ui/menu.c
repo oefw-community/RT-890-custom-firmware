@@ -475,11 +475,24 @@ void UI_DrawSettingScanlist(uint8_t Index)
 	UI_DrawSettingOptionEx(Mode[(Index + 1) % 9], 1, 1);
 }
 
-void UI_DrawSettingMicGain(uint8_t Index)
+void UI_DrawSettingNumList(uint8_t Index, uint8_t Max)
 {
+	uint8_t Len;
+
+	if (Index < 9) {
+		Len = 1;
+	} else if (Index < 99) {
+		Len = 2;
+	} else {
+		Len = 3;
+	}
+
+	gShortString[1] = ' ';
+	gShortString[2] = ' ';
+
 	gColorForeground = COLOR_FOREGROUND;
-	Int2Ascii(Index, 2);
-	UI_DrawString(24, 48, gShortString, 2);
-	Int2Ascii((Index + 1) % 32, 2);
-	UI_DrawString(24, 24, gShortString, 2);
+	Int2Ascii(Index, Len);
+	UI_DrawString(24, 48, gShortString, 3);
+	Int2Ascii((Index + 1) % Max, Len);
+	UI_DrawString(24, 24, gShortString, 3);
 }
