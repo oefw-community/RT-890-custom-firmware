@@ -190,6 +190,7 @@ void UI_DrawActions(uint8_t Index)
 #endif
 		"Mic Gain    ",
 		"Modulation  ",
+		"Bandwidth   ",
 	};
 
 	UI_DrawSettingOptionEx(Actions[Index], 12, 0);
