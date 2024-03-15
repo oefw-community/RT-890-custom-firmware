@@ -36,12 +36,10 @@ static const uint32_t gNoaaFrequencyTable[11] = {
 void UI_DrawNOAA(uint8_t Channel)
 {
 	Int2Ascii(gNoaaFrequencyTable[Channel], 8);
-	gColorForeground = COLOR_BLUE;
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString( 8, 64, gShortString, 3);
 	UI_DrawString(32, 64, ".", 1);
 	UI_DrawString(40, 64, gShortString + 3, 5);
-	UI_DrawString(80, 64, "MHz", 3);
-	UI_DrawString( 8, 32, "CH-", 3);
 	Int2Ascii(Channel + 1, 2);
 	UI_DrawString(32, 32, gShortString, 2);
 	gColorForeground = COLOR_FOREGROUND;

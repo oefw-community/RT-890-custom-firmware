@@ -23,13 +23,14 @@
 
 static void DrawBandwidth(bool bIsNarrow, uint8_t Vfo)
 {
-	const uint8_t Y = 43 - (Vfo * 41);
+	const uint8_t Y = 52 - (Vfo * 41);
 
-	gColorForeground = COLOR_FOREGROUND;
+	gColorForeground = COLOR_RGB(16, 45, 0);
 	if (bIsNarrow) {
-		UI_DrawSmallString(150, Y, "N", 1);
+		UI_DrawSmallString(124, Y, "12.5K", 5);
 	} else {
-		UI_DrawSmallString(150, Y, "W", 1);
+	gColorForeground = COLOR_RGB(31, 41, 0);	
+		UI_DrawSmallString(124, Y, "25.0K", 5);
 	}
 }
 
@@ -44,7 +45,7 @@ void UI_DrawVfo(uint8_t Vfo)
 		if (gRadioMode == RADIO_MODE_RX) {
 			UI_DrawRX(Vfo);
 			UI_DrawExtra(2, gVfoState[Vfo].gModulationType, Vfo);
-			gColorForeground = COLOR_BLUE;
+			gColorForeground = COLOR_GREEN;
 		} else if (gRadioMode == RADIO_MODE_TX) {
 			UI_DrawRX(Vfo);
 			UI_DrawExtra(1, gVfoState[Vfo].gModulationType, Vfo);
@@ -68,7 +69,7 @@ void UI_DrawVfo(uint8_t Vfo)
 	}
 
 	UI_DrawTxPower(gVfoState[Vfo].bIsLowPower, Vfo);
-	gColorForeground = COLOR_FOREGROUND;
+	gColorForeground = COLOR_RGB( 0, 24, 31);
 	if (gSettings.WorkMode) {
 		UI_DrawChannel(gSettings.VfoChNo[Vfo], Vfo);
 	} else {

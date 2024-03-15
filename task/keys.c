@@ -14,7 +14,6 @@
  *     limitations under the License.
  */
 
-#include "app/flashlight.h"
 #include "app/fm.h"
 #include "app/menu.h"
 #include "app/radio.h"
@@ -77,7 +76,7 @@ static void VFO_AppendDigit(char Digit)
 		INPUTBOX_Pad(0, 10);
 	}
 	gInputBox[gInputBoxWriteIndex++] = Digit;
-	gInputBoxWriteIndex %= 6U;
+	gInputBoxWriteIndex %= 7U;
 	UI_DrawFrequencyEx(gInputBox, gSettings.CurrentVfo, gFrequencyReverse);
 	if (gInputBoxWriteIndex == 0) {
 		CHANNELS_UpdateVFO();
@@ -263,11 +262,6 @@ static void MAIN_KeyHandler(KEY_t Key)
 
 static void HandlerShort(KEY_t Key)
 {
-	if (gFlashlightMode) {
-		FLASHLIGHT_Toggle();
-		return;
-	}
-
 	if (gSettings.Lock || gRadioMode == RADIO_MODE_TX || (gReceptionMode && Key != KEY_UP && Key != KEY_DOWN)) {
 		return;
 	}
@@ -285,6 +279,8 @@ static void HandlerShort(KEY_t Key)
 		break;
 	case SCREEN_SETTING:
 		MENU_SettingKeyHandler(Key);
+		break;
+		default:
 		break;
 	}
 }

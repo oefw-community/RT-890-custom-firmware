@@ -519,20 +519,26 @@ void CHANNELS_UpdateVFO(void)
 	uint8_t i;
 
 	RADIO_CancelMode();
-	for (i = 0; i < 6; i++) {
+	for (i = 0; i < 7; i++) {
 		Frequency = (Frequency * 10) + gInputBox[i];
 	}
-	Frequency *= 100;
+	Frequency *= 10;
 
 	gInputBoxWriteIndex = 0;
 	INPUTBOX_Pad(0, 10);
-	if (
-		(!gSettings.bFLock && (Frequency >= 1000000  && Frequency <= 130000000)) ||
-		(gSettings.bFLock && (
-			(Frequency >= 14400000 && Frequency <= 14600000) ||
-			(Frequency >= 43000000 && Frequency <= 44000000) ||
-			(Frequency >= 10800000 && Frequency <= 13600000)))
-	   ) {
+	
+	CHANNELS_UpdateVFOFreq(Frequency);
+}
+
+	void CHANNELS_UpdateVFOFreq(uint32_t Frequency)
+{
+		if (
+			(!gSettings.bFLock && (Frequency >= 1000000  && Frequency <= 130000000)) ||
+			(gSettings.bFLock && (
+					(Frequency >= 14400000 && Frequency <= 14600000) ||
+					(Frequency >= 43000000 && Frequency <= 44000000) ||
+					(Frequency >= 10800000 && Frequency <= 13600000)))
+			) {
 		if (!gFrequencyReverse) {
 			gVfoState[gSettings.CurrentVfo].RX.Frequency = Frequency;
 			// if (Frequency < 13600000) {

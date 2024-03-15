@@ -39,9 +39,9 @@ void UI_DrawSettingRoger(uint8_t Index)
 {
 	static const char Mode[4][7] = {
 		"Off    ",
-		"Roger 1",
-		"Roger 2",
-		"Send ID",
+		"Roger A",
+		"Roger B",
+		"FSK ID ",
 	};
 
 	UI_DrawSettingOptionEx(Mode[Index], 7, 0);
@@ -145,24 +145,19 @@ void UI_DrawActions(uint8_t Index)
 		"Preset CH   ",
 		"Local Alarm ",
 		"Remote Alarm",
-#ifdef ENABLE_NOAA
+/*#ifdef ENABLE_NOAA
 		"NOAA        ",
 #else
 		"[DISABLED]  ",
-#endif
+#endif*/
 		"Send Tone   ",
-		"Roger Beep  ",
+		"TX Tone     ",
 		"FM Radio    ",
 		"Freq Scanner",
-		"Flashlight  ",
-#ifdef ENABLE_AM_FIX
-		"AM Fix      ",
-#else
-		"[DISABLED]  ",
-#endif
+		"TX Priority ",
 		"VOX         ",
 		"TX Power    ",
-		"SQ Level    ",
+		"Squelch     ",
 		"Dual Standby",
 		"Backlight   ",
 		"Freq Step   ",
@@ -172,6 +167,22 @@ void UI_DrawActions(uint8_t Index)
 		"Dual Display",
 		"TX Frequency",
 		"Lock        ",
+		#ifdef ENABLE_SPECTRUM
+		"Spectrum    ",
+#else
+		"[DISABLED]  ",
+#endif
+		"Dark Theme  ",
+		"AGC Mode    ",
+#ifdef ENABLE_REGISTER_EDIT
+		"Reg Editor  ",
+#else
+		"[DISABLED]  ",
+#endif
+		"Mic Gain    ",
+		"Modulation  ",
+		"Bandwidth   ",
+		"TX CTCSS/DCS",// replaces NOAA, remove to establish again
 	};
 
 	UI_DrawSettingOptionEx(Actions[Index], 12, 0);
@@ -191,7 +202,7 @@ void UI_DrawChannelName(uint16_t Channel)
 	String[5] = '1';
 	String[6] = ' ';
 	String[7] = ' ';
-	String[8] = 'N';
+	String[8] = 'E';
 	String[9] = 0;
 	String[10] = 0;
 	String[11] = 0;
@@ -202,9 +213,9 @@ void UI_DrawChannelName(uint16_t Channel)
 	String[5] = gShortString[2];
 	SFLASH_Read(&Info, 0x3C2000 + (Channel * sizeof(Info)), sizeof(Info));
 	if (Info.Available) {
-		String[8] = 'N';
+		String[8] = 'E';
 	} else {
-		String[8] = 'Y';
+		String[8] = 'F';
 	}
 	UI_DrawString(24, 48, String, 9);
 
@@ -214,9 +225,9 @@ void UI_DrawChannelName(uint16_t Channel)
 	String[5] = gShortString[2];
 	SFLASH_Read(&Info, 0x3C2000 + ((Channel + 1U) % 999U) * sizeof(Info), sizeof(Info));
 	if (Info.Available) {
-		String[8] = 'N';
+		String[8] = 'E';
 	} else {
-		String[8] = 'Y';
+		String[8] = 'F';
 	}
 	UI_DrawString(24, 24, String, 9);
 }
@@ -264,8 +275,8 @@ void UI_DrawScrambler(uint8_t Index)
 void UI_DrawActivateBy(void)
 {
 	DISPLAY_Fill(1, 158, 1, 19, gColorBackground);
-	DISPLAY_DrawRectangle0(1, 20, 159, 1, gSettings.BorderColor);
-	gColorForeground = COLOR_RED;
+	DISPLAY_DrawRectangle0(1, 20, 159, 1, gColorForeground);
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(20, 18, "Activate by [#]", 15);
 	gColorForeground = COLOR_FOREGROUND;
 }
@@ -276,7 +287,7 @@ void UI_DrawCursor(uint8_t X, bool bVisible)
 	uint16_t Color;
 
 	if (bVisible) {
-		Color = COLOR_RED;
+		Color = COLOR_FOREGROUND;
 	} else {
 		Color = gColorBackground;
 	}
@@ -315,62 +326,43 @@ void UI_DrawFrequencyStep(uint8_t Index)
 
 void UI_DrawTimer(uint8_t Index)
 {
-	char String[4];
 	uint16_t Timer;
-
-	String[0] = ' ';
-	String[1] = ' ';
-	String[2] = ' ';
-	String[3] = ' ';
-
+	
 	switch (Index) {
 	case 0:
-		UI_DrawSettingOptionEx(" Off", 4, 0);
-		UI_DrawSettingOptionEx("   5", 4, 1);
+		UI_DrawSettingOptionEx("Off ", 4, 0);
+		UI_DrawSettingOptionEx("5   ", 4, 1);
 		break;
 
 	case 1:
-		UI_DrawSettingOptionEx("   5", 4, 0);
-		UI_DrawSettingOptionEx("  10", 4, 1);
+		UI_DrawSettingOptionEx("5   ", 4, 0);
+		UI_DrawSettingOptionEx("10  ", 4, 1);
 		break;
 
 	case 2:
-		UI_DrawSettingOptionEx("  10", 4, 0);
-		UI_DrawSettingOptionEx("  15", 4, 1);
+		UI_DrawSettingOptionEx("10  ", 4, 0);
+		UI_DrawSettingOptionEx("15  ", 4, 1);
 		break;
 
 	case 42:
-		UI_DrawSettingOptionEx(" 600", 4, 0);
-		UI_DrawSettingOptionEx(" Off", 4, 1);
+		UI_DrawSettingOptionEx("600 ", 4, 0);
+		UI_DrawSettingOptionEx("Off ", 4, 1);
 		break;
 
 	default:
+
 		Timer = (Index - 2) * 15;
-		if (Timer < 100) {
-			Int2Ascii(Timer, 2);
-			String[2] = gShortString[0];
-			String[3] = gShortString[1];
-			UI_DrawSettingOptionEx(String, 4, 0);
-		} else {
-			Int2Ascii(Timer, 3);
-			String[1] = gShortString[0];
-			String[2] = gShortString[1];
-			String[3] = gShortString[2];
-			UI_DrawSettingOptionEx(String, 4, 0);
-		}
+		gShortString[2] = ' ';
+		gShortString[3] = ' ';
+		Int2Ascii(Timer, (Timer > 100) ? 3 : 2);
+		UI_DrawSettingOptionEx(gShortString, 4, 0);
+
 		Timer = (Index - 1) * 15;
-		if (Timer < 100) {
-			Int2Ascii(Timer, 2);
-			String[2] = gShortString[0];
-			String[3] = gShortString[1];
-			UI_DrawSettingOptionEx(String, 4, 1);
-		} else {
-			Int2Ascii(Timer, 3);
-			String[1] = gShortString[0];
-			String[2] = gShortString[1];
-			String[3] = gShortString[2];
-			UI_DrawSettingOptionEx(String, 4, 1);
-		}
+		gShortString[2] = ' ';
+		gShortString[3] = ' ';
+		Int2Ascii(Timer, (Timer > 100) ? 3 : 2);
+		UI_DrawSettingOptionEx(gShortString, 4, 1);
+		
 		break;
 	}
 }
@@ -399,10 +391,10 @@ void UI_DrawDeviceName(const char *pName)
 
 void UI_DrawSettingRepeaterMode(uint8_t Index)
 {
-	static const char Mode[3][13] = {
-		"Off          ",
-		"Talkaround   ",
-		"Freq Reversal",
+	static const char Mode[3][14] = {
+		"Off           ",
+		"No RX Subtone ",
+		"Monitor Input ",
 	};
 
 	UI_DrawSettingOptionEx(Mode[Index], 13, 0);
@@ -430,8 +422,8 @@ void UI_DrawSettingModulation(uint8_t Index)
 
 void UI_DrawSettingBandwidth(void)
 {
-	UI_DrawSettingOptionEx("Wide  ", 6, 0);
-	UI_DrawSettingOptionEx("Narrow", 6, 1);
+	UI_DrawSettingOptionEx("25.0 kHz", 8, 0);
+	UI_DrawSettingOptionEx("12.5 kHz", 8, 1);
 }
 
 void UI_DrawSettingBusyLock(uint8_t Index)
@@ -474,4 +466,27 @@ void UI_DrawSettingScanlist(uint8_t Index)
 
 	UI_DrawSettingOptionEx(Mode[Index], 1, 0);
 	UI_DrawSettingOptionEx(Mode[(Index + 1) % 9], 1, 1);
+}
+
+void UI_DrawSettingNumList(uint8_t Index, uint8_t Max)
+{
+	uint8_t Len;
+
+	if (Index < 9) {
+		Len = 1;
+	} else if (Index < 99) {
+		Len = 2;
+	} else {
+		Len = 3;
+	}
+
+	gShortString[1] = ' ';
+	gShortString[2] = ' ';
+
+	gColorForeground = COLOR_FOREGROUND;
+	Int2Ascii(Index, Len);
+	UI_DrawString(24, 48, gShortString, 3);
+	Int2Ascii((Index + 1) % Max, Len);
+	UI_DrawString(24, 24, gShortString, 3);
+
 }

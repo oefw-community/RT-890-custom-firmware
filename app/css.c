@@ -185,7 +185,7 @@ uint16_t DCS_GetOption(uint8_t Index)
 {
 	uint16_t Option = DCS_Options[Index];
 
-	if (Option > 63) {
+	if (Index > 63) {
 		Option |= 0x100;
 	}
 

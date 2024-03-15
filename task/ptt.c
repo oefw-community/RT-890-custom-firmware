@@ -14,7 +14,6 @@
  *     limitations under the License.
  */
 
-#include "app/flashlight.h"
 #include "app/fm.h"
 #include "app/radio.h"
 #include "driver/beep.h"
@@ -46,13 +45,8 @@ void Task_CheckPTT(void)
 	SCHEDULER_ClearTask(TASK_CHECK_PTT);
 	if (!gpio_input_data_bit_read(GPIOB, BOARD_GPIOB_KEY_PTT)) {
 		if (gSettings.DtmfState == DTMF_STATE_NORMAL && !gPttPressed) {
-			if (gPttCounter++ < 100) {
-				return;
-			}
-			if (gFlashlightMode) {
-				FLASHLIGHT_Toggle();
-				gPttCounter = 0;
-				gPttPressed = false;
+			if (gPttCounter++ < (gRadioMode == RADIO_MODE_RX ? 10 : 100)) {// Fix PTT timing during RX
+			//if (gPttCounter++ < 100) {
 				return;
 			}
 			SCREEN_TurnOn();

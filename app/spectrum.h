@@ -1,5 +1,5 @@
-/* Copyright 2023 Reppad
- * https://github.com/reppad
+/* Copyright 2023 Dual Tachyon
+ * https://github.com/DualTachyon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,17 @@
  *     limitations under the License.
  */
 
-#ifndef APP_FLASHLIGHT_H
-#define APP_FLASHLIGHT_H
+#ifndef RADIO_SPECTRUM_H
+#define RADIO_SPECTRUM_H
 
-void FLASHLIGHT_Toggle(void);
+enum {
+  STEPS_128,
+  STEPS_64,
+  STEPS_32,
+  STEPS_16,
+  STEPS_COUNT,
+};
+
+void APP_Spectrum(void);
 
 #endif
-

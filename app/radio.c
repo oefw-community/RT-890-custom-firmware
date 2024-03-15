@@ -37,7 +37,6 @@
 	#include "ui/noaa.h"
 #endif
 #include "task/ptt.h"
-#include "task/am-fix.h"
 #include "task/scanner.h"
 #include "task/screen.h"
 #include "ui/boot.h"
@@ -50,7 +49,6 @@ uint8_t gCurrentVfo;
 ChannelInfo_t *gMainVfo;
 ChannelInfo_t gVfoState[3];
 FrequencyInfo_t gVfoInfo[2];
-uint16_t gCurrentRssi[2];
 
 bool gNoaaMode;
 uint16_t gCode;
@@ -137,7 +135,6 @@ static bool TuneTX(bool bUseMic)
 		}
 		gRadioMode = RADIO_MODE_TX;
 		BK4819_EnableRfTxDeviation();
-		BK4819_SetMicSensitivityTuning();
 		BK4819_EnableTX(bUseMic);
 		BK4819_EnableScramble(gMainVfo->Scramble);
 		if (gMainVfo->Scramble == 0) {
@@ -222,9 +219,6 @@ void RADIO_Init(void)
 	SETTINGS_LoadSettings();
 
 	BK4819_Init();
-	#ifdef ENABLE_AM_FIX
-	AM_fix_init();
-	#endif
 
 	if (gSettings.DtmfState != DTMF_STATE_KILLED) {
 		UI_DrawBoot();
@@ -293,7 +287,8 @@ void RADIO_StartRX(void)
 			UI_DrawMainBitmap(false, gSettings.CurrentVfo);
 			UI_DrawRX(gCurrentVfo);
 		}
-		if (gMainVfo->BCL == BUSY_LOCK_CSS) {
+		if (gMainVfo->BCL == BUSY_LOCK_CSS && !gMonitorMode) {// Monitor mode bypasses TX lock
+		//if (gMainVfo->BCL == BUSY_LOCK_CSS) {
 			PTT_SetLock(PTT_LOCK_BUSY);
 		}
 		if (gSettings.TxPriority && gSettings.CurrentVfo != gCurrentVfo) {
@@ -350,7 +345,7 @@ void RADIO_EndRX(void)
 		if (!gRedrawScreen) {
 			FM_Resume();
 		}
-		gIncomingTimer = 100;
+		gIncomingTimer = 1;//100 //1
 	} else {
 		gSignalFound = true;
 		gDetectorTimer = 500;
@@ -372,7 +367,7 @@ void RADIO_EndAudio(void)
 	SPEAKER_TurnOff(SPEAKER_OWNER_RX);
 	gRxLinkCounter = 0;
 	gNoToneCounter = 0;
-	gIncomingTimer = 250;
+	gIncomingTimer = 1;//250 //1
 #ifdef ENABLE_NOAA
 	NOAA_NextChannelCountdown = 3000;
 #endif

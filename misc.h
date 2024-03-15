@@ -20,10 +20,18 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifndef ARRAY_SIZE
+	#define ARRAY_SIZE(x) (sizeof(x) / sizeof(x[0]))
+#endif
+
 enum SCREEN_Mode_t {
 	SCREEN_MAIN = 0,
 	SCREEN_MENU,
 	SCREEN_SETTING,
+	SCREEN_FREQ_DETECT,
+#ifdef ENABLE_REGISTER_EDIT
+	SCREEN_REGEDIT,
+#endif
 };
 
 typedef enum SCREEN_Mode_t SCREEN_Mode_t;
@@ -72,7 +80,6 @@ extern bool gFrequencyDetectMode;
 extern bool gEnableBlink;
 extern bool gRedrawScreen;
 extern bool gScannerMode;
-extern bool gFlashlightMode;
 extern bool gSaveMode;
 extern bool gReceptionMode;
 extern bool gReceivingAudio;
@@ -102,5 +109,5 @@ extern uint32_t SFLASH_Offsets[20];
 extern uint32_t SFLASH_FontOffsets[32];
 extern uint8_t gFlashBuffer[8192];
 
-#endif
 
+#endif

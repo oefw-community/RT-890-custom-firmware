@@ -34,10 +34,9 @@ void Int2Ascii(uint32_t Number, uint8_t Size)
 
 uint16_t TIMER_Calculate(uint16_t Setting)
 {
-	if (Setting == 0) {
-		return 0;
-	}
-	if (Setting != 1 && Setting != 2 && Setting != 3) {
+	if (Setting < 4) {
+		return Setting * 5;
+	} else {
 		return (Setting - 2) * 15;
 	}
 

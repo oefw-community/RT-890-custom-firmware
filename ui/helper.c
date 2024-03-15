@@ -81,27 +81,27 @@ static const uint8_t FontSmall[47][5] = {
 	{ 0xC2, 0xA2, 0x92, 0x8A, 0x86 },
 };
 
-static const uint16_t FontBigDigits[][10] = {
-	{ 0x0FFC, 0x1FFE, 0x3FFF, 0x3103, 0x2081, 0x2041, 0x3023, 0x3FFF, 0x1FFE, 0x0FFC },
-	{ 0x0000, 0x0000, 0x0000, 0x0004, 0x0004, 0x3FFE, 0x3FFF, 0x3FFF, 0x0000, 0x0000 },
-	{ 0x3804, 0x3C06, 0x3E07, 0x2703, 0x2381, 0x21C1, 0x20E3, 0x207F, 0x203E, 0x203C },
-	{ 0x0804, 0x1806, 0x3807, 0x3003, 0x2001, 0x20C1, 0x31E3, 0x3FFF, 0x1F3E, 0x0E1C },
-	{ 0x0380, 0x03C0, 0x0260, 0x0230, 0x0218, 0x020C, 0x3FFE, 0x3FFF, 0x3FFF, 0x0200 },
-	{ 0x08FF, 0x18FF, 0x38FF, 0x3061, 0x2021, 0x2021, 0x3061, 0x3FE1, 0x1FC1, 0x0F81 },
-	{ 0x0FFC, 0x1FFE, 0x3FFF, 0x30C3, 0x2061, 0x2061, 0x30E3, 0x3FC7, 0x1F86, 0x0F04 },
-	{ 0x0001, 0x0001, 0x0001, 0x3FC1, 0x3FE1, 0x3FF1, 0x0039, 0x001F, 0x000F, 0x0007 },
-	{ 0x0E1C, 0x1F3E, 0x3FFF, 0x31E3, 0x20C1, 0x20C1, 0x31E3, 0x3FFF, 0x1F3E, 0x0E1C },
-	{ 0x083C, 0x187E, 0x38FF, 0x31C3, 0x2181, 0x2181, 0x30C3, 0x3FFF, 0x1FFE, 0x0FFC },
-	{ 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0 },
+static const uint16_t FontBigDigits[][10] = {	
+	{ 0x0FFC, 0x1FFE, 0x3703, 0x3383, 0x31C3, 0x30E3, 0x3073, 0x303B, 0x1FFE, 0x0FFC }, //0
+	{ 0x0000, 0x0000, 0x3008, 0x300C, 0x300E, 0x3FFF, 0x3FFF, 0x3000, 0x3000, 0x0000 }, //1
+	{ 0x3F1C, 0x3F9E, 0x338F, 0x3183, 0x3183, 0x3183, 0x3183, 0x31C7, 0x30FE, 0x307C }, //2
+	{ 0x0C0C, 0x1C0E, 0x3807, 0x3003, 0x30C3, 0x30C3, 0x30C3, 0x39E7, 0x1FFE, 0x0F3C }, //3
+	{ 0x07C0, 0x07E0, 0x0670, 0x0638, 0x061C, 0x060E, 0x3FFF, 0x3FFF, 0x0600, 0x0600 }, //4
+	{ 0x0C7F, 0x1C7F, 0x3863, 0x3063, 0x3063, 0x3063, 0x3063, 0x38E3, 0x1FC3, 0x0F83 }, //5
+	{ 0x0FFC, 0x1FFE, 0x38C7, 0x30C3, 0x30C3, 0x30C3, 0x30C3, 0x39C7, 0x1F8E, 0x0F0C }, //6
+	{ 0x0003, 0x0003, 0x0003, 0x3F03, 0x3F83, 0x01C3, 0x00E3, 0x0073, 0x003F, 0x001F }, //7
+	{ 0x0F3C, 0x1FFE, 0x39E7, 0x30C3, 0x30C3, 0x30C3, 0x30C3, 0x39E7, 0x1FFE, 0x0F3C }, //8
+	{ 0x0C3C, 0x1C7E, 0x38E7, 0x30C3, 0x30C3, 0x30C3, 0x30C3, 0x38C7, 0x1FFE, 0x0FFC }, //9
+	{ 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0, 0x00C0 }, //-
 };
 
 static const uint16_t Icons[] = {
 	// 0x00 Lock
 	0x03F0, 0x03FE, 0x03F1, 0x03F1, 0x03F1, 0x03F1, 0x03FE, 0x03F0,
 	// 0x08 Bell
-	0x0080, 0x00C0, 0x00FC, 0x01FE, 0x02FF, 0x02FF, 0x01FE, 0x00FC,
-	// 0x10 ???
-	0x00C0, 0x0080, 0x0040, 0x0080, 0x01FC, 0x0282, 0x0241, 0x0201, 0x0201, 0x0201, 0x0209, 0x0104, 0x00FE, 0x0004, 0x0008,
+	0x0080, 0x00C0, 0x00FC, 0x01FE, 0x02FF, 0x02FF, 0x01FE, 0x00FC, 0x00C0, 0x0080,
+	// 0x12 Scan
+	0x0040, 0x0080, 0x01FC, 0x0282, 0x0241, 0x0201, 0x0201, 0x0201, 0x0209, 0x0104, 0x00FE, 0x0004, 0x0008,
 	// 0x1F Dual Watch
 	0x03FF, 0x0201, 0x0201, 0x0201, 0x0201, 0x0102, 0x00FC, 0x0000, 0x00FF, 0x0100, 0x0200, 0x0100, 0x00FF, 0x0100, 0x0200, 0x0100, 0x00FF,
 	// 0x30 Battery
@@ -110,7 +110,7 @@ static const uint16_t Icons[] = {
 	0x007F, 0x0080, 0x0100, 0x0200, 0x0100, 0x0080, 0x007F, 0x0000, 0x01FE, 0x0201, 0x0201, 0x0201, 0x0201, 0x0201, 0x01FE, 0x0000, 0x0303, 0x0084, 0x0048, 0x0030, 0x0030, 0x0048, 0x0084, 0x0303,
 	// 0x5B NOAA
 	0x0038, 0x037C, 0x007C, 0x037E, 0x007F, 0x037F, 0x007F, 0x037E, 0x007C, 0x037C, 0x0038,
-	// 0x66 TR
+	//0x66 TR
 	0x0001, 0x0001, 0x0001, 0x03FF, 0x0001, 0x0001, 0x0001, 0x0000, 0x03FF, 0x0021, 0x0021, 0x0061, 0x00A1, 0x0112, 0x020C,
 	// 0x75 RR
 	0x03FF, 0x0021, 0x0021, 0x0061, 0x00A1, 0x0112, 0x020C, 0x0000, 0x03FF, 0x0021, 0x0021, 0x0061, 0x00A1, 0x0112, 0x020C,
@@ -125,28 +125,7 @@ static const uint32_t IconRadio[] = {
 	0x7FFC00, 0x800300, 0xAA7B00, 0xAA7A00, 0xAA7A00, 0xAA7A00, 0xAA7A00, 0x8003FF, 0x7FFC00,
 };
 
-static const uint8_t BitmapFM[] = {
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x04, 0x08, 0x08, 0x10, 0x1F, 0x20,
-	0x20, 0x20, 0x40, 0x40, 0x40, 0x40, 0x40, 0x7F, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x40, 0x20, 0x20,
-	0x20, 0x1F, 0x10, 0x08, 0x08, 0x04, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x01, 0x06, 0x0E, 0x22, 0x42, 0x82, 0x02, 0x02, 0x02, 0x02, 0x02, 0x06, 0xFF, 0x06,
-	0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0xFF, 0xFF, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02,
-	0x06, 0xFF, 0x06, 0x02, 0x02, 0x02, 0x02, 0x02, 0x82, 0x42, 0x22, 0x1E, 0x06, 0x01, 0x00, 0x00,
-	0x00, 0x3F, 0xC1, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xFF, 0x01,
-	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xFF, 0xFF, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
-	0x01, 0xFF, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0xC1, 0x3F, 0x00,
-	0x00, 0xF8, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xF8, 0x00,
-	0x00, 0x00, 0x00, 0xE0, 0x70, 0x4C, 0x46, 0x41, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0xFF, 0x40,
-	0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0xFF, 0xFF, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
-	0x40, 0xFF, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x41, 0x42, 0x4C, 0x70, 0xE0, 0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x40, 0x60, 0x20, 0x10, 0x10, 0xF8, 0x08,
-	0x04, 0x04, 0x04, 0x02, 0x02, 0x02, 0x02, 0xFE, 0xFE, 0x02, 0x02, 0x02, 0x02, 0x04, 0x04, 0x04,
-	0x08, 0xF8, 0x10, 0x10, 0x20, 0x20, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
-
-static const uint8_t BitmapSKY[] = {
+/*static const uint8_t BitmapSKY[] = {
 	0x00, 0x01, 0x07, 0x0F, 0x1F, 0x3F, 0x3F, 0x3F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
 	0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
 	0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F, 0x7F,
@@ -178,13 +157,11 @@ static const uint8_t BitmapSKY[] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF8, 0xF0, 0xE0, 0xC0, 0x80,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0xC0, 0xE0, 0xF8, 0xFC, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-};
+};*/
 
 static const uint16_t BitmapMAIN[] = {
-	0x00FC, 0x01FE, 0x0303, 0x03F7, 0x030F, 0x03F7, 0x0303, 0x03FF,
-	0x030F, 0x03D7, 0x03DB, 0x03D7, 0x030F, 0x03FF, 0x037B, 0x0303,
-	0x037B, 0x03FF, 0x0303, 0x03F7, 0x03EF, 0x03DF, 0x0303, 0x01FE,
-	0x00FC,
+	0x81, 0xC3, 0xE7, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x7E, 0x3C, 0x18,//arrow refer to line 746
+	//0x66, 0x3C, 0x18, 0x18, 0x18, 0x99, 0xDB, 0xFF, 0x7E, 0x3C, 0x3C, 0x18, 0x18, 0x18, 0x18, 0x18,//aeroplane refer to line 746
 };
 
 static const uint8_t BitmapRadar[] = {
@@ -259,8 +236,8 @@ void UI_DrawDigits(const char *pDigits, uint8_t Vfo)
 	uint8_t i;
 
 	X = 136;
-	Y = 73 + (Vfo * 215);
-	gColorForeground = COLOR_FOREGROUND;
+	Y = 70 + (Vfo * 215);
+	gColorForeground = COLOR_RGB( 0, 24, 31);
 	for (i = 0; i < 3; i++) {
 		if (pDigits[i] == '-') {
 			UI_DrawSmallCharacter(X, Y, '-');
@@ -308,84 +285,88 @@ void UI_DrawStatusIcon(uint8_t X, UI_Icon_t Icon, bool bDraw, uint16_t Color)
 
 void UI_DrawRoger(void)
 {
-	gColorForeground = COLOR_FOREGROUND;
+	gColorForeground = COLOR_GREY;
 
 	switch (gSettings.RogerBeep) {
 	case 0:
-		UI_DrawStatusIcon(20, ICON_BELL, false, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 85, "  ", 2);
+		UI_DrawSmallString(130, 86, " ", 1);
 		break;
 	case 1:
-		UI_DrawStatusIcon(20, ICON_BELL, true, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 86, " 1", 2);
+		UI_DrawSmallString(130, 86, "A", 1);
 		break;
 	case 2:
-		UI_DrawStatusIcon(20, ICON_BELL, true, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 86, " 2", 2);
+		UI_DrawSmallString(130, 86, "B", 1);
 		break;
 	case 3:
-		UI_DrawStatusIcon(20, ICON_BELL, true, COLOR_FOREGROUND);
-		UI_DrawSmallString(32, 86, "ID", 2);
+		UI_DrawSmallString(130, 86, "I", 1);
 		break;
 	}
 }
 
 void UI_DrawVoltage(uint8_t Vfo)
 {
-	if (gSettings.DualDisplay == 0) {
-		const uint8_t Y = 72 - (Vfo * 41);
-		gColorForeground = COLOR_BLUE;
+	if ((gSettings.DualDisplay == 0 && gScreenMode == SCREEN_MAIN)
+#ifdef ENABLE_REGISTER_EDIT
+		|| (gScreenMode == SCREEN_REGEDIT)
+#endif
+	) {
+		const uint8_t Y = 70 - (Vfo * 41);
+		gColorForeground = COLOR_RGB(16, 45,  0);
+		UI_DrawSmallString(46, Y, "AGC MODE", 8);
 		/* Replacing voltage display with register display */
 		uint16_t regValue = BK4819_ReadRegister(0x7E);
 		// Extract bits 15, 14, 13 and 12
 		regValue = (regValue & 0xF000) >> 12;
 		// If bit 15 is set, display AUTO, otherwise display FIX
 		if ((regValue & 0x8) == 0x8) {
-			UI_DrawSmallString(16, Y, "FIX ", 4);
+			UI_DrawSmallString(100, Y, "F", 1);
 		} else {
-			UI_DrawSmallString(16, Y, "AUTO", 4);
+			UI_DrawSmallString(100, Y, "A", 1);
 		}
 		// Display bits 14:12 as an integer
 		unsigned char curRegValue = (regValue & 0x7);
 		Int2Ascii(regValue & 0x7, 1);
-		UI_DrawSmallString(40, Y, gShortString, 1);
+		UI_DrawSmallString(106, Y, gShortString, 1);
 		// Now, read register (0x10 + curRegValue) and output the following as separate values:
 		// 2:0 - PGA Gain
 		// 4:3 - Mixer Gain
 		// 7:5 - LNA Gain
 		// 9:8 - LNA Gain Short
+		gColorForeground = COLOR_RGB(31, 41,  0);
 		regValue = BK4819_ReadRegister(0x10 + curRegValue);
 		// Extract bits 2:0
 		Int2Ascii(regValue & 0x7, 1);
-		UI_DrawSmallString(16, Y-8, "PGA ", 4);
-		UI_DrawSmallString(40, Y-8, gShortString, 1);
+		UI_DrawSmallString(112, Y-12, "PGA ", 4);
+		UI_DrawSmallString(136, Y-12, gShortString, 1);
 		// Extract bits 4:3
 		Int2Ascii((regValue & 0x18) >> 3, 1);
-		UI_DrawSmallString(64, Y-8, "MIX ", 4);
-		UI_DrawSmallString(88, Y-8, gShortString, 1);
+		UI_DrawSmallString(16, Y-24, "MIX ", 4);
+		UI_DrawSmallString(40, Y-24, gShortString, 1);
 		// Extract bits 7:5
 		Int2Ascii((regValue & 0xE0) >> 5, 1);
-		UI_DrawSmallString(112, Y-8, "LNA ", 4);
-		UI_DrawSmallString(136, Y-8, gShortString, 1);
+		UI_DrawSmallString(64, Y-12, "LNA ", 4);
+		UI_DrawSmallString(88, Y-12, gShortString, 1);
 		// Extract bits 9:8
 		Int2Ascii((regValue & 0x300) >> 8, 1);
-		UI_DrawSmallString(16, Y-16, "LNAS", 4);
-		UI_DrawSmallString(48, Y-16, gShortString, 1);
+		UI_DrawSmallString(16, Y-12, "LNAS", 4);
+		UI_DrawSmallString(40, Y-12, gShortString, 1);
 		// Next, logic to handle REG_43<14:12> (RF filter bandwidth)
 		regValue = BK4819_ReadRegister(0x43);
 		// Extract bits 14:12
-		Int2Ascii(regValue & 0x7000 >> 12, 1);
-		UI_DrawSmallString(64, Y, "BW", 2);
-		UI_DrawSmallString(88, Y, gShortString, 1);
+		Int2Ascii((regValue & 0x7000) >> 12, 1);
+		UI_DrawSmallString(58, Y-24, "BW", 2);
+		UI_DrawSmallString(70, Y-24, gShortString, 1);
 		// Extract bits 11:9
-		Int2Ascii(regValue & 0xE00 >> 9, 1);
-		UI_DrawSmallString(112, Y, "Weak", 4);
-		UI_DrawSmallString(136, Y, gShortString, 1);
+		Int2Ascii((regValue & 0xE00) >> 9, 1);
+		UI_DrawSmallString(82, Y-24, "WK", 2);
+		UI_DrawSmallString(94, Y-24, gShortString, 1);
+		UI_DrawSmallString(112, Y-24, "0", 1);
 		Int2Ascii(gBatteryVoltage, 2);
 		gShortString[2] = gShortString[1];
 		gShortString[1] = '.';
 		gShortString[3] = 'V';
-		UI_DrawSmallString(64, Y-24, gShortString, 4);
+		UI_DrawSmallString(118, Y-24, gShortString, 4);
+		regValue = BK4819_ReadRegister(0x48);
 
 	}
 }
@@ -393,27 +374,20 @@ void UI_DrawVoltage(uint8_t Vfo)
 void UI_DrawVfoFrame(uint8_t Y)
 {
 	Y = 43 - (Y * 41);
-// Full size
-//	DISPLAY_DrawRectangle0( 20, Y, 100, 1, COLOR_FOREGROUND);
-//	DISPLAY_DrawRectangle1( 20, Y,   6, 1, COLOR_FOREGROUND);
-//	DISPLAY_DrawRectangle1(120, Y,   6, 1, COLOR_FOREGROUND);
-//	DISPLAY_DrawRectangle1( 45, Y,   5, 1, COLOR_FOREGROUND);
-//	DISPLAY_DrawRectangle1( 70, Y,   5, 1, COLOR_FOREGROUND);
-//	DISPLAY_DrawRectangle1( 95, Y,   5, 1, COLOR_FOREGROUND);
-
-// 80% size - allow room to right for dBM reading
-	DISPLAY_DrawRectangle0( 20, Y, 80, 1, COLOR_FOREGROUND);
-	DISPLAY_DrawRectangle1( 20, Y,   6, 1, COLOR_FOREGROUND);
-	DISPLAY_DrawRectangle1(100, Y,   6, 1, COLOR_FOREGROUND);
-	DISPLAY_DrawRectangle1( 40, Y,   5, 1, COLOR_FOREGROUND);
-	DISPLAY_DrawRectangle1( 60, Y,   5, 1, COLOR_FOREGROUND);
-	DISPLAY_DrawRectangle1( 80, Y,   5, 1, COLOR_FOREGROUND);
+	
+	DISPLAY_DrawRectangle0( 20, Y, 80, 1, COLOR_GREY);
+	DISPLAY_DrawRectangle1( 20, Y,   6, 1, COLOR_GREY);
+	DISPLAY_DrawRectangle1(100, Y,   6, 1, COLOR_GREY);
+	DISPLAY_DrawRectangle1( 40, Y,   5, 1, COLOR_GREY);
+	DISPLAY_DrawRectangle1( 60, Y,   5, 1, COLOR_GREY);
+	DISPLAY_DrawRectangle1( 80, Y,   5, 1, COLOR_GREY);
 }
 
 void UI_DrawName(uint8_t Vfo, const char *pName)
-{
-	gColorForeground = COLOR_FOREGROUND;
-	UI_DrawString(34, 83 - (Vfo * 41), pName, 10);
+{	gColorForeground = COLOR_RGB( 0, 24, 31);
+	UI_DrawSmallString(28, 70 - (Vfo * 41), "USER", 4);
+	gColorForeground = COLOR_GREY;
+	UI_DrawSmallString(58, 70 - (Vfo * 41), pName, 10);
 }
 
 void UI_DrawExtra(uint8_t Mode, uint8_t gModulationType, uint8_t Vfo)
@@ -422,18 +396,17 @@ void UI_DrawExtra(uint8_t Mode, uint8_t gModulationType, uint8_t Vfo)
 
 	switch (Mode) {
 	case 0:
-		gColorForeground = COLOR_BLUE;
-		UI_DrawSmallString(2, Y, gModulationType == 0 ? " FM" : gModulationType == 1 ? " AM" : gModulationType == 2 ? "LSB" : "USB", 3);
+		gColorForeground = COLOR_GREY;
+		UI_DrawSmallString(106, Y, gModulationType == 0 ? "FM" : gModulationType == 1 ? "AM" : gModulationType == 2 ? "L-" : "-U", 2);
         break;
-
 	case 1: // TX mode
 		gColorForeground = COLOR_RED;
-		UI_DrawSmallString(2, Y, " TX", 3);
+		UI_DrawSmallString(106, Y, "TX", 2);
 		break;
 
 	case 2: // RX mode
-		gColorForeground = COLOR_BLUE;
-		UI_DrawSmallString(2, Y, " RX", 3);
+		gColorForeground = COLOR_GREEN;
+		UI_DrawSmallString(106, Y, "RX", 2);
 		break;
 	}
 }
@@ -481,16 +454,16 @@ void UI_DrawBigDigit(uint8_t X, uint8_t Y, uint8_t Digit)
 
 void UI_DrawCss(uint8_t CodeType, uint16_t Code, uint8_t Encrypt, bool bMute, uint8_t Vfo)
 {
-	const uint8_t Y = 58 - (Vfo * 41);
+	const uint8_t Y = 61 - (Vfo * 41);
 
-	gColorForeground = COLOR_FOREGROUND;
+	gColorForeground = COLOR_RED;
 
 	if (bMute) {
-		UI_DrawSmallString(124, Y, "MUTE ", 5);
+		UI_DrawSmallString(124, Y, "MCODE", 5);
 		return;
 	}
 	if (Encrypt) {
-		UI_DrawSmallString(124, Y, "ENC  ", 5);
+		UI_DrawSmallString(124, Y, "ENCPT", 5);
 		return;
 	}
 	switch (CodeType) {
@@ -507,7 +480,8 @@ void UI_DrawCss(uint8_t CodeType, uint16_t Code, uint8_t Encrypt, bool bMute, ui
 		UI_DrawSmallString(130, Y, gShortString, 3);
 		break;
 	case 3:
-		UI_DrawSmallString(124, Y, "OFF  ", 5);
+	gColorForeground = COLOR_GREY;
+		UI_DrawSmallString(124, Y, "-----", 5);
 		break;
 	}
 }
@@ -517,51 +491,75 @@ void UI_DrawTxPower(bool bIsLow, uint8_t Vfo)
 	uint8_t Y = 43 - (Vfo * 41);
 
 	if (bIsLow) {
-		gColorForeground = COLOR_RED;
-		UI_DrawSmallString(132, Y, "L", 1);
+		gColorForeground = COLOR_RGB(16, 0, 16);
+		UI_DrawSmallString(4, Y, "LO", 2);
 	} else {
-		gColorForeground = COLOR_GREEN;
-		UI_DrawSmallString(132, Y, "H", 1);
+		gColorForeground = COLOR_RGB(31, 0, 31);
+		UI_DrawSmallString(4, Y, "HI", 2);
 	}
 }
 
-void UI_DrawRxDBM(uint16_t RXdBM, bool isNeg, uint16_t len, uint8_t Vfo, bool Clear)
-{
-	uint8_t Y = 43 - (Vfo * 41);
-
-	gColorForeground = COLOR_FOREGROUND;
-
-	if (Clear) {
-		UI_DrawSmallString(105, Y, "    ", 4);
-	} else {
-		for (int i = len; i < 3; i++) {
+void ConvertRssiToDbm(uint16_t Rssi) {
+		int16_t RXdBM;
+		uint16_t uRXdBM;
+		uint8_t bNeg;
+		uint16_t len;
+		
+		RXdBM = (Rssi >> 1) - 177; 
+		if (RXdBM < 0) {
+			uRXdBM = -RXdBM;
+			bNeg = true;
+		} else {
+			uRXdBM = RXdBM;
+			bNeg = false;
+		}
+		
+		for (int i = 0; i < 8; i++) {
 			gShortString[i] = ' ';
 		}
-		Int2Ascii(RXdBM, len);
-
-		if (isNeg) {
-			UI_DrawSmallString(105, Y, "-", 1);
+		if (uRXdBM < 10) {
+			len = 1;
+		} else if (uRXdBM < 100) {
+			len = 2;
 		} else {
-			UI_DrawSmallString(105, Y, " ", 1);
+			len = 3;
 		}
-		UI_DrawSmallString(111, Y, gShortString, 3);
+		Int2Ascii(uRXdBM, len);
+		if (bNeg) {
+			for (uint8_t i = len; i > 0; i--){
+				gShortString[i] = gShortString[i-1];
+			}
+			gShortString[0] = '-';
+		}	
+}
+void UI_DrawRxDBM(uint8_t Vfo, bool Clear)
+{
+	
+	uint8_t Y = 43 - (Vfo * 41);
+		
+	gColorForeground = COLOR_GREEN;
+	UI_DrawSmallString(124, Y, "S", 1);
+	
+	if (Clear) {
+		UI_DrawSmallString(124, Y, "     ", 5);
+	} else {
+		UI_DrawSmallString(130, Y, gShortString, 4);
 	}
 }
 
 void UI_DrawChannel(uint16_t Channel, uint8_t Vfo)
 {
-	uint8_t Y = 73 - (Vfo * 41);
+	uint8_t Y = 70 - (Vfo * 41);
 
-	gColorForeground = COLOR_FOREGROUND;
+	gColorForeground = COLOR_RGB( 0, 24, 31);
 	if (Channel > 998) {
-		UI_DrawSmallString(124, Y, "VFO  ", 5);
+		UI_DrawSmallString(124, Y, ">VFO<", 5);
 	} else {
-		UI_DrawSmallString(124, Y, "CH", 2);
+		UI_DrawSmallString(124, Y, "M-", 2);
 		Int2Ascii(Channel + 1, 3);
 		UI_DrawSmallString(136, Y, gShortString, 3);
 	}
 }
-
 static void DrawRadio(uint8_t Vfo)
 {
 	uint8_t i;
@@ -570,7 +568,7 @@ static void DrawRadio(uint8_t Vfo)
 		uint32_t Pixel = IconRadio[i];
 		uint8_t j;
 
-		ST7735S_SetPosition(4 + i, 56 - (Vfo * 41));
+		ST7735S_SetPosition(4 + i, 54 - (Vfo * 41));
 		for (j = 0; j < 24; j++) {
 			if (Pixel & 0x800000U) {
 				ST7735S_SendU16(gColorForeground);
@@ -594,13 +592,13 @@ void UI_DrawRX(uint8_t Vfo)
 			gColorForeground = COLOR_RED;
 			Pixel = IconAntenna[0][i];
 		} else if (gRadioMode == RADIO_MODE_RX) {
-			gColorForeground = COLOR_BLUE;
+			gColorForeground = COLOR_GREEN;
 			Pixel = IconAntenna[1][i];
 		} else {
 			gColorForeground = gColorBackground;
 			Pixel = 0x0FFF;
 		}
-		ST7735S_SetPosition(14 + i, 70 - (Vfo * 41));
+		ST7735S_SetPosition(14 + i, 69 - (Vfo * 41));
 		for (j = 0; j < 12; j++) {
 			if (Pixel & 0x800U) {
 				ST7735S_SendU16(gColorForeground);
@@ -615,32 +613,32 @@ void UI_DrawRX(uint8_t Vfo)
 
 void UI_DrawDTMF(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(10, 54, "DTMF Input :", 12);
 	UI_DrawString(10, 38, gDTMF_Input.String, 14);
 }
 
-void UI_DrawFMFrequency(uint16_t Frequency)
+void UI_DrawFMFrequency(uint16_t Frequency)// Start of FM radio code
 {
 	Int2Ascii(gSettings.FmFrequency, 4);
 	gShortString[4] = gShortString[3];
 	gShortString[3] = '.';
-	gColorForeground = COLOR_BLUE;
-	UI_DrawString(84, 58, gShortString, 5);
-	UI_DrawString(124, 58, "M", 1);
+	gColorForeground = COLOR_FOREGROUND;
+	UI_DrawSmallString(14, 86, gShortString, 5);
 }
 
-void UI_DrawFM(void)
+void UI_DrawDecimal(const char *pInput)
 {
-	gColorForeground = COLOR_GREY;
-	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
-	UI_DrawFrame(12, 150, 6, 74, 2, gColorForeground);
-	UI_DrawFrame(72, 144, 36, 64, 2, gColorForeground);
-	DISPLAY_Fill( 72,  88, 16, 22, gColorForeground);
-	DISPLAY_Fill(100, 116, 16, 22, gColorForeground);
-	DISPLAY_Fill(128, 144, 16, 22, gColorForeground);
-	UI_DrawBitmap(16,  16,  6, 48, BitmapFM);
+	char String[5];
+	uint8_t i;
+
+	gColorForeground = COLOR_FOREGROUND;
+	for (i = 0; i < 4; i++) {
+		String[i] = (pInput[i] == 10) ? '-' : ('0' + pInput[i]);
+	}
+	String[4] = String[3];
+	String[3] = '.';
+	UI_DrawSmallString(14, 86, String, 5);// End of FM radio code
 }
 
 void UI_DrawBitmap(uint8_t X, uint8_t Y, uint8_t H, uint8_t W, const uint8_t *pBitmap)
@@ -683,28 +681,22 @@ void UI_DrawBar(uint8_t Level, uint8_t Vfo)
 	uint8_t Y = 44 - (Vfo * 41);
 	uint8_t i;
 
-	// Adjust for 80% bar
-	Level = Level * .8;
+	Level = (Level * 80) / 100;
 
-//	if (Level < 25) {
 	if (Level < 20) {
-		gColorForeground = COLOR_RED;
-//	} else if (Level < 50) {
+		gColorForeground = COLOR_BLUE;
 	} else if (Level < 40) {
-		gColorForeground = COLOR_RGB(31, 41, 0);
+		gColorForeground = COLOR_BLUE;
 	} else {
-		gColorForeground = COLOR_GREEN;
+		gColorForeground = COLOR_RED;
 	}
 
 	for (i = 0; i < Level; i++) {
-//		if (i != 0 && i != 25 && i != 50 && i != 75) {
 		if (i != 0 && i != 20 && i != 40 && i != 60) {
 			DISPLAY_DrawRectangle1(20 + i, Y, 4, 1, gColorForeground);
 		}
 	}
 
-//	for (; Level < 100; Level++) {
-//		if (Level != 0 && Level != 25 && Level != 50 && Level != 75) {
 	for (; Level < 80; Level++) {
 		if (Level != 0 && Level != 20 && Level != 40 && Level != 60) {
 			DISPLAY_DrawRectangle1(20 + Level, Y, 4, 1, gColorBackground);
@@ -732,7 +724,8 @@ void UI_DrawSomething(void)
 		}
 		UI_DrawRX(gCurrentVfo);
 		UI_DrawBar(0, gCurrentVfo);
-		UI_DrawRxDBM(0, false, 0, gCurrentVfo, true);
+		ConvertRssiToDbm(0);
+		UI_DrawRxDBM(gCurrentVfo, true);
 	}
 	UI_DrawMainBitmap(true, gSettings.CurrentVfo);
 }
@@ -742,15 +735,15 @@ void UI_DrawMainBitmap(bool bOverride, uint8_t Vfo)
 	uint8_t i, j;
 
 	if (gSettings.bFLock) {
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_RGB(31, 62, 0);
 	} else {
-		gColorForeground = COLOR_BLUE;
+		gColorForeground = COLOR_RGB(31, 62, 0);
 	}
 
-	for (i = 0; i < 25; i++) {
+	for (i = 0; i < 16; i++) {
 		uint16_t Pixel = BitmapMAIN[i];
 
-		ST7735S_SetPosition(i + 4, 70 - (Vfo * 41));
+		ST7735S_SetPosition(i + 4, 68 - (Vfo * 41));// i + 4 arrow // i + 6 aeroplane
 		for (j = 0; j < 10; j++) {
 			if (bOverride) {
 				if (Pixel & 0x0200U) {
@@ -766,13 +759,13 @@ void UI_DrawMainBitmap(bool bOverride, uint8_t Vfo)
 	}
 }
 
-void UI_DrawSky(void)
+/*void UI_DrawSky(void)
 {
-	gColorForeground = COLOR_RGB(31, 63, 31);
+	gColorForeground = COLOR_FOREGROUND;
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
+	DISPLAY_DrawRectangle0(0, 82, 160, 1, gSettings.BorderColor);
 	UI_DrawBitmap(90, 16, 7, 70, BitmapSKY);
-}
+}*/
 
 void UI_DrawFrequencyEx(const char *String, uint8_t Vfo, bool bReverse)
 {
@@ -783,7 +776,7 @@ void UI_DrawFrequencyEx(const char *String, uint8_t Vfo, bool bReverse)
 	if (!bReverse) {
 		gColorForeground = COLOR_FOREGROUND;
 	} else {
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_FOREGROUND;
 	}
 
 	DISPLAY_Fill(56, 57, Y, Y + 1, gColorForeground);
@@ -799,27 +792,13 @@ void UI_DrawFrequencyEx(const char *String, uint8_t Vfo, bool bReverse)
 
 void UI_DrawBootVoltage(uint8_t X, uint8_t Y)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(gBatteryVoltage, 2);
 	gShortString[2] = gShortString[1];
 	gShortString[1] = '.';
 	gShortString[3] = 'V';
 	UI_DrawString(X, Y, "Voltage:", 8);
 	UI_DrawString(X + 72, Y, gShortString, 4);
-}
-
-void UI_DrawDecimal(const char *pInput)
-{
-	char String[5];
-	uint8_t i;
-
-	gColorForeground = COLOR_BLUE;
-	for (i = 0; i < 4; i++) {
-		String[i] = (pInput[i] == 10) ? '-' : ('0' + pInput[i]);
-	}
-	String[4] = String[3];
-	String[3] = '.';
-	UI_DrawString(84, 58, String, 5);
 }
 
 void UI_DrawMenuPosition(const char *pString)
@@ -838,8 +817,8 @@ void UI_DrawMenuPosition(const char *pString)
 
 void UI_DrawStringSwitchType(void)
 {
-	DISPLAY_DrawRectangle0(1, 20, 159, 1, COLOR_RGB(31, 53, 0));
-	gColorForeground = COLOR_RED;
+	DISPLAY_DrawRectangle0(1, 20, 159, 1, gSettings.BorderColor);
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(4, 18, "Switch type by [*]", 18);
 	gColorForeground = COLOR_FOREGROUND;
 }
@@ -847,8 +826,8 @@ void UI_DrawStringSwitchType(void)
 void UI_DrawRadar(void)
 {
 	DISPLAY_Fill(0, 159, 1, 81, COLOR_BACKGROUND);
-	DISPLAY_DrawRectangle0(0, 81, 160, 1, gSettings.BorderColor);
-	gColorForeground = COLOR_BLUE;
+	DISPLAY_DrawRectangle0(0, 82, 160, 1, gSettings.BorderColor);
+	gColorForeground = COLOR_GREEN;
 	UI_DrawBitmap(4, 12, 8, 64, BitmapRadar);
 }
 
@@ -883,7 +862,7 @@ void UI_DrawChannelNumber(const char *pString)
 
 void UI_DrawBand(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_RGB( 0, 24, 31);
 	if (gSettings.bUseVHF) {
 		UI_DrawString(80, 72, "VHF      ", 9);
 	} else {
@@ -895,7 +874,7 @@ void UI_DrawScanFrequency(uint32_t Frequency)
 {
 	uint8_t i;
 
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 	Int2Ascii(Frequency, 8);
 	for (i = 8; i > 3; i--) {
 		gShortString[i] = gShortString[i - 1];
@@ -906,8 +885,8 @@ void UI_DrawScanFrequency(uint32_t Frequency)
 
 void UI_DrawCtdcScan(void)
 {
-	gColorForeground = COLOR_RED;
-	UI_DrawString(80, 72, "CTDC Scan", 9);
+	gColorForeground = COLOR_GREY;
+	UI_DrawString(80, 72, "Code Scan", 9);
 }
 
 void UI_DrawCtcssCode(uint16_t Code)
@@ -936,17 +915,17 @@ void UI_DrawDTMFString(void)
 	if (gDTMF_Settings.Display) {
 		if (!gDataDisplay) {
 			UI_DrawDialog();
-			gColorForeground = COLOR_RED;
+			gColorForeground = COLOR_FOREGROUND;
 			UI_DrawString(10, 54, "DTMF:", 5);
 		}
-		gColorForeground = COLOR_RED;
+		gColorForeground = COLOR_FOREGROUND;
 		UI_DrawString(10, 38, gDTMF_String, 14);
 	}
 }
 
 void UI_DrawMuteInfo(bool bIs24Bit, uint32_t Golay)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_RGB(31, 41, 0);
 	Int2Ascii(Golay, 8);
 	if (bIs24Bit) {
 		UI_DrawString(80, 40, "24bits", 6);
@@ -958,20 +937,26 @@ void UI_DrawMuteInfo(bool bIs24Bit, uint32_t Golay)
 
 void UI_DrawNone(void)
 {
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_RGB(31, 0, 31);
 	UI_DrawString(80, 40, "None", 4);
 }
 
 void UI_DrawScan(void)
 {
-	gColorForeground = COLOR_RED;
-	UI_DrawSmallString(4, 85, !gScannerMode ? "  " :
-								gExtendedSettings.ScanAll ? "SA" :
-								gExtendedSettings.CurrentScanList == 0 ? "S1" :
-								gExtendedSettings.CurrentScanList == 1 ? "S2" :
-								gExtendedSettings.CurrentScanList == 2 ? "S3" :
-								gExtendedSettings.CurrentScanList == 3 ? "S4" :
-								gExtendedSettings.CurrentScanList == 4 ? "S5" :
-								gExtendedSettings.CurrentScanList == 5 ? "S6" :
-								gExtendedSettings.CurrentScanList == 6 ? "S7" : "S8", 2);
+	gColorForeground = COLOR_GREY;
+	if (!gScannerMode) {
+		UI_DrawSmallString(58, 86, "        ", 8);
+	} else {
+		if (gSettings.WorkMode) {
+UI_DrawSmallString(58, 86, gExtendedSettings.ScanAll ? "SCAN ALL" :
+									   gExtendedSettings.CurrentScanList == 0 ? "SCAN L1 " :
+									   gExtendedSettings.CurrentScanList == 1 ? "SCAN L2 " :
+									   gExtendedSettings.CurrentScanList == 2 ? "SCAN L3 " :
+									   gExtendedSettings.CurrentScanList == 3 ? "SCAN L4 " :
+									   gExtendedSettings.CurrentScanList == 4 ? "SCAN L5 " :
+									   gExtendedSettings.CurrentScanList == 5 ? "SCAN L6 " :
+									   gExtendedSettings.CurrentScanList == 6 ? "SCAN L7 " : "SCAN L8 ", 8);
+		}
+	}
 }
+

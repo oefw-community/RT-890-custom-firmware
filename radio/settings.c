@@ -15,6 +15,7 @@
  */
 
 #include "app/radio.h"
+#include "driver/bk4819.h"
 #include "driver/delay.h"
 #include "driver/key.h"
 #include "driver/pins.h"
@@ -111,9 +112,20 @@ void SETTINGS_LoadSettings(void)
 		SetDefaultKeyShortcuts(false); //
 	}
 
+if (gExtendedSettings.SqGlitchBase == 0xFF) {
+		gExtendedSettings.SqRSSIBase = 0x5E;
+		gExtendedSettings.SqNoiseBase = 0x44;
+		gExtendedSettings.SqGlitchBase = 0x11;
+	}
+
 	gFrequencyStep = FREQUENCY_GetStep(gSettings.FrequencyStep);
 
 	UI_SetColors(gExtendedSettings.DarkMode);
+	
+	if (gExtendedSettings.MicGainLevel > 31) {
+		gExtendedSettings.MicGainLevel = 19;
+	}
+	BK4819_SetMicSensitivityTuning();
 
 	gSettings.bEnableDisplay = 1;
 	if (!gpio_input_data_bit_read(GPIOA, BOARD_GPIOA_KEY_SIDE2)) {

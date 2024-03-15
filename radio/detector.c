@@ -118,6 +118,7 @@ static void CtdcScan(void)
 static void StopDetect(void)
 {
 	gFrequencyDetectMode = false;
+	gSettings.DualDisplay = 1; // always returns to Dual Display even if started im single M7OCM 27022024
 	SCREEN_TurnOn();
 
 	if (gSettings.WorkMode) {
@@ -186,11 +187,11 @@ static void MuteCtcssScan(void)
 			}
 
 			// Double check the assembly, it didn't make sense!
-			Code = (Code & 0xFFF) << 16;
+			Code = (Code & 0xFFF) << 12;
 			Code |= BK4819_ReadRegister(0x6A) & 0xFFF;
 			gVfoState[gSettings.CurrentVfo].Golay = Code;
 
-			if ((Code & 0XFFFFFF) != 0x555555 && (Code & 0xFFFFFF) != 0xAAAAAA) {
+			if ((Code & 0xFFFFFF) != 0x555555 && (Code & 0xFFFFFF) != 0xAAAAAA) {
 				if (Code != 0x800000 && (Code & 0xFFFFFF) != 0xFFFFFF && (Code & 0xFFFFFF) != 0x7FFFFF) {
 					if (!gVfoState[gSettings.CurrentVfo].bIs24Bit) {
 						Code &= 0x7FFFFF;
@@ -213,7 +214,7 @@ static void MuteCtcssScan(void)
 		VFO_ClearMute();
 		Code = BK4819_ReadRegister(0x68);
 		if ((Code & 0x8000U) == 0) {
-			Code = (((Code & 0xFFFU) * 200U) / 412U) + 1U;
+			Code = (((Code & 0x1FFFU) * 200U) / 413U) + 1U;
 			if (Code > 500) {
 				Code &= 0xFFFU;
 				gVfoState[gSettings.CurrentVfo].RX.Code = Code;
@@ -305,6 +306,7 @@ static void DETECTOR_Loop(void)
 			Task_CheckIncoming();
 			Task_CheckRSSI();
 			if (bCtdcScan && gSignalFound && gRadioMode != RADIO_MODE_QUIET && gDetectorTimer == 0) {
+				CtdcScan();
 				break;
 			}
 			if (Key == KEY_NONE) {
@@ -326,13 +328,13 @@ static void DETECTOR_Loop(void)
 						KEY_CurrentKey = KEY_NONE;
 						RADIO_EndRX();
 						BEEP_Play(740, 2, 100);
-						continue;
+						break;
 					}
 					if (KEY_CurrentKey == KEY_HASH && !bCtdcScan) {
 						KEY_CurrentKey = KEY_NONE;
 						RADIO_EndRX();
 						UpdateBand(true);
-						continue;
+						break;
 					}
 					if (KEY_CurrentKey == KEY_STAR) {
 						KEY_CurrentKey = KEY_NONE;
@@ -344,7 +346,7 @@ static void DETECTOR_Loop(void)
 							UpdateBand(false);
 							bCtdcScan = false;
 						}
-						continue;
+						break;
 					}
 				}
 				KEY_KeyCounter = 0;
@@ -352,7 +354,6 @@ static void DETECTOR_Loop(void)
 				Key = KEY_CurrentKey;
 			}
 		}
-		CtdcScan();
 	}
 }
 
@@ -360,6 +361,7 @@ static void DETECTOR_Loop(void)
 
 void RADIO_FrequencyDetect(void)
 {
+	gScreenMode = SCREEN_FREQ_DETECT;
 	SPEAKER_State = 0;
 	gpio_bits_reset(GPIOA, BOARD_GPIOA_SPEAKER);
 	gAudioOffsetIndex = gAudioOffsetLast;
@@ -372,5 +374,6 @@ void RADIO_FrequencyDetect(void)
 	VFO_ClearMute();
 	BK4819_EnableFilter(true);
 	DETECTOR_Loop();
+	gScreenMode = SCREEN_MAIN;
 }
 

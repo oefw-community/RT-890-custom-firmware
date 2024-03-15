@@ -21,6 +21,7 @@
 #include "driver/delay.h"
 #include "driver/pins.h"
 #include "driver/speaker.h"
+#include "helper/helper.h"
 #include "misc.h"
 #include "radio/settings.h"
 
@@ -28,48 +29,6 @@ enum {
 	GPIO_FILTER_UHF     = 1U << 5,
 	GPIO_FILTER_VHF     = 1U << 6,
 	GPIO_FILTER_UNKWOWN = 1U << 7,
-};
-
-static const uint8_t gSquelchGlitchLevel[11] = {
-	0x20,
-	0x20,
-	0x1E,
-	0x1C,
-	0x1A,
-	0x18,
-	0x16,
-	0x14,
-	0x12,
-	0x10,
-	0x0E,
-};
-
-static const uint8_t gSquelchNoiseLevel[11] = {
-	0x0A,
-	0x0A,
-	0x09,
-	0x08,
-	0x07,
-	0x06,
-	0x05,
-	0x04,
-	0x03,
-	0x02,
-	0x01,
-};
-
-static const uint8_t gSquelchRssiLevel[11] = {
-	0x00,
-	0x00,
-	0x02,
-	0x04,
-	0x06,
-	0x0A,
-	0x10,
-	0x16,
-	0x1C,
-	0x22,
-	0x26,
 };
 
 static void Delay(volatile uint8_t Counter)
@@ -154,7 +113,7 @@ static void DisableAGC(uint32_t Unknown)
 }
 #endif
 
-static void OpenAudio(bool bIsNarrow, uint8_t gModulationType)
+void OpenAudio(bool bIsNarrow, uint8_t gModulationType)
 {
 	switch(gModulationType) {
 		case 0:
@@ -317,6 +276,41 @@ void BK4819_SetFrequency(uint32_t Frequency)
 
 void BK4819_SetSquelchGlitch(bool bIsNarrow)
 {
+
+#ifdef ENABLE_ALT_SQUELCH
+	uint16_t Value;
+
+	if (gSettings.Squelch == 0){
+		Value = 255;
+	} else {
+		Value = gExtendedSettings.SqGlitchBase - (gSettings.Squelch);
+	}
+
+	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF) | Value);
+
+	if (gSettings.Squelch == 0){
+		Value = 255;
+	} else {
+		Value = (Value * 10) / 9;
+	}
+
+	BK4819_WriteRegister(0x4D, (BK4819_ReadRegister(0x4D) & 0xFF) | Value);
+#else
+
+	static const uint8_t gSquelchGlitchLevel[11] = {
+		0x20,
+		0x20,
+		0x1E,
+		0x1C,
+		0x1A,
+		0x18,
+		0x16,
+		0x14,
+		0x12,
+		0x10,
+		0x0E,
+	};
+	
 	if (bIsNarrow) {
 		BK4819_WriteRegister(0x4D, gSquelchGlitchLevel[gSettings.Squelch] + 0x9FFF);
 		BK4819_WriteRegister(0x4E, gSquelchGlitchLevel[gSettings.Squelch] + 0x4DFE);
@@ -324,10 +318,45 @@ void BK4819_SetSquelchGlitch(bool bIsNarrow)
 		BK4819_WriteRegister(0x4D, gSquelchGlitchLevel[gSettings.Squelch] + 0xA000);
 		BK4819_WriteRegister(0x4E, gSquelchGlitchLevel[gSettings.Squelch] + 0x4DFF);
 	}
+#endif
+
 }
 
 void BK4819_SetSquelchNoise(bool bIsNarrow)
 {
+#ifdef ENABLE_ALT_SQUELCH
+
+	uint16_t Value;
+
+	if (gSettings.Squelch == 0){
+		Value = (127 << 8) | 127;
+	} else {
+		Value = gExtendedSettings.SqNoiseBase - (gSettings.Squelch * 6);
+		if (bIsNarrow) {
+			Value = ((((Value - 5) * 10) / 9) << 8) | Value;
+		} else {
+			Value = (((Value * 10) / 9) << 8) | Value;
+		 }
+	}
+
+	BK4819_WriteRegister(0x4F, (BK4819_ReadRegister(0x4F) & 0x7F7F) | Value);
+
+#else
+
+	static const uint8_t gSquelchNoiseLevel[11] = {
+		0x0A,
+		0x0A,
+		0x09,
+		0x08,
+		0x07,
+		0x06,
+		0x05,
+		0x04,
+		0x03,
+		0x02,
+		0x01,
+	};
+
 	uint8_t Level;
 	uint16_t Value;
 
@@ -339,10 +368,41 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 	}
 
 	BK4819_WriteRegister(0x4F, Value);
+
+#endif
+
 }
 
 void BK4819_SetSquelchRSSI(bool bIsNarrow)
 {
+#ifdef ENABLE_ALT_SQUELCH
+
+	uint16_t Value;
+
+	if (gSettings.Squelch == 0){
+		Value = 0;
+	} else {
+		Value = gExtendedSettings.SqRSSIBase + (gSettings.Squelch * 8);
+		Value = (Value << 8) | (Value * 9) / 10;
+	}
+
+	BK4819_WriteRegister(0x78, Value);
+#else
+
+	static const uint8_t gSquelchRssiLevel[11] = {
+		0x00,
+		0x00,
+		0x02,
+		0x04,
+		0x06,
+		0x0A,
+		0x10,
+		0x16,
+		0x1C,
+		0x22,
+		0x26,
+	};
+
 	uint8_t Level;
 	uint16_t Value;
 
@@ -354,17 +414,33 @@ void BK4819_SetSquelchRSSI(bool bIsNarrow)
 	}
 
 	BK4819_WriteRegister(0x78, Value);
+
+#endif
+
 }
 
 void BK4819_SetFilterBandwidth(bool bIsNarrow)
 {
 	// Check if modulation is FM
 	if (gMainVfo->gModulationType == 0) { // if FM
+#ifndef ENABLE_REGISTER_EDIT
 		if (bIsNarrow) {
-			BK4819_WriteRegister(0x43, 0x4048);
+			//BK4819_WriteRegister(0x43, 0x4048); //stock
+			BK4819_WriteRegister(0x43, 0x7B08); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x4408); //egzumer
 		} else {
-			BK4819_WriteRegister(0x43, 0x3028);
+			//BK4819_WriteRegister(0x43, 0x3028); //stock
+			BK4819_WriteRegister(0x43, 0x3428); //kamil/fagci
+			//BK4819_WriteRegister(0x43, 0x45A8); //egzumer
 		}
+#else
+		uint16_t Value = BK4819_ReadRegister(0x43); 
+		if (bIsNarrow) {
+			BK4819_WriteRegister(0x43, (Value & ~0x30) | 0);
+		} else {
+			BK4819_WriteRegister(0x43, (Value & ~0x30) | 32);
+		}
+#endif
 	}
 }
 
@@ -437,6 +513,7 @@ void BK4819_EnableVox(bool bEnable)
 
 void BK4819_RestoreGainSettings()
 {
+	/* Keep for now, may be useful for register editing
 	const uint8_t orig_lna_short = 2;
             const uint8_t orig_lna = 5;
             const uint8_t orig_mixer = 2;
@@ -444,21 +521,32 @@ void BK4819_RestoreGainSettings()
 			if(BK4819_ReadRegister(0x13) != ((orig_lna_short << 8) | (orig_lna << 5) | (orig_mixer << 3) | (orig_pga << 0))) {
             	BK4819_WriteRegister(0x13, (orig_lna_short << 8) | (orig_lna << 5) | (orig_mixer << 3) | (orig_pga << 0));
 			}
+	*/
+	
+	//Default values
+	BK4819_WriteRegister(0x10, 0x0038);  
+	BK4819_WriteRegister(0x11, 0x025a);  
+	BK4819_WriteRegister(0x12, 0x037b); 
+	BK4819_WriteRegister(0x13, 0x03de);
+	BK4819_WriteRegister(0x14, 0x0000); 
 }
 
-void BK4819_ToggleAGCMode(bool bAuto)
+void BK4819_ToggleAGCMode()
 {
 	// REG_7E[15] - AGC Mode
 	// 1 - Fixed, 0 - Auto
-	uint16_t Value;
-	Value = BK4819_ReadRegister(0x7E);
-	if (bAuto) {
-		Value &= ~0x8000U;
+
+	uint16_t Value = BK4819_ReadRegister(0x7E);
+	uint16_t AGCIndex = (Value & 0x7000) >> 12; // Extract bits 14, 13 and 12
+
+	if (!(Value & 0x8000U) || AGCIndex == 4){ //Bit 15 = 0 (AGC on) or 14:12 = 110 (index 4/min)
+		Value ^= 0x8000U; //Toggle AGC
 	} else {
-		Value |= 0x8000U;
-		// Set bits 14:12 to 110 (AGC index 4) without affecting the other bits
-		Value = (Value & 0x8FFFU) | 0x6000U;
+		Value |= 0x8000U; //Turn AGC off
+		AGCIndex = (AGCIndex + 7) % 8; //Decrement ACG Index
+		Value =  (Value & 0x8FFFU) | (AGCIndex << 12); // Set bits 14:12 (AGC Index)
 	}
+	BK4819_WriteRegister(0x7E, Value);
 }
 
 void BK4819_SetToneFrequency(bool Tone2, uint16_t Tone)
@@ -643,10 +731,7 @@ void BK4819_EnableRfTxDeviation(void)
 
 void BK4819_SetMicSensitivityTuning(void)
 {
-	uint8_t Tuning;
-
-	Tuning = gMainVfo->bIsNarrow ? gFrequencyBandInfo.MicSensitivityTuningNarrow : gFrequencyBandInfo.MicSensitivityTuningWide;
-	BK4819_WriteRegister(0x7D, 0xE940 | Tuning);
+	BK4819_WriteRegister(0x7D, 0xE940 | (gExtendedSettings.MicGainLevel & 0x1F));
 }
 
 void BK4819_EnableTX(bool bUseMic)
@@ -680,3 +765,17 @@ void BK4819_DisableAutoCssBW(void)
 	BK4819_EnableRX();
 }
 
+#ifdef ENABLE_SPECTRUM
+void BK4819_set_rf_frequency(const uint32_t frequency, const bool trigger_update)
+{
+	BK4819_WriteRegister(0x38, (frequency >> 0) & 0xFFFF);
+	BK4819_WriteRegister(0x39, (frequency >> 16) & 0xFFFF);
+
+	if (trigger_update)
+	{ // trigger a PLL/VCO update
+		const uint16_t reg = BK4819_ReadRegister(0x30);
+		BK4819_WriteRegister(0x30, reg & ~BK4819_REG_30_ENABLE_VCO_CALIB);
+		BK4819_WriteRegister(0x30, reg);
+	}
+}
+#endif

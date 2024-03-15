@@ -30,7 +30,7 @@ void Task_CheckDisplayTimeout(void)
 		return;
 	}
 
-	if (gSettings.DisplayTimer == 0 || gFlashlightMode) {
+	if (gSettings.DisplayTimer == 0) {	
 		STANDBY_Counter = 0;
 	} else if (gEnableBlink) {
 		STANDBY_BlinkGreen();

@@ -1,10 +1,20 @@
 TARGET = firmware
 
-UART_DEBUG			:= 0
-MOTO_STARTUP_TONE		:= 1
-ENABLE_AM_FIX			:= 1
-ENABLE_LTO			:= 0
-ENABLE_NOAA			:= 1
+UART_DEBUG			?= 0
+MOTO_STARTUP_TONE		?= 1
+ENABLE_ALT_SQUELCH		?= 1
+ENABLE_NOAA			?= 0
+ENABLE_SPECTRUM			?= 1
+# Spectrum presets - 1.4 kB
+ENABLE_SPECTRUM_PRESETS		?= 0
+# FM radio = 2.6 kB
+ENABLE_FM_RADIO			?= 1
+# Register Editor = .5 kB
+ENABLE_REGISTER_EDIT	?= 1
+# Space saving options
+ENABLE_LTO			?= 0
+ENABLE_OPTIMIZED		?= 1
+ENABLE_SLOWER_RSSI_TIMER ?= 1
 
 OBJS =
 # Startup files
@@ -24,7 +34,9 @@ OBJS += bsp/tmr.o
 OBJS += driver/audio.o
 OBJS += driver/battery.o
 OBJS += driver/beep.o
-OBJS += driver/bk1080.o
+ifeq ($(ENABLE_FM_RADIO), 1)
+	OBJS += driver/bk1080.o
+endif
 OBJS += driver/bk4819.o
 OBJS += driver/crm.o
 OBJS += driver/delay.o
@@ -38,11 +50,18 @@ OBJS += driver/uart.o
 
 # "App" logic
 OBJS += app/css.o
-OBJS += app/flashlight.o
-OBJS += app/fm.o
+ifeq ($(ENABLE_FM_RADIO), 1)
+	OBJS += app/fm.o
+endif
 OBJS += app/lock.o
 OBJS += app/menu.o
 OBJS += app/radio.o
+ifeq ($(ENABLE_REGISTER_EDIT), 1)
+	OBJS += app/regedit.o
+endif
+ifeq ($(ENABLE_SPECTRUM), 1)
+	OBJS += app/spectrum.o
+endif
 OBJS += app/t9.o
 OBJS += app/uart.o
 
@@ -65,13 +84,12 @@ OBJS += radio/settings.o
 
 # Tasks
 OBJS += task/alarm.o
-ifeq ($(ENABLE_AM_FIX), 1)
-        OBJS += task/am-fix.o
-endif
 OBJS += task/battery.o
 OBJS += task/cursor.o
 OBJS += task/encrypt.o
-OBJS += task/fmscanner.o
+ifeq ($(ENABLE_FM_RADIO), 1)
+	OBJS += task/fmscanner.o
+endif
 OBJS += task/keyaction.o
 OBJS += task/keys.o
 OBJS += task/idle.o
@@ -133,12 +151,24 @@ GIT_HASH := $(GIT_HASH_TMP)
 endif
 
 ASFLAGS = -mcpu=cortex-m4
-CFLAGS = -Os -Wall -Werror -mcpu=cortex-m4 -fno-builtin -fshort-enums -fno-delete-null-pointer-checks -std=c11 -MMD
+CFLAGS = -Os -Wall -Werror -mcpu=cortex-m4 -fno-builtin -fshort-enums -fno-delete-null-pointer-checks -std=c2x -MMD
 CFLAGS += -DAT32F421C8T7
 CFLAGS += -DPRINTF_INCLUDE_CONFIG_H
 CFLAGS += -DGIT_HASH=\"$(GIT_HASH)\"
 LDFLAGS = -mcpu=cortex-m4 -nostartfiles -Wl,-T,firmware.ld
 
+ifeq ($(ENABLE_OPTIMIZED),1)
+CFLAGS += --specs=nano.specs
+LDFLAGS += --specs=nano.specs
+
+CFLAGS += -ffunction-sections
+LDFLAGS += -Wl,--gc-sections
+
+CFLAGS += -finline-limit=0
+
+CFLAGS += -fmerge-all-constants
+endif
+ 
 ifeq ($(DEBUG),1)
 ASFLAGS += -g
 CFLAGS += -g
@@ -161,14 +191,29 @@ endif
 ifeq ($(MOTO_STARTUP_TONE),1)
 	CFLAGS += -DMOTO_STARTUP_TONE
 endif
-ifeq ($(ENABLE_AM_FIX),1)
-	CFLAGS += -DENABLE_AM_FIX
+ifeq ($(ENABLE_ALT_SQUELCH),1)
+	CFLAGS += -DENABLE_ALT_SQUELCH
 endif
 ifeq ($(ENABLE_LTO),1)
-	CFLAGS += -flto
+	CFLAGS += -flto=auto
 endif
 ifeq ($(ENABLE_NOAA),1)
 	CFLAGS += -DENABLE_NOAA
+endif
+ifeq ($(ENABLE_SPECTRUM), 1)
+	CFLAGS += -DENABLE_SPECTRUM
+endif
+ifeq ($(ENABLE_SPECTRUM_PRESETS), 1)
+	CFLAGS += -DENABLE_SPECTRUM_PRESETS
+endif
+ifeq ($(ENABLE_REGISTER_EDIT), 1)
+	CFLAGS += -DENABLE_REGISTER_EDIT
+endif
+ifeq ($(ENABLE_FM_RADIO), 1)
+	CFLAGS += -DENABLE_FM_RADIO
+endif
+ifeq ($(ENABLE_SLOWER_RSSI_TIMER), 1)
+	CFLAGS += -DENABLE_SLOWER_RSSI_TIMER
 endif
 
 all: $(TARGET)
@@ -195,4 +240,3 @@ $(TARGET): $(OBJS)
 
 clean:
 	rm -f $(TARGET).bin $(TARGET) $(OBJS) $(DEPS)
-

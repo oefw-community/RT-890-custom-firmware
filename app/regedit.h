@@ -1,5 +1,4 @@
-
-/* Copyright 2023 OneOfEleven
+/* Copyright 2023 Dual Tachyon
  * https://github.com/DualTachyon
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +14,17 @@
  *     limitations under the License.
  */
 
-#ifndef AM_FIXH
+#ifndef APP_SPECTRUM_H
+#define APP_SPECTRUM_H
 
-#include <stdint.h>
-#include <stdbool.h>
+typedef struct Registers {
+  const char Name[5];
+  uint8_t RegAddr;
+  uint8_t Offset;
+  uint16_t Mask;
+  uint16_t DiplayDigits;
+} Registers;
 
-#ifdef ENABLE_AM_FIX
-	extern int16_t rssi_gain_diff[2];
-    extern uint16_t gAmFixCountdown;
-
-	void AM_fix_init(void);
-	void AM_fix_reset(const int vfo);
-	void Task_AM_fix(void);
-	#ifdef ENABLE_AM_FIX_SHOW_DATA
-		void AM_fix_print_data(const int vfo, char *s);
-	#endif
-		
-#endif
+void APP_RegEdit(void);
 
 #endif

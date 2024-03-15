@@ -48,6 +48,7 @@ void UI_DrawSettingModulation(uint8_t Index);
 void UI_DrawSettingBandwidth(void);
 void UI_DrawSettingBusyLock(uint8_t Index);
 void UI_DrawSettingScanlist(uint8_t Index);
+void UI_DrawSettingNumList(uint8_t Index, uint8_t Max);
 void UI_DrawSettingScanResume(uint8_t Index);
 
 #endif

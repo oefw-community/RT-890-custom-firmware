@@ -14,7 +14,6 @@
  *     limitations under the License.
  */
 
-#include "app/flashlight.h"
 #include "app/radio.h"
 #include "app/fm.h"
 #include "driver/beep.h"

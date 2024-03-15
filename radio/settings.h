@@ -169,8 +169,15 @@ typedef struct __attribute__((packed)) {
 	uint8_t KeyShortcut[14];
 	// 0x0F
 	uint8_t ScanAll: 1;
-	uint8_t Undefined: 7;	// free for use
-	// 0x10...
+	uint8_t MicGainLevel: 6;
+	uint8_t Undefined: 1;	// free for use
+	// 0x10
+	uint8_t SqRSSIBase;
+	// 0x12
+	uint8_t SqNoiseBase;
+	// 0x13
+	uint8_t SqGlitchBase;
+	//0x14...
 } gExtendedSettings_t;
 
 extern Calibration_t gCalibration;

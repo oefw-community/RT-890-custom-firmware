@@ -73,13 +73,13 @@ static uint8_t GetToneStatus(uint8_t CodeType, bool bMuteEnabled)
 		}
 	}
 
-	// Check DCS N
-	if (Value & 0x4000U && (CodeType == CODE_TYPE_DCS_N || bMuteEnabled)) {
+	// Check DCS N (its actually I)
+	if (Value & 0x4000U && (CodeType == CODE_TYPE_DCS_I || bMuteEnabled)) {
 		return STATUS_GOT_TONE;
 	}
 
-	// Check DCS I
-	if (Value & 0x8000U && CodeType == CODE_TYPE_DCS_I) {
+	// Check DCS I (its actually N)
+	if (Value & 0x8000U && CodeType == CODE_TYPE_DCS_N) {
 		return STATUS_GOT_TONE;
 	}
 
@@ -94,16 +94,15 @@ static void CheckRSSI(void)
 {
 	if (gVoxRssiUpdateTimer == 0 && !gDataDisplay && !gDTMF_InputMode && !gFrequencyDetectMode && !gReceptionMode && !gFskDataReceived && gScreenMode == SCREEN_MAIN) {
 		uint16_t RSSI;
-		int16_t RXdBM;
-		uint16_t uRXdBM;
 		uint16_t Power;
-		bool isNeg;
-		uint16_t len;
 
+#ifdef ENABLE_SLOWER_RSSI_TIMER
+		gVoxRssiUpdateTimer = 500;
+#else
 		gVoxRssiUpdateTimer = 100;
+#endif
+
 		RSSI = BK4819_GetRSSI();
-		
-		RXdBM = (RSSI>>1)-160;  // Using same rssi to dBM conversion as uv-k5.  Don't know if this is right.
 
 		//Valid range is 72 - 330
 		if (RSSI < 72) {
@@ -113,27 +112,10 @@ static void CheckRSSI(void)
 		} else {
 			Power = ((RSSI-72)*100)/258;
 		}
-
-		// Convert to pos number to work with string funcs that require uint
-		if (RXdBM < 0) {
-			uRXdBM = -RXdBM;
-			isNeg = true;
-		} else {
-			uRXdBM = RXdBM;
-			isNeg = false;
-		}
-		
-		if (uRXdBM < 10) {
-			len = 1;
-		} else if (uRXdBM < 100) {
-			len = 2;
-		} else {
-			len = 3;
-		}
 		
 		UI_DrawBar(Power, gCurrentVfo);
-		UI_DrawRxDBM(uRXdBM, isNeg, len, gCurrentVfo, false);
-		gCurrentRssi[gCurrentVfo] = Power;
+		ConvertRssiToDbm(RSSI);
+		UI_DrawRxDBM(gCurrentVfo, false);
 	}
 }
 
@@ -156,6 +138,7 @@ void Task_CheckRSSI(void)
 			if (gTailToneCounter <= 10 && gNoToneCounter <= 1000) {
 				gNoToneCounter = 0;
 				CheckRSSI();
+				UI_DrawVoltage(!gCurrentVfo);
 			} else if (!gReceptionMode) {
 				RADIO_EndRX();
 			} else {

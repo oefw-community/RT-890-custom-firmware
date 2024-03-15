@@ -20,6 +20,7 @@
 #include "app/t9.h"
 #include "driver/audio.h"
 #include "driver/beep.h"
+#include "driver/bk4819.h"
 #include "driver/key.h"
 #include "driver/speaker.h"
 #include "helper/dtmf.h"
@@ -39,36 +40,40 @@
 
 static const char Menu[][14] = {
 	"Startup Logo  ",
-	"Voltage       ",
-	"Ringtone      ",
-	"Prompt Text   ",
+	"Cell Voltage  ",
+	"Startup Tone  ",
+	"Startup Text  ",
 	"Voice Prompt  ",
 	"Key Beep      ",
-	"Roger Beep    ",
+	"TX Tone       ",
 	"Dual Display  ",
 	"TX Priority   ",
-	"Save Mode     ",
+	"Power Save    ",
 	"Freq Step     ",
-	"SQ Level      ",
-	"LED Timer     ",
-	"Lock Timer    ",
-	"TOT           ",
+	"Squelch Level ",
+	"Squelch RSSI  ",
+	"Squelch Noise ",
+	"Squelch Glitch",
+	"Backlight     ",
+	"Lock Time     ",
+	"Time Of Talk  ",
 	"VOX Level     ",
 	"VOX Delay     ",
-	"NOAA Monitor  ",
+  /*"NOAA Monitor  ", remove comment to establish again*/
 	"FM Standby    ",
 	"Tail Tone     ",
-	"Scan DIR      ",
-	"Personal ID   ",
+	"Scan >>>      ",
+	"FSK ID        ",
 	"Repeater Mode ",
 	"Scan Resume   ",
-	"Scan Blink    ",
+	"Scan LED      ",
 	"CTCSS/DCS     ",
 	"RX CTCSS/DCS  ",
 	"TX CTCSS/DCS  ",
 	"TX Power      ",
+	"Mic Gain      ",
 	"Modulation    ",
-	"Band Width    ",
+	"Bandwidth     ",
 	"List To Scan  ",
 	"Ch In List 1  ",
 	"Ch In List 2  ",
@@ -79,12 +84,12 @@ static const char Menu[][14] = {
 	"Ch In List 7  ",
 	"Ch In List 8  ",
 	"Busy Lock     ",
-	"Scrambler     ",
+	"Invert Speech ",
 	"DCS Encrypt   ",
 	"Mute Code     ",
-	"CH Name       ",
-	"Save CH       ",
-	"Delete CH     ",
+	"Channel Name  ",
+	"Save Channel  ",
+	"Delete Channel",
 	"Side 1 Long   ",
 	"Side 1 Short  ",
 	"Side 2 Long   ",
@@ -109,7 +114,7 @@ static const char Menu[][14] = {
 	"DTMF Mode     ",
 	"DTMF Select   ",
 	"DTMF Display  ",
-	"Dark Mode     ",
+	"Dark Theme    ",
 	"Initialize    ",
 	"Version       ",
 };
@@ -181,7 +186,7 @@ static void EnableTextEditor(void)
 
 static void DrawSettingName(uint8_t Index)
 {
-	gColorForeground = COLOR_BLUE;
+	gColorForeground = COLOR_FOREGROUND;
 	UI_DrawString(24, 72, Menu[Index], 14);
 	Int2Ascii((Index + 1), 2);
 	UI_DrawString(140, 72, gShortString, 2);
@@ -317,8 +322,6 @@ static void MUTE_KeyHandler(uint8_t Key)
 		}
 	}
 }
-
-//
 
 void MENU_SetMaxCssValues(void)
 {
@@ -503,6 +506,28 @@ void MENU_AcceptSetting(void)
 	case MENU_TX_POWER:
 		gVfoState[gSettings.CurrentVfo].bIsLowPower = gSettingIndex;
 		CHANNELS_SaveVfo();
+		break;
+
+	case MENU_MIC_GAIN:
+		gExtendedSettings.MicGainLevel = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		SETTINGS_SaveGlobals();
+		BK4819_SetMicSensitivityTuning();
+		break;
+
+	case MENU_SQUELCH_RSSI:
+	case MENU_SQUELCH_NOISE:
+	case MENU_SQUELCH_GLITCH:
+		if (gMenuIndex == MENU_SQUELCH_RSSI) {
+			gExtendedSettings.SqRSSIBase = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		} else if (gMenuIndex == MENU_SQUELCH_NOISE) {
+			gExtendedSettings.SqNoiseBase = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		} else {
+			gExtendedSettings.SqGlitchBase = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		}
+		SETTINGS_SaveGlobals();
+		BK4819_SetSquelchGlitch(gMainVfo->bIsNarrow);
+		BK4819_SetSquelchNoise(gMainVfo->bIsNarrow);
+		BK4819_SetSquelchRSSI(gMainVfo->bIsNarrow);
 		break;
 
 	case MENU_MODULATION:
@@ -891,6 +916,28 @@ void MENU_DrawSetting(void)
 		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
 		UI_DrawSettingTxPower();
 		break;
+	
+	case MENU_MIC_GAIN:
+		gSettingCurrentValue = gExtendedSettings.MicGainLevel;
+		gSettingMaxValues = 32;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingNumList(gSettingCurrentValue, gSettingMaxValues);
+		break;
+	
+	case MENU_SQUELCH_RSSI:
+	case MENU_SQUELCH_NOISE:
+	case MENU_SQUELCH_GLITCH:
+		if (gMenuIndex == MENU_SQUELCH_RSSI) {
+			gSettingCurrentValue = gExtendedSettings.SqRSSIBase;
+		} else if (gMenuIndex == MENU_SQUELCH_NOISE) {
+			gSettingCurrentValue = gExtendedSettings.SqNoiseBase;
+		} else {
+			gSettingCurrentValue = gExtendedSettings.SqGlitchBase;
+		}
+		gSettingMaxValues = 255;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingNumList(gSettingCurrentValue, gSettingMaxValues);							 
+		break;
 
 	case MENU_MODULATION:
 		gSettingCurrentValue = gVfoState[gSettings.CurrentVfo].gModulationType;
@@ -1271,6 +1318,16 @@ void MENU_ScrollSetting(uint8_t Key)
 		UI_DrawSettingTxPower();
 		break;
 
+	case MENU_MIC_GAIN:
+		UI_DrawSettingNumList(gSettingCurrentValue, 32);
+		break;
+
+	case MENU_SQUELCH_RSSI:
+	case MENU_SQUELCH_NOISE:
+	case MENU_SQUELCH_GLITCH:
+		UI_DrawSettingNumList(gSettingCurrentValue, 255);
+		break;
+
 	case MENU_MODULATION:
 		UI_DrawSettingModulation(gSettingCurrentValue);
 		break;
@@ -1345,7 +1402,7 @@ void MENU_ScrollSetting(uint8_t Key)
 
 void MENU_PlayAudio(uint8_t MenuID)
 {
-	uint8_t ID;
+	uint8_t ID = 0;
 
 	switch (MenuID) {
 	case MENU_STARTUP_LOGO:  ID = 0x09; break;
@@ -1369,6 +1426,7 @@ void MENU_PlayAudio(uint8_t MenuID)
 	case MENU_NOAA_MONITOR:  ID = 0x1C; break;
 #endif
 	case MENU_FM_STANDBY:    ID = 0x1D; break;
+
 	case MENU_TAIL_TONE:     ID = 0x1F; break;
 	case MENU_SCAN_DIR:      ID = 0x20; break;
 	case MENU_PERSONAL_ID:   ID = 0x21; break;
@@ -1393,7 +1451,7 @@ void MENU_PlayAudio(uint8_t MenuID)
 	case MENU_VERSION:       ID = 0x3B; break;
 	}
 
-	if (MenuID != MENU_DTMF_DELAY && MenuID != MENU_DTMF_INTERVAL && MenuID != MENU_DTMF_MODE && MenuID != MENU_DTMF_SELECT && MenuID != MENU_DTMF_DISPLAY) {
+	if (ID) {
 		AUDIO_PlaySampleOptional(ID);
 	}
 }

@@ -23,17 +23,17 @@
 void UI_DrawDialogText(UI_DialogText_t Text, bool bSet)
 {
 	UI_DrawDialog();
-
-	gColorForeground = COLOR_RED;
+	gColorForeground = COLOR_FOREGROUND;
 
 	switch (Text) {
-	case DIALOG_AM_FIX:
+	case DIALOG_FM_RADIO:
 		if (bSet) {
-			UI_DrawString(10, 48, "AM Fix: On", 10);
+			UI_DrawString(10, 48, "FMB On      ", 12);
 		} else {
-			UI_DrawString(10, 48, "AM Fix: Off", 11);
+			UI_DrawString(10, 48, "FMB Idle    ", 12);
 		}
 		break;
+		
 	case DIALOG_TX_PRIORITY:
 		if (bSet) {
 			UI_DrawString(10, 48, "TX PRI: Busy", 12);
@@ -49,7 +49,15 @@ void UI_DrawDialogText(UI_DialogText_t Text, bool bSet)
 			UI_DrawString(10, 48, "VOX: Off", 8);
 		}
 		break;
-
+		
+	case DIALOG_BAND_WIDTH:
+		if (bSet) {
+			UI_DrawString(10, 48, "BW 12.5 kHz ", 12);
+		} else {
+			UI_DrawString(10, 48, "BW 25.0 kHz ", 12);
+		}
+		break;
+		
 	case DIALOG_TX_POWER:
 		if (bSet) {
 			UI_DrawString(10, 48, "Power: Low ", 11);
@@ -76,7 +84,7 @@ void UI_DrawDialogText(UI_DialogText_t Text, bool bSet)
 
 	case DIALOG_TOGGLE_SCANLIST:
 		if (bSet) {
-			UI_DrawString(10, 48, "SList: Ch Added", 15);
+			UI_DrawString(10, 48, "SList: Ch Added  ", 17);
 		} else {
 			UI_DrawString(10, 48, "SList: Ch Removed", 17);
 		}
