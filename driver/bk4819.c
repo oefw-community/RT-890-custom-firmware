@@ -199,7 +199,7 @@ void BK4819_Init(void)
 	BK4819_WriteRegister(0x53, 0xE678);
 	BK4819_WriteRegister(0x2C, 0x5705);
 	BK4819_WriteRegister(0x4B, 0x7102);
-	BK4819_WriteRegister(0x77, 0x88EF);
+	//BK4819_WriteRegister(0x77, 0x88EF);
 	BK4819_WriteRegister(0x26, 0x13A0);
 	BK4819_SetAFResponseCoefficients(false, true,  gCalibration.RX_3000Hz_Coefficient);
 	BK4819_SetAFResponseCoefficients(false, false, gCalibration.RX_300Hz_Coefficient);
@@ -273,6 +273,24 @@ void BK4819_SetFrequency(uint32_t Frequency)
 	Frequency = (Frequency - 32768U) + gFrequencyBandInfo.FrequencyOffset;
 	BK4819_WriteRegister(0x38, (Frequency >>  0) & 0xFFFFU);
 	BK4819_WriteRegister(0x39, (Frequency >> 16) & 0xFFFFU);
+}
+
+void BK4819_SetSquelchMode(void)
+{
+	switch (gExtendedSettings.SqMode) {
+		case 0:
+			BK4819_WriteRegister(0x77, 0xFFEF); // RSSI
+			break;
+		case 1:
+			BK4819_WriteRegister(0x77, 0xCCEF); // RSSI + noise
+			break;
+		case 2:
+			BK4819_WriteRegister(0x77, 0xAAEF); // RSSI + Glitch
+			break;
+		case 3:
+			BK4819_WriteRegister(0x77, 0x88EF); // RSSI + noise + Glitch
+			break;
+	}
 }
 
 void BK4819_SetSquelchGlitch(bool bIsNarrow)

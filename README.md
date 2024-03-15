@@ -51,10 +51,17 @@ Exit => Single/dual VFO display
 ```
 
 ### Tunable Squelch - Configurable in main menu
+The squelch mode can be set in the main menu.  This setting affects what variables the radio will use to determine the squelch open/close level.  There are 4 modes available:
+- RSSI (R)
+- RSSI + Noise (R + N)
+- RSSI + Glitch (R + G)
+- RSSI + Noise + Glitch (R + N + G) 
+
 Overall squelch levels (0-9) can be set from the SQL Level option in main menu (or the Shortcut Key Action).  These levels affect the squelch RSSI, Noise and Glitch settings on the radio chip.  The levels 0-9 are offsets from a base value for each setting.  These base values can be tuned for your specific radio using the Squelch RSSI, Squelch Noise and Squelch Glitch settings in the main menu.
 
-Default base Squelch levels:
+Default squelch settings:
 ```
+Mode    => R + N + G
 RSSI    => 94 (Hex: 0x5E)
 Noise   => 68 (Hex: 0x44)
 Glitch  => 17 (Hex: 0x11)

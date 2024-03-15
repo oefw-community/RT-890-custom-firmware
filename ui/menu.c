@@ -414,6 +414,19 @@ void UI_DrawSettingTxPower(void)
 	UI_DrawSettingOptionEx("Low ", 4, 1);
 }
 
+void UI_DrawSettingSquelchMode(uint8_t Index)
+{
+	static const char Mode[4][9] = {
+		"R        ",
+		"R + N    ",
+		"R + G    ",
+		"R + N + G",
+	};
+
+	UI_DrawSettingOptionEx(Mode[Index], 9, 0);
+	UI_DrawSettingOptionEx(Mode[(Index + 1) % 4], 9, 1);
+}
+
 void UI_DrawSettingModulation(uint8_t Index)
 {
 	static const char Mode[4][3] = {

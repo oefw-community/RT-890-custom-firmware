@@ -177,7 +177,10 @@ typedef struct __attribute__((packed)) {
 	uint8_t SqNoiseBase;
 	// 0x13
 	uint8_t SqGlitchBase;
-	//0x14...
+	//0x14
+	uint8_t SqMode: 2;
+	uint8_t Undefined2: 6; // free for use
+	//0x15...
 } gExtendedSettings_t;
 
 extern Calibration_t gCalibration;

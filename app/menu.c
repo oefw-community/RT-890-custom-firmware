@@ -67,6 +67,7 @@ static const char Menu[][14] = {
 	"Scan Direction",
 	"Scan Resume   ",
 	"Scan Blink    ",
+	"Squelch Mode  ",
 	"Squelch RSSI  ",
 	"Squelch Noise ",
 	"Squelch Glitch",
@@ -517,6 +518,12 @@ void MENU_AcceptSetting(void)
 		BK4819_SetMicSensitivityTuning();
 		break;
 
+	case MENU_SQUELCH_MODE:
+		gExtendedSettings.SqMode = (gSettingCurrentValue + gSettingIndex) % gSettingMaxValues;
+		SETTINGS_SaveGlobals();
+		BK4819_SetSquelchMode();
+		break;
+
 	case MENU_SQUELCH_RSSI:
 	case MENU_SQUELCH_NOISE:
 	case MENU_SQUELCH_GLITCH:
@@ -927,6 +934,13 @@ void MENU_DrawSetting(void)
 		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
 		UI_DrawSettingNumList(gSettingCurrentValue, gSettingMaxValues);
 		break;
+
+	case MENU_SQUELCH_MODE:
+		gSettingCurrentValue = gExtendedSettings.SqMode;
+		gSettingMaxValues = 4;
+		DISPLAY_Fill(0, 159, 1, 55, COLOR_BACKGROUND);
+		UI_DrawSettingSquelchMode(gSettingCurrentValue);
+		break;
 	
 	case MENU_SQUELCH_RSSI:
 	case MENU_SQUELCH_NOISE:
@@ -1324,6 +1338,10 @@ void MENU_ScrollSetting(uint8_t Key)
 
 	case MENU_MIC_GAIN:
 		UI_DrawSettingNumList(gSettingCurrentValue, 32);
+		break;
+
+	case MENU_SQUELCH_MODE:
+		UI_DrawSettingSquelchMode(gSettingCurrentValue);
 		break;
 
 	case MENU_SQUELCH_RSSI:
