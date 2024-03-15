@@ -305,7 +305,7 @@ void BK4819_SetSquelchGlitch(bool bIsNarrow)
 		Value = gExtendedSettings.SqGlitchBase - (gSettings.Squelch);
 	}
 
-	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF) | Value);
+	BK4819_WriteRegister(0x4E, (BK4819_ReadRegister(0x4E) & 0xFF00) | Value);
 
 	if (gSettings.Squelch == 0 || gExtendedSettings.SqGlitchBase > 230){
 		Value = 255;
@@ -313,7 +313,7 @@ void BK4819_SetSquelchGlitch(bool bIsNarrow)
 		Value = (Value * 10) / 9;
 	}
 
-	BK4819_WriteRegister(0x4D, (BK4819_ReadRegister(0x4D) & 0xFF) | Value);
+	BK4819_WriteRegister(0x4D, 0xA0 << 8 | Value);
 #else
 
 	static const uint8_t gSquelchGlitchLevel[11] = {
@@ -360,7 +360,7 @@ void BK4819_SetSquelchNoise(bool bIsNarrow)
 		 }
 	}
 
-	BK4819_WriteRegister(0x4F, (BK4819_ReadRegister(0x4F) & 0x7F7F) | Value);
+	BK4819_WriteRegister(0x4F, Value);
 
 #else
 
