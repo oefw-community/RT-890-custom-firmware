@@ -21,7 +21,7 @@ ENABLE_REGISTER_EDIT		?= 0
 # Scanlist membership display - 252 B
 ENABLE_SCANLIST_DISPLAY		?= 1
 # Space saving options
-ENABLE_LTO			?= 1
+ENABLE_LTO			?= 0
 ENABLE_OPTIMIZED		?= 1
 
 
