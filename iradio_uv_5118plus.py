@@ -1104,6 +1104,6 @@ class IradioUV5118plus(chirp_common.CloneModeRadio):
 
 @directory.register
 class RuyageUV58PlusRadio(IradioUV5118plus):
-    """Ruyage UV58Plus"""
-    VENDOR = "Ruyage"
-    MODEL = "UV58Plus"
+    """Radtel RT-890 Custom"""
+    VENDOR = "Radtel"
+    MODEL = "RT-890 Custom"
